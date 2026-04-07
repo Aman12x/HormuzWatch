@@ -1,0 +1,17 @@
+ticker,sector,route_exposure,defense_exposure
+LMT,defense,,us
+RTX,defense,,us
+NOC,defense,,us
+BAEL,defense,,non_us
+RHM,defense,,non_us
+LDO,defense,,non_us
+XOM,energy_major,,
+CVX,energy_major,,
+BP,energy_major,,
+FRO,tanker,hormuz,
+STNG,tanker,hormuz,
+HAFNI,tanker,non_hormuz,
+INSW,tanker,non_hormuz,
+NAT,tanker,non_hormuz,
+TK,tanker,non_hormuz,
+SPY,benchmark,,

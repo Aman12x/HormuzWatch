@@ -1,0 +1,625 @@
+date,commodity,ticker,price,category
+2025-11-03,Brent Crude,BZ=F,64.88999938964844,hormuz_exposed
+2025-11-04,Brent Crude,BZ=F,64.44000244140625,hormuz_exposed
+2025-11-05,Brent Crude,BZ=F,63.52000045776367,hormuz_exposed
+2025-11-06,Brent Crude,BZ=F,63.380001068115234,hormuz_exposed
+2025-11-07,Brent Crude,BZ=F,63.630001068115234,hormuz_exposed
+2025-11-10,Brent Crude,BZ=F,64.05999755859375,hormuz_exposed
+2025-11-11,Brent Crude,BZ=F,65.16000366210938,hormuz_exposed
+2025-11-12,Brent Crude,BZ=F,62.709999084472656,hormuz_exposed
+2025-11-13,Brent Crude,BZ=F,63.0099983215332,hormuz_exposed
+2025-11-14,Brent Crude,BZ=F,64.38999938964844,hormuz_exposed
+2025-11-17,Brent Crude,BZ=F,64.19999694824219,hormuz_exposed
+2025-11-18,Brent Crude,BZ=F,64.88999938964844,hormuz_exposed
+2025-11-19,Brent Crude,BZ=F,63.5099983215332,hormuz_exposed
+2025-11-20,Brent Crude,BZ=F,63.380001068115234,hormuz_exposed
+2025-11-21,Brent Crude,BZ=F,62.560001373291016,hormuz_exposed
+2025-11-24,Brent Crude,BZ=F,63.369998931884766,hormuz_exposed
+2025-11-25,Brent Crude,BZ=F,62.47999954223633,hormuz_exposed
+2025-11-26,Brent Crude,BZ=F,63.130001068115234,hormuz_exposed
+2025-11-28,Brent Crude,BZ=F,63.20000076293945,hormuz_exposed
+2025-12-01,Brent Crude,BZ=F,63.16999816894531,hormuz_exposed
+2025-12-02,Brent Crude,BZ=F,62.45000076293945,hormuz_exposed
+2025-12-03,Brent Crude,BZ=F,62.66999816894531,hormuz_exposed
+2025-12-04,Brent Crude,BZ=F,63.2599983215332,hormuz_exposed
+2025-12-05,Brent Crude,BZ=F,63.75,hormuz_exposed
+2025-12-08,Brent Crude,BZ=F,62.4900016784668,hormuz_exposed
+2025-12-09,Brent Crude,BZ=F,61.939998626708984,hormuz_exposed
+2025-12-10,Brent Crude,BZ=F,62.209999084472656,hormuz_exposed
+2025-12-11,Brent Crude,BZ=F,61.279998779296875,hormuz_exposed
+2025-12-12,Brent Crude,BZ=F,61.119998931884766,hormuz_exposed
+2025-12-15,Brent Crude,BZ=F,60.560001373291016,hormuz_exposed
+2025-12-16,Brent Crude,BZ=F,58.91999816894531,hormuz_exposed
+2025-12-17,Brent Crude,BZ=F,59.68000030517578,hormuz_exposed
+2025-12-18,Brent Crude,BZ=F,59.81999969482422,hormuz_exposed
+2025-12-19,Brent Crude,BZ=F,60.470001220703125,hormuz_exposed
+2025-12-22,Brent Crude,BZ=F,62.06999969482422,hormuz_exposed
+2025-12-23,Brent Crude,BZ=F,62.380001068115234,hormuz_exposed
+2025-12-24,Brent Crude,BZ=F,62.2400016784668,hormuz_exposed
+2025-12-26,Brent Crude,BZ=F,60.63999938964844,hormuz_exposed
+2025-12-29,Brent Crude,BZ=F,61.939998626708984,hormuz_exposed
+2025-12-30,Brent Crude,BZ=F,61.91999816894531,hormuz_exposed
+2025-12-31,Brent Crude,BZ=F,60.849998474121094,hormuz_exposed
+2026-01-02,Brent Crude,BZ=F,60.75,hormuz_exposed
+2026-01-05,Brent Crude,BZ=F,61.7599983215332,hormuz_exposed
+2026-01-06,Brent Crude,BZ=F,60.70000076293945,hormuz_exposed
+2026-01-07,Brent Crude,BZ=F,59.959999084472656,hormuz_exposed
+2026-01-08,Brent Crude,BZ=F,61.9900016784668,hormuz_exposed
+2026-01-09,Brent Crude,BZ=F,63.34000015258789,hormuz_exposed
+2026-01-12,Brent Crude,BZ=F,63.869998931884766,hormuz_exposed
+2026-01-13,Brent Crude,BZ=F,65.47000122070312,hormuz_exposed
+2026-01-14,Brent Crude,BZ=F,66.5199966430664,hormuz_exposed
+2026-01-15,Brent Crude,BZ=F,63.7599983215332,hormuz_exposed
+2026-01-16,Brent Crude,BZ=F,64.12999725341797,hormuz_exposed
+2026-01-20,Brent Crude,BZ=F,64.91999816894531,hormuz_exposed
+2026-01-21,Brent Crude,BZ=F,65.23999786376953,hormuz_exposed
+2026-01-22,Brent Crude,BZ=F,64.05999755859375,hormuz_exposed
+2026-01-23,Brent Crude,BZ=F,65.87999725341797,hormuz_exposed
+2026-01-26,Brent Crude,BZ=F,65.58999633789062,hormuz_exposed
+2026-01-27,Brent Crude,BZ=F,67.56999969482422,hormuz_exposed
+2026-01-28,Brent Crude,BZ=F,68.4000015258789,hormuz_exposed
+2026-01-29,Brent Crude,BZ=F,70.70999908447266,hormuz_exposed
+2026-01-30,Brent Crude,BZ=F,70.69000244140625,hormuz_exposed
+2026-02-02,Brent Crude,BZ=F,66.30000305175781,hormuz_exposed
+2026-02-03,Brent Crude,BZ=F,67.33000183105469,hormuz_exposed
+2026-02-04,Brent Crude,BZ=F,69.45999908447266,hormuz_exposed
+2026-02-05,Brent Crude,BZ=F,67.55000305175781,hormuz_exposed
+2026-02-06,Brent Crude,BZ=F,68.05000305175781,hormuz_exposed
+2026-02-09,Brent Crude,BZ=F,69.04000091552734,hormuz_exposed
+2026-02-10,Brent Crude,BZ=F,68.80000305175781,hormuz_exposed
+2026-02-11,Brent Crude,BZ=F,69.4000015258789,hormuz_exposed
+2026-02-12,Brent Crude,BZ=F,67.5199966430664,hormuz_exposed
+2026-02-13,Brent Crude,BZ=F,67.75,hormuz_exposed
+2026-02-17,Brent Crude,BZ=F,67.41999816894531,hormuz_exposed
+2026-02-18,Brent Crude,BZ=F,70.3499984741211,hormuz_exposed
+2026-02-19,Brent Crude,BZ=F,71.66000366210938,hormuz_exposed
+2026-02-20,Brent Crude,BZ=F,71.76000213623047,hormuz_exposed
+2026-02-23,Brent Crude,BZ=F,71.48999786376953,hormuz_exposed
+2026-02-24,Brent Crude,BZ=F,70.7699966430664,hormuz_exposed
+2026-02-25,Brent Crude,BZ=F,70.8499984741211,hormuz_exposed
+2026-02-26,Brent Crude,BZ=F,70.75,hormuz_exposed
+2026-02-27,Brent Crude,BZ=F,72.4800033569336,hormuz_exposed
+2026-03-02,Brent Crude,BZ=F,77.73999786376953,hormuz_exposed
+2026-03-03,Brent Crude,BZ=F,81.4000015258789,hormuz_exposed
+2026-03-04,Brent Crude,BZ=F,81.4000015258789,hormuz_exposed
+2026-03-05,Brent Crude,BZ=F,85.41000366210938,hormuz_exposed
+2026-03-06,Brent Crude,BZ=F,92.69000244140625,hormuz_exposed
+2026-03-09,Brent Crude,BZ=F,98.95999908447266,hormuz_exposed
+2026-03-10,Brent Crude,BZ=F,87.80000305175781,hormuz_exposed
+2026-03-11,Brent Crude,BZ=F,91.9800033569336,hormuz_exposed
+2026-03-12,Brent Crude,BZ=F,100.45999908447266,hormuz_exposed
+2026-03-13,Brent Crude,BZ=F,103.13999938964844,hormuz_exposed
+2026-03-16,Brent Crude,BZ=F,100.20999908447266,hormuz_exposed
+2026-03-17,Brent Crude,BZ=F,103.41999816894531,hormuz_exposed
+2026-03-18,Brent Crude,BZ=F,107.37999725341797,hormuz_exposed
+2026-03-19,Brent Crude,BZ=F,108.6500015258789,hormuz_exposed
+2026-03-20,Brent Crude,BZ=F,112.19000244140625,hormuz_exposed
+2026-03-23,Brent Crude,BZ=F,99.94000244140625,hormuz_exposed
+2026-03-24,Brent Crude,BZ=F,104.48999786376953,hormuz_exposed
+2026-03-25,Brent Crude,BZ=F,102.22000122070312,hormuz_exposed
+2026-03-26,Brent Crude,BZ=F,108.01000213623047,hormuz_exposed
+2026-03-27,Brent Crude,BZ=F,112.56999969482422,hormuz_exposed
+2026-03-30,Brent Crude,BZ=F,112.77999877929688,hormuz_exposed
+2026-03-31,Brent Crude,BZ=F,118.3499984741211,hormuz_exposed
+2026-04-01,Brent Crude,BZ=F,101.16000366210938,hormuz_exposed
+2026-04-02,Brent Crude,BZ=F,109.02999877929688,hormuz_exposed
+2025-11-03,CBOT Corn,ZC=F,434.25,agriculture
+2025-11-04,CBOT Corn,ZC=F,431.5,agriculture
+2025-11-05,CBOT Corn,ZC=F,435.25,agriculture
+2025-11-06,CBOT Corn,ZC=F,428.75,agriculture
+2025-11-07,CBOT Corn,ZC=F,427.25,agriculture
+2025-11-10,CBOT Corn,ZC=F,429.75,agriculture
+2025-11-11,CBOT Corn,ZC=F,432.0,agriculture
+2025-11-12,CBOT Corn,ZC=F,435.25,agriculture
+2025-11-13,CBOT Corn,ZC=F,441.5,agriculture
+2025-11-14,CBOT Corn,ZC=F,430.25,agriculture
+2025-11-17,CBOT Corn,ZC=F,434.75,agriculture
+2025-11-18,CBOT Corn,ZC=F,436.75,agriculture
+2025-11-19,CBOT Corn,ZC=F,429.75,agriculture
+2025-11-20,CBOT Corn,ZC=F,426.5,agriculture
+2025-11-21,CBOT Corn,ZC=F,425.5,agriculture
+2025-11-24,CBOT Corn,ZC=F,423.75,agriculture
+2025-11-25,CBOT Corn,ZC=F,423.5,agriculture
+2025-11-26,CBOT Corn,ZC=F,431.75,agriculture
+2025-11-28,CBOT Corn,ZC=F,435.5,agriculture
+2025-12-01,CBOT Corn,ZC=F,432.75,agriculture
+2025-12-02,CBOT Corn,ZC=F,438.0,agriculture
+2025-12-03,CBOT Corn,ZC=F,431.5,agriculture
+2025-12-04,CBOT Corn,ZC=F,437.75,agriculture
+2025-12-05,CBOT Corn,ZC=F,436.75,agriculture
+2025-12-08,CBOT Corn,ZC=F,436.25,agriculture
+2025-12-09,CBOT Corn,ZC=F,440.75,agriculture
+2025-12-10,CBOT Corn,ZC=F,434.75,agriculture
+2025-12-11,CBOT Corn,ZC=F,435.25,agriculture
+2025-12-12,CBOT Corn,ZC=F,431.5,agriculture
+2025-12-15,CBOT Corn,ZC=F,439.75,agriculture
+2025-12-16,CBOT Corn,ZC=F,436.5,agriculture
+2025-12-17,CBOT Corn,ZC=F,440.5,agriculture
+2025-12-18,CBOT Corn,ZC=F,444.5,agriculture
+2025-12-19,CBOT Corn,ZC=F,443.75,agriculture
+2025-12-22,CBOT Corn,ZC=F,447.0,agriculture
+2025-12-23,CBOT Corn,ZC=F,447.5,agriculture
+2025-12-24,CBOT Corn,ZC=F,451.0,agriculture
+2025-12-26,CBOT Corn,ZC=F,450.0,agriculture
+2025-12-29,CBOT Corn,ZC=F,442.25,agriculture
+2025-12-30,CBOT Corn,ZC=F,440.5,agriculture
+2025-12-31,CBOT Corn,ZC=F,440.25,agriculture
+2026-01-02,CBOT Corn,ZC=F,437.5,agriculture
+2026-01-05,CBOT Corn,ZC=F,444.5,agriculture
+2026-01-06,CBOT Corn,ZC=F,444.0,agriculture
+2026-01-07,CBOT Corn,ZC=F,446.75,agriculture
+2026-01-08,CBOT Corn,ZC=F,446.0,agriculture
+2026-01-09,CBOT Corn,ZC=F,445.75,agriculture
+2026-01-12,CBOT Corn,ZC=F,421.5,agriculture
+2026-01-13,CBOT Corn,ZC=F,419.75,agriculture
+2026-01-14,CBOT Corn,ZC=F,422.0,agriculture
+2026-01-15,CBOT Corn,ZC=F,420.25,agriculture
+2026-01-16,CBOT Corn,ZC=F,424.75,agriculture
+2026-01-20,CBOT Corn,ZC=F,423.75,agriculture
+2026-01-21,CBOT Corn,ZC=F,421.75,agriculture
+2026-01-22,CBOT Corn,ZC=F,424.0,agriculture
+2026-01-23,CBOT Corn,ZC=F,430.5,agriculture
+2026-01-26,CBOT Corn,ZC=F,428.25,agriculture
+2026-01-27,CBOT Corn,ZC=F,426.5,agriculture
+2026-01-28,CBOT Corn,ZC=F,430.0,agriculture
+2026-01-29,CBOT Corn,ZC=F,430.75,agriculture
+2026-01-30,CBOT Corn,ZC=F,428.25,agriculture
+2026-02-02,CBOT Corn,ZC=F,425.75,agriculture
+2026-02-03,CBOT Corn,ZC=F,428.5,agriculture
+2026-02-04,CBOT Corn,ZC=F,429.5,agriculture
+2026-02-05,CBOT Corn,ZC=F,435.0,agriculture
+2026-02-06,CBOT Corn,ZC=F,430.25,agriculture
+2026-02-09,CBOT Corn,ZC=F,428.75,agriculture
+2026-02-10,CBOT Corn,ZC=F,428.75,agriculture
+2026-02-11,CBOT Corn,ZC=F,427.5,agriculture
+2026-02-12,CBOT Corn,ZC=F,431.25,agriculture
+2026-02-13,CBOT Corn,ZC=F,431.75,agriculture
+2026-02-17,CBOT Corn,ZC=F,426.25,agriculture
+2026-02-18,CBOT Corn,ZC=F,427.0,agriculture
+2026-02-19,CBOT Corn,ZC=F,425.75,agriculture
+2026-02-20,CBOT Corn,ZC=F,427.5,agriculture
+2026-02-23,CBOT Corn,ZC=F,427.5,agriculture
+2026-02-24,CBOT Corn,ZC=F,427.75,agriculture
+2026-02-25,CBOT Corn,ZC=F,430.5,agriculture
+2026-02-26,CBOT Corn,ZC=F,433.25,agriculture
+2026-02-27,CBOT Corn,ZC=F,438.75,agriculture
+2026-03-02,CBOT Corn,ZC=F,433.25,agriculture
+2026-03-03,CBOT Corn,ZC=F,434.25,agriculture
+2026-03-04,CBOT Corn,ZC=F,431.75,agriculture
+2026-03-05,CBOT Corn,ZC=F,441.5,agriculture
+2026-03-06,CBOT Corn,ZC=F,447.0,agriculture
+2026-03-09,CBOT Corn,ZC=F,437.5,agriculture
+2026-03-10,CBOT Corn,ZC=F,436.25,agriculture
+2026-03-11,CBOT Corn,ZC=F,444.25,agriculture
+2026-03-12,CBOT Corn,ZC=F,448.25,agriculture
+2026-03-13,CBOT Corn,ZC=F,452.5,agriculture
+2026-03-16,CBOT Corn,ZC=F,454.0,agriculture
+2026-03-17,CBOT Corn,ZC=F,454.0,agriculture
+2026-03-18,CBOT Corn,ZC=F,463.25,agriculture
+2026-03-19,CBOT Corn,ZC=F,469.75,agriculture
+2026-03-20,CBOT Corn,ZC=F,465.5,agriculture
+2026-03-23,CBOT Corn,ZC=F,459.5,agriculture
+2026-03-24,CBOT Corn,ZC=F,462.5,agriculture
+2026-03-25,CBOT Corn,ZC=F,467.25,agriculture
+2026-03-26,CBOT Corn,ZC=F,467.0,agriculture
+2026-03-27,CBOT Corn,ZC=F,462.0,agriculture
+2026-03-30,CBOT Corn,ZC=F,455.75,agriculture
+2026-03-31,CBOT Corn,ZC=F,457.75,agriculture
+2026-04-01,CBOT Corn,ZC=F,454.25,agriculture
+2026-04-02,CBOT Corn,ZC=F,452.25,agriculture
+2025-11-03,CBOT Wheat,ZW=F,543.5,agriculture
+2025-11-04,CBOT Wheat,ZW=F,550.25,agriculture
+2025-11-05,CBOT Wheat,ZW=F,554.75,agriculture
+2025-11-06,CBOT Wheat,ZW=F,535.5,agriculture
+2025-11-07,CBOT Wheat,ZW=F,527.75,agriculture
+2025-11-10,CBOT Wheat,ZW=F,535.75,agriculture
+2025-11-11,CBOT Wheat,ZW=F,536.0,agriculture
+2025-11-12,CBOT Wheat,ZW=F,536.0,agriculture
+2025-11-13,CBOT Wheat,ZW=F,535.75,agriculture
+2025-11-14,CBOT Wheat,ZW=F,527.25,agriculture
+2025-11-17,CBOT Wheat,ZW=F,544.25,agriculture
+2025-11-18,CBOT Wheat,ZW=F,546.5,agriculture
+2025-11-19,CBOT Wheat,ZW=F,536.75,agriculture
+2025-11-20,CBOT Wheat,ZW=F,527.0,agriculture
+2025-11-21,CBOT Wheat,ZW=F,527.0,agriculture
+2025-11-24,CBOT Wheat,ZW=F,522.25,agriculture
+2025-11-25,CBOT Wheat,ZW=F,527.25,agriculture
+2025-11-26,CBOT Wheat,ZW=F,529.0,agriculture
+2025-11-28,CBOT Wheat,ZW=F,531.0,agriculture
+2025-12-01,CBOT Wheat,ZW=F,530.25,agriculture
+2025-12-02,CBOT Wheat,ZW=F,537.75,agriculture
+2025-12-03,CBOT Wheat,ZW=F,537.75,agriculture
+2025-12-04,CBOT Wheat,ZW=F,541.0,agriculture
+2025-12-05,CBOT Wheat,ZW=F,537.5,agriculture
+2025-12-08,CBOT Wheat,ZW=F,536.0,agriculture
+2025-12-09,CBOT Wheat,ZW=F,536.25,agriculture
+2025-12-10,CBOT Wheat,ZW=F,531.25,agriculture
+2025-12-11,CBOT Wheat,ZW=F,534.5,agriculture
+2025-12-12,CBOT Wheat,ZW=F,534.5,agriculture
+2025-12-15,CBOT Wheat,ZW=F,520.75,agriculture
+2025-12-16,CBOT Wheat,ZW=F,509.5,agriculture
+2025-12-17,CBOT Wheat,ZW=F,506.25,agriculture
+2025-12-18,CBOT Wheat,ZW=F,507.75,agriculture
+2025-12-19,CBOT Wheat,ZW=F,509.75,agriculture
+2025-12-22,CBOT Wheat,ZW=F,515.5,agriculture
+2025-12-23,CBOT Wheat,ZW=F,517.0,agriculture
+2025-12-24,CBOT Wheat,ZW=F,521.75,agriculture
+2025-12-26,CBOT Wheat,ZW=F,519.0,agriculture
+2025-12-29,CBOT Wheat,ZW=F,513.0,agriculture
+2025-12-30,CBOT Wheat,ZW=F,510.75,agriculture
+2025-12-31,CBOT Wheat,ZW=F,507.0,agriculture
+2026-01-02,CBOT Wheat,ZW=F,506.5,agriculture
+2026-01-05,CBOT Wheat,ZW=F,512.5,agriculture
+2026-01-06,CBOT Wheat,ZW=F,510.5,agriculture
+2026-01-07,CBOT Wheat,ZW=F,518.0,agriculture
+2026-01-08,CBOT Wheat,ZW=F,518.0,agriculture
+2026-01-09,CBOT Wheat,ZW=F,517.25,agriculture
+2026-01-12,CBOT Wheat,ZW=F,511.25,agriculture
+2026-01-13,CBOT Wheat,ZW=F,510.5,agriculture
+2026-01-14,CBOT Wheat,ZW=F,512.5,agriculture
+2026-01-15,CBOT Wheat,ZW=F,510.5,agriculture
+2026-01-16,CBOT Wheat,ZW=F,518.0,agriculture
+2026-01-20,CBOT Wheat,ZW=F,510.25,agriculture
+2026-01-21,CBOT Wheat,ZW=F,507.75,agriculture
+2026-01-22,CBOT Wheat,ZW=F,515.5,agriculture
+2026-01-23,CBOT Wheat,ZW=F,529.5,agriculture
+2026-01-26,CBOT Wheat,ZW=F,522.5,agriculture
+2026-01-27,CBOT Wheat,ZW=F,523.25,agriculture
+2026-01-28,CBOT Wheat,ZW=F,536.0,agriculture
+2026-01-29,CBOT Wheat,ZW=F,541.5,agriculture
+2026-01-30,CBOT Wheat,ZW=F,538.0,agriculture
+2026-02-02,CBOT Wheat,ZW=F,527.75,agriculture
+2026-02-03,CBOT Wheat,ZW=F,528.75,agriculture
+2026-02-04,CBOT Wheat,ZW=F,526.75,agriculture
+2026-02-05,CBOT Wheat,ZW=F,535.25,agriculture
+2026-02-06,CBOT Wheat,ZW=F,529.75,agriculture
+2026-02-09,CBOT Wheat,ZW=F,528.75,agriculture
+2026-02-10,CBOT Wheat,ZW=F,528.25,agriculture
+2026-02-11,CBOT Wheat,ZW=F,537.25,agriculture
+2026-02-12,CBOT Wheat,ZW=F,552.5,agriculture
+2026-02-13,CBOT Wheat,ZW=F,548.75,agriculture
+2026-02-17,CBOT Wheat,ZW=F,537.75,agriculture
+2026-02-18,CBOT Wheat,ZW=F,547.0,agriculture
+2026-02-19,CBOT Wheat,ZW=F,559.5,agriculture
+2026-02-20,CBOT Wheat,ZW=F,573.5,agriculture
+2026-02-23,CBOT Wheat,ZW=F,569.5,agriculture
+2026-02-24,CBOT Wheat,ZW=F,567.5,agriculture
+2026-02-25,CBOT Wheat,ZW=F,565.75,agriculture
+2026-02-26,CBOT Wheat,ZW=F,571.75,agriculture
+2026-02-27,CBOT Wheat,ZW=F,591.25,agriculture
+2026-03-02,CBOT Wheat,ZW=F,574.5,agriculture
+2026-03-03,CBOT Wheat,ZW=F,572.25,agriculture
+2026-03-04,CBOT Wheat,ZW=F,566.75,agriculture
+2026-03-05,CBOT Wheat,ZW=F,582.75,agriculture
+2026-03-06,CBOT Wheat,ZW=F,611.25,agriculture
+2026-03-09,CBOT Wheat,ZW=F,598.0,agriculture
+2026-03-10,CBOT Wheat,ZW=F,584.75,agriculture
+2026-03-11,CBOT Wheat,ZW=F,588.5,agriculture
+2026-03-12,CBOT Wheat,ZW=F,592.25,agriculture
+2026-03-13,CBOT Wheat,ZW=F,618.5,agriculture
+2026-03-16,CBOT Wheat,ZW=F,597.25,agriculture
+2026-03-17,CBOT Wheat,ZW=F,589.75,agriculture
+2026-03-18,CBOT Wheat,ZW=F,604.25,agriculture
+2026-03-19,CBOT Wheat,ZW=F,608.0,agriculture
+2026-03-20,CBOT Wheat,ZW=F,595.25,agriculture
+2026-03-23,CBOT Wheat,ZW=F,587.75,agriculture
+2026-03-24,CBOT Wheat,ZW=F,590.0,agriculture
+2026-03-25,CBOT Wheat,ZW=F,597.75,agriculture
+2026-03-26,CBOT Wheat,ZW=F,605.0,agriculture
+2026-03-27,CBOT Wheat,ZW=F,605.0,agriculture
+2026-03-30,CBOT Wheat,ZW=F,607.0,agriculture
+2026-03-31,CBOT Wheat,ZW=F,616.25,agriculture
+2026-04-01,CBOT Wheat,ZW=F,597.5,agriculture
+2026-04-02,CBOT Wheat,ZW=F,598.25,agriculture
+2025-11-03,Coal Sector (ETF),COAL,22.280033111572266,non_hormuz_energy
+2025-11-04,Coal Sector (ETF),COAL,21.596847534179688,non_hormuz_energy
+2025-11-05,Coal Sector (ETF),COAL,21.749858856201172,non_hormuz_energy
+2025-11-06,Coal Sector (ETF),COAL,22.257617950439453,non_hormuz_energy
+2025-11-07,Coal Sector (ETF),COAL,22.32291603088379,non_hormuz_energy
+2025-11-10,Coal Sector (ETF),COAL,22.622114181518555,non_hormuz_energy
+2025-11-11,Coal Sector (ETF),COAL,22.560714721679688,non_hormuz_energy
+2025-11-12,Coal Sector (ETF),COAL,22.558765411376953,non_hormuz_energy
+2025-11-13,Coal Sector (ETF),COAL,21.72354507446289,non_hormuz_energy
+2025-11-14,Coal Sector (ETF),COAL,21.686511993408203,non_hormuz_energy
+2025-11-17,Coal Sector (ETF),COAL,21.52570343017578,non_hormuz_energy
+2025-11-18,Coal Sector (ETF),COAL,21.27523422241211,non_hormuz_energy
+2025-11-19,Coal Sector (ETF),COAL,20.982858657836914,non_hormuz_energy
+2025-11-20,Coal Sector (ETF),COAL,20.4731502532959,non_hormuz_energy
+2025-11-21,Coal Sector (ETF),COAL,20.360097885131836,non_hormuz_energy
+2025-11-24,Coal Sector (ETF),COAL,20.383487701416016,non_hormuz_energy
+2025-11-25,Coal Sector (ETF),COAL,20.764551162719727,non_hormuz_energy
+2025-11-26,Coal Sector (ETF),COAL,20.97701072692871,non_hormuz_energy
+2025-11-28,Coal Sector (ETF),COAL,21.063749313354492,non_hormuz_energy
+2025-12-01,Coal Sector (ETF),COAL,20.977985382080078,non_hormuz_energy
+2025-12-02,Coal Sector (ETF),COAL,21.28595542907715,non_hormuz_energy
+2025-12-03,Coal Sector (ETF),COAL,22.30829620361328,non_hormuz_energy
+2025-12-04,Coal Sector (ETF),COAL,22.367746353149414,non_hormuz_energy
+2025-12-05,Coal Sector (ETF),COAL,22.454486846923828,non_hormuz_energy
+2025-12-08,Coal Sector (ETF),COAL,21.886301040649414,non_hormuz_energy
+2025-12-09,Coal Sector (ETF),COAL,22.006174087524414,non_hormuz_energy
+2025-12-10,Coal Sector (ETF),COAL,21.996429443359375,non_hormuz_energy
+2025-12-11,Coal Sector (ETF),COAL,22.532453536987305,non_hormuz_energy
+2025-12-12,Coal Sector (ETF),COAL,22.221559524536133,non_hormuz_energy
+2025-12-15,Coal Sector (ETF),COAL,22.07439613342285,non_hormuz_energy
+2025-12-16,Coal Sector (ETF),COAL,21.8609619140625,non_hormuz_energy
+2025-12-17,Coal Sector (ETF),COAL,21.936979293823242,non_hormuz_energy
+2025-12-18,Coal Sector (ETF),COAL,22.221559524536133,non_hormuz_energy
+2025-12-19,Coal Sector (ETF),COAL,22.659149169921875,non_hormuz_energy
+2025-12-22,Coal Sector (ETF),COAL,22.668893814086914,non_hormuz_energy
+2025-12-23,Coal Sector (ETF),COAL,23.010000228881836,non_hormuz_energy
+2025-12-24,Coal Sector (ETF),COAL,23.136695861816406,non_hormuz_energy
+2025-12-26,Coal Sector (ETF),COAL,23.087966918945312,non_hormuz_energy
+2025-12-29,Coal Sector (ETF),COAL,23.010000228881836,non_hormuz_energy
+2025-12-30,Coal Sector (ETF),COAL,22.940000534057617,non_hormuz_energy
+2025-12-31,Coal Sector (ETF),COAL,22.809999465942383,non_hormuz_energy
+2026-01-02,Coal Sector (ETF),COAL,23.31999969482422,non_hormuz_energy
+2026-01-05,Coal Sector (ETF),COAL,23.55900001525879,non_hormuz_energy
+2026-01-06,Coal Sector (ETF),COAL,24.15999984741211,non_hormuz_energy
+2026-01-07,Coal Sector (ETF),COAL,24.309999465942383,non_hormuz_energy
+2026-01-08,Coal Sector (ETF),COAL,24.68000030517578,non_hormuz_energy
+2026-01-09,Coal Sector (ETF),COAL,24.969999313354492,non_hormuz_energy
+2026-01-12,Coal Sector (ETF),COAL,25.729999542236328,non_hormuz_energy
+2026-01-13,Coal Sector (ETF),COAL,25.457000732421875,non_hormuz_energy
+2026-01-14,Coal Sector (ETF),COAL,26.280000686645508,non_hormuz_energy
+2026-01-15,Coal Sector (ETF),COAL,26.290000915527344,non_hormuz_energy
+2026-01-16,Coal Sector (ETF),COAL,26.069000244140625,non_hormuz_energy
+2026-01-20,Coal Sector (ETF),COAL,26.239999771118164,non_hormuz_energy
+2026-01-21,Coal Sector (ETF),COAL,26.790000915527344,non_hormuz_energy
+2026-01-22,Coal Sector (ETF),COAL,27.08799934387207,non_hormuz_energy
+2026-01-23,Coal Sector (ETF),COAL,27.18000030517578,non_hormuz_energy
+2026-01-26,Coal Sector (ETF),COAL,26.219999313354492,non_hormuz_energy
+2026-01-27,Coal Sector (ETF),COAL,26.729999542236328,non_hormuz_energy
+2026-01-28,Coal Sector (ETF),COAL,26.559999465942383,non_hormuz_energy
+2026-01-29,Coal Sector (ETF),COAL,26.8799991607666,non_hormuz_energy
+2026-01-30,Coal Sector (ETF),COAL,25.82699966430664,non_hormuz_energy
+2026-02-02,Coal Sector (ETF),COAL,25.833999633789062,non_hormuz_energy
+2026-02-03,Coal Sector (ETF),COAL,26.420000076293945,non_hormuz_energy
+2026-02-04,Coal Sector (ETF),COAL,26.469999313354492,non_hormuz_energy
+2026-02-05,Coal Sector (ETF),COAL,25.341999053955078,non_hormuz_energy
+2026-02-06,Coal Sector (ETF),COAL,25.96299934387207,non_hormuz_energy
+2026-02-09,Coal Sector (ETF),COAL,26.566999435424805,non_hormuz_energy
+2026-02-10,Coal Sector (ETF),COAL,26.020000457763672,non_hormuz_energy
+2026-02-11,Coal Sector (ETF),COAL,26.25,non_hormuz_energy
+2026-02-12,Coal Sector (ETF),COAL,25.649999618530273,non_hormuz_energy
+2026-02-13,Coal Sector (ETF),COAL,25.510000228881836,non_hormuz_energy
+2026-02-17,Coal Sector (ETF),COAL,25.049999237060547,non_hormuz_energy
+2026-02-18,Coal Sector (ETF),COAL,25.260000228881836,non_hormuz_energy
+2026-02-19,Coal Sector (ETF),COAL,25.15999984741211,non_hormuz_energy
+2026-02-20,Coal Sector (ETF),COAL,25.0,non_hormuz_energy
+2026-02-23,Coal Sector (ETF),COAL,25.34000015258789,non_hormuz_energy
+2026-02-24,Coal Sector (ETF),COAL,25.600000381469727,non_hormuz_energy
+2026-02-25,Coal Sector (ETF),COAL,25.350000381469727,non_hormuz_energy
+2026-02-26,Coal Sector (ETF),COAL,24.709999084472656,non_hormuz_energy
+2026-02-27,Coal Sector (ETF),COAL,24.690000534057617,non_hormuz_energy
+2026-03-02,Coal Sector (ETF),COAL,25.25,non_hormuz_energy
+2026-03-03,Coal Sector (ETF),COAL,25.530000686645508,non_hormuz_energy
+2026-03-04,Coal Sector (ETF),COAL,26.200000762939453,non_hormuz_energy
+2026-03-05,Coal Sector (ETF),COAL,25.3799991607666,non_hormuz_energy
+2026-03-06,Coal Sector (ETF),COAL,25.579999923706055,non_hormuz_energy
+2026-03-09,Coal Sector (ETF),COAL,26.0,non_hormuz_energy
+2026-03-10,Coal Sector (ETF),COAL,26.0,non_hormuz_energy
+2026-03-11,Coal Sector (ETF),COAL,26.489999771118164,non_hormuz_energy
+2026-03-12,Coal Sector (ETF),COAL,27.040000915527344,non_hormuz_energy
+2026-03-13,Coal Sector (ETF),COAL,26.739999771118164,non_hormuz_energy
+2026-03-16,Coal Sector (ETF),COAL,26.59000015258789,non_hormuz_energy
+2026-03-17,Coal Sector (ETF),COAL,26.530000686645508,non_hormuz_energy
+2026-03-18,Coal Sector (ETF),COAL,26.389999389648438,non_hormuz_energy
+2026-03-19,Coal Sector (ETF),COAL,27.540000915527344,non_hormuz_energy
+2026-03-20,Coal Sector (ETF),COAL,27.049999237060547,non_hormuz_energy
+2026-03-23,Coal Sector (ETF),COAL,27.0,non_hormuz_energy
+2026-03-24,Coal Sector (ETF),COAL,28.299999237060547,non_hormuz_energy
+2026-03-25,Coal Sector (ETF),COAL,27.950000762939453,non_hormuz_energy
+2026-03-26,Coal Sector (ETF),COAL,27.43000030517578,non_hormuz_energy
+2026-03-27,Coal Sector (ETF),COAL,28.399999618530273,non_hormuz_energy
+2026-03-30,Coal Sector (ETF),COAL,28.079999923706055,non_hormuz_energy
+2026-03-31,Coal Sector (ETF),COAL,27.440000534057617,non_hormuz_energy
+2026-04-01,Coal Sector (ETF),COAL,27.469999313354492,non_hormuz_energy
+2026-04-02,Coal Sector (ETF),COAL,27.709999084472656,non_hormuz_energy
+2025-11-03,Henry Hub Nat Gas,NG=F,4.265999794006348,non_hormuz_energy
+2025-11-04,Henry Hub Nat Gas,NG=F,4.3429999351501465,non_hormuz_energy
+2025-11-05,Henry Hub Nat Gas,NG=F,4.23199987411499,non_hormuz_energy
+2025-11-06,Henry Hub Nat Gas,NG=F,4.35699987411499,non_hormuz_energy
+2025-11-07,Henry Hub Nat Gas,NG=F,4.315000057220459,non_hormuz_energy
+2025-11-10,Henry Hub Nat Gas,NG=F,4.3379998207092285,non_hormuz_energy
+2025-11-11,Henry Hub Nat Gas,NG=F,4.565000057220459,non_hormuz_energy
+2025-11-12,Henry Hub Nat Gas,NG=F,4.5329999923706055,non_hormuz_energy
+2025-11-13,Henry Hub Nat Gas,NG=F,4.645999908447266,non_hormuz_energy
+2025-11-14,Henry Hub Nat Gas,NG=F,4.565999984741211,non_hormuz_energy
+2025-11-17,Henry Hub Nat Gas,NG=F,4.361000061035156,non_hormuz_energy
+2025-11-18,Henry Hub Nat Gas,NG=F,4.370999813079834,non_hormuz_energy
+2025-11-19,Henry Hub Nat Gas,NG=F,4.550000190734863,non_hormuz_energy
+2025-11-20,Henry Hub Nat Gas,NG=F,4.473999977111816,non_hormuz_energy
+2025-11-21,Henry Hub Nat Gas,NG=F,4.579999923706055,non_hormuz_energy
+2025-11-24,Henry Hub Nat Gas,NG=F,4.548999786376953,non_hormuz_energy
+2025-11-25,Henry Hub Nat Gas,NG=F,4.423999786376953,non_hormuz_energy
+2025-11-26,Henry Hub Nat Gas,NG=F,4.558000087738037,non_hormuz_energy
+2025-11-28,Henry Hub Nat Gas,NG=F,4.849999904632568,non_hormuz_energy
+2025-12-01,Henry Hub Nat Gas,NG=F,4.921000003814697,non_hormuz_energy
+2025-12-02,Henry Hub Nat Gas,NG=F,4.840000152587891,non_hormuz_energy
+2025-12-03,Henry Hub Nat Gas,NG=F,4.994999885559082,non_hormuz_energy
+2025-12-04,Henry Hub Nat Gas,NG=F,5.063000202178955,non_hormuz_energy
+2025-12-05,Henry Hub Nat Gas,NG=F,5.289000034332275,non_hormuz_energy
+2025-12-08,Henry Hub Nat Gas,NG=F,4.9120001792907715,non_hormuz_energy
+2025-12-09,Henry Hub Nat Gas,NG=F,4.573999881744385,non_hormuz_energy
+2025-12-10,Henry Hub Nat Gas,NG=F,4.59499979019165,non_hormuz_energy
+2025-12-11,Henry Hub Nat Gas,NG=F,4.230999946594238,non_hormuz_energy
+2025-12-12,Henry Hub Nat Gas,NG=F,4.11299991607666,non_hormuz_energy
+2025-12-15,Henry Hub Nat Gas,NG=F,4.01200008392334,non_hormuz_energy
+2025-12-16,Henry Hub Nat Gas,NG=F,3.885999917984009,non_hormuz_energy
+2025-12-17,Henry Hub Nat Gas,NG=F,4.02400016784668,non_hormuz_energy
+2025-12-18,Henry Hub Nat Gas,NG=F,3.9079999923706055,non_hormuz_energy
+2025-12-19,Henry Hub Nat Gas,NG=F,3.9839999675750732,non_hormuz_energy
+2025-12-22,Henry Hub Nat Gas,NG=F,3.9649999141693115,non_hormuz_energy
+2025-12-23,Henry Hub Nat Gas,NG=F,4.4079999923706055,non_hormuz_energy
+2025-12-24,Henry Hub Nat Gas,NG=F,4.242000102996826,non_hormuz_energy
+2025-12-26,Henry Hub Nat Gas,NG=F,4.366000175476074,non_hormuz_energy
+2025-12-29,Henry Hub Nat Gas,NG=F,4.686999797821045,non_hormuz_energy
+2025-12-30,Henry Hub Nat Gas,NG=F,3.9719998836517334,non_hormuz_energy
+2025-12-31,Henry Hub Nat Gas,NG=F,3.686000108718872,non_hormuz_energy
+2026-01-02,Henry Hub Nat Gas,NG=F,3.618000030517578,non_hormuz_energy
+2026-01-05,Henry Hub Nat Gas,NG=F,3.5230000019073486,non_hormuz_energy
+2026-01-06,Henry Hub Nat Gas,NG=F,3.3499999046325684,non_hormuz_energy
+2026-01-07,Henry Hub Nat Gas,NG=F,3.5250000953674316,non_hormuz_energy
+2026-01-08,Henry Hub Nat Gas,NG=F,3.4070000648498535,non_hormuz_energy
+2026-01-09,Henry Hub Nat Gas,NG=F,3.1689999103546143,non_hormuz_energy
+2026-01-12,Henry Hub Nat Gas,NG=F,3.4089999198913574,non_hormuz_energy
+2026-01-13,Henry Hub Nat Gas,NG=F,3.4189999103546143,non_hormuz_energy
+2026-01-14,Henry Hub Nat Gas,NG=F,3.119999885559082,non_hormuz_energy
+2026-01-15,Henry Hub Nat Gas,NG=F,3.128000020980835,non_hormuz_energy
+2026-01-16,Henry Hub Nat Gas,NG=F,3.1029999256134033,non_hormuz_energy
+2026-01-20,Henry Hub Nat Gas,NG=F,3.9070000648498535,non_hormuz_energy
+2026-01-21,Henry Hub Nat Gas,NG=F,4.875,non_hormuz_energy
+2026-01-22,Henry Hub Nat Gas,NG=F,5.045000076293945,non_hormuz_energy
+2026-01-23,Henry Hub Nat Gas,NG=F,5.275000095367432,non_hormuz_energy
+2026-01-26,Henry Hub Nat Gas,NG=F,6.800000190734863,non_hormuz_energy
+2026-01-27,Henry Hub Nat Gas,NG=F,6.953999996185303,non_hormuz_energy
+2026-01-28,Henry Hub Nat Gas,NG=F,7.460000038146973,non_hormuz_energy
+2026-01-29,Henry Hub Nat Gas,NG=F,3.9179999828338623,non_hormuz_energy
+2026-01-30,Henry Hub Nat Gas,NG=F,4.354000091552734,non_hormuz_energy
+2026-02-02,Henry Hub Nat Gas,NG=F,3.236999988555908,non_hormuz_energy
+2026-02-03,Henry Hub Nat Gas,NG=F,3.311000108718872,non_hormuz_energy
+2026-02-04,Henry Hub Nat Gas,NG=F,3.4649999141693115,non_hormuz_energy
+2026-02-05,Henry Hub Nat Gas,NG=F,3.509000062942505,non_hormuz_energy
+2026-02-06,Henry Hub Nat Gas,NG=F,3.421999931335449,non_hormuz_energy
+2026-02-09,Henry Hub Nat Gas,NG=F,3.138000011444092,non_hormuz_energy
+2026-02-10,Henry Hub Nat Gas,NG=F,3.115000009536743,non_hormuz_energy
+2026-02-11,Henry Hub Nat Gas,NG=F,3.1589999198913574,non_hormuz_energy
+2026-02-12,Henry Hub Nat Gas,NG=F,3.2170000076293945,non_hormuz_energy
+2026-02-13,Henry Hub Nat Gas,NG=F,3.243000030517578,non_hormuz_energy
+2026-02-17,Henry Hub Nat Gas,NG=F,3.0309998989105225,non_hormuz_energy
+2026-02-18,Henry Hub Nat Gas,NG=F,3.010999917984009,non_hormuz_energy
+2026-02-19,Henry Hub Nat Gas,NG=F,2.996000051498413,non_hormuz_energy
+2026-02-20,Henry Hub Nat Gas,NG=F,3.046999931335449,non_hormuz_energy
+2026-02-23,Henry Hub Nat Gas,NG=F,2.984999895095825,non_hormuz_energy
+2026-02-24,Henry Hub Nat Gas,NG=F,2.9149999618530273,non_hormuz_energy
+2026-02-25,Henry Hub Nat Gas,NG=F,2.9690001010894775,non_hormuz_energy
+2026-02-26,Henry Hub Nat Gas,NG=F,2.8269999027252197,non_hormuz_energy
+2026-02-27,Henry Hub Nat Gas,NG=F,2.8589999675750732,non_hormuz_energy
+2026-03-02,Henry Hub Nat Gas,NG=F,2.9600000381469727,non_hormuz_energy
+2026-03-03,Henry Hub Nat Gas,NG=F,3.053999900817871,non_hormuz_energy
+2026-03-04,Henry Hub Nat Gas,NG=F,2.9170000553131104,non_hormuz_energy
+2026-03-05,Henry Hub Nat Gas,NG=F,3.003000020980835,non_hormuz_energy
+2026-03-06,Henry Hub Nat Gas,NG=F,3.186000108718872,non_hormuz_energy
+2026-03-09,Henry Hub Nat Gas,NG=F,3.119999885559082,non_hormuz_energy
+2026-03-10,Henry Hub Nat Gas,NG=F,3.0199999809265137,non_hormuz_energy
+2026-03-11,Henry Hub Nat Gas,NG=F,3.2090001106262207,non_hormuz_energy
+2026-03-12,Henry Hub Nat Gas,NG=F,3.2330000400543213,non_hormuz_energy
+2026-03-13,Henry Hub Nat Gas,NG=F,3.13100004196167,non_hormuz_energy
+2026-03-16,Henry Hub Nat Gas,NG=F,3.0230000019073486,non_hormuz_energy
+2026-03-17,Henry Hub Nat Gas,NG=F,3.0329999923706055,non_hormuz_energy
+2026-03-18,Henry Hub Nat Gas,NG=F,3.065000057220459,non_hormuz_energy
+2026-03-19,Henry Hub Nat Gas,NG=F,3.1659998893737793,non_hormuz_energy
+2026-03-20,Henry Hub Nat Gas,NG=F,3.0950000286102295,non_hormuz_energy
+2026-03-23,Henry Hub Nat Gas,NG=F,2.8910000324249268,non_hormuz_energy
+2026-03-24,Henry Hub Nat Gas,NG=F,2.943000078201294,non_hormuz_energy
+2026-03-25,Henry Hub Nat Gas,NG=F,2.9519999027252197,non_hormuz_energy
+2026-03-26,Henry Hub Nat Gas,NG=F,2.999000072479248,non_hormuz_energy
+2026-03-27,Henry Hub Nat Gas,NG=F,3.0950000286102295,non_hormuz_energy
+2026-03-30,Henry Hub Nat Gas,NG=F,2.88700008392334,non_hormuz_energy
+2026-03-31,Henry Hub Nat Gas,NG=F,2.884000062942505,non_hormuz_energy
+2026-04-01,Henry Hub Nat Gas,NG=F,2.819000005722046,non_hormuz_energy
+2026-04-02,Henry Hub Nat Gas,NG=F,2.799999952316284,non_hormuz_energy
+2025-11-03,WTI Crude,CL=F,61.04999923706055,hormuz_exposed
+2025-11-04,WTI Crude,CL=F,60.560001373291016,hormuz_exposed
+2025-11-05,WTI Crude,CL=F,59.599998474121094,hormuz_exposed
+2025-11-06,WTI Crude,CL=F,59.43000030517578,hormuz_exposed
+2025-11-07,WTI Crude,CL=F,59.75,hormuz_exposed
+2025-11-10,WTI Crude,CL=F,60.130001068115234,hormuz_exposed
+2025-11-11,WTI Crude,CL=F,61.040000915527344,hormuz_exposed
+2025-11-12,WTI Crude,CL=F,58.4900016784668,hormuz_exposed
+2025-11-13,WTI Crude,CL=F,58.689998626708984,hormuz_exposed
+2025-11-14,WTI Crude,CL=F,60.09000015258789,hormuz_exposed
+2025-11-17,WTI Crude,CL=F,59.90999984741211,hormuz_exposed
+2025-11-18,WTI Crude,CL=F,60.7400016784668,hormuz_exposed
+2025-11-19,WTI Crude,CL=F,59.439998626708984,hormuz_exposed
+2025-11-20,WTI Crude,CL=F,59.13999938964844,hormuz_exposed
+2025-11-21,WTI Crude,CL=F,58.060001373291016,hormuz_exposed
+2025-11-24,WTI Crude,CL=F,58.84000015258789,hormuz_exposed
+2025-11-25,WTI Crude,CL=F,57.95000076293945,hormuz_exposed
+2025-11-26,WTI Crude,CL=F,58.650001525878906,hormuz_exposed
+2025-11-28,WTI Crude,CL=F,58.54999923706055,hormuz_exposed
+2025-12-01,WTI Crude,CL=F,59.31999969482422,hormuz_exposed
+2025-12-02,WTI Crude,CL=F,58.63999938964844,hormuz_exposed
+2025-12-03,WTI Crude,CL=F,58.95000076293945,hormuz_exposed
+2025-12-04,WTI Crude,CL=F,59.66999816894531,hormuz_exposed
+2025-12-05,WTI Crude,CL=F,60.08000183105469,hormuz_exposed
+2025-12-08,WTI Crude,CL=F,58.880001068115234,hormuz_exposed
+2025-12-09,WTI Crude,CL=F,58.25,hormuz_exposed
+2025-12-10,WTI Crude,CL=F,58.459999084472656,hormuz_exposed
+2025-12-11,WTI Crude,CL=F,57.599998474121094,hormuz_exposed
+2025-12-12,WTI Crude,CL=F,57.439998626708984,hormuz_exposed
+2025-12-15,WTI Crude,CL=F,56.81999969482422,hormuz_exposed
+2025-12-16,WTI Crude,CL=F,55.27000045776367,hormuz_exposed
+2025-12-17,WTI Crude,CL=F,55.939998626708984,hormuz_exposed
+2025-12-18,WTI Crude,CL=F,56.150001525878906,hormuz_exposed
+2025-12-19,WTI Crude,CL=F,56.65999984741211,hormuz_exposed
+2025-12-22,WTI Crude,CL=F,58.0099983215332,hormuz_exposed
+2025-12-23,WTI Crude,CL=F,58.380001068115234,hormuz_exposed
+2025-12-24,WTI Crude,CL=F,58.349998474121094,hormuz_exposed
+2025-12-26,WTI Crude,CL=F,56.7400016784668,hormuz_exposed
+2025-12-29,WTI Crude,CL=F,58.08000183105469,hormuz_exposed
+2025-12-30,WTI Crude,CL=F,57.95000076293945,hormuz_exposed
+2025-12-31,WTI Crude,CL=F,57.41999816894531,hormuz_exposed
+2026-01-02,WTI Crude,CL=F,57.31999969482422,hormuz_exposed
+2026-01-05,WTI Crude,CL=F,58.31999969482422,hormuz_exposed
+2026-01-06,WTI Crude,CL=F,57.130001068115234,hormuz_exposed
+2026-01-07,WTI Crude,CL=F,55.9900016784668,hormuz_exposed
+2026-01-08,WTI Crude,CL=F,57.7599983215332,hormuz_exposed
+2026-01-09,WTI Crude,CL=F,59.119998931884766,hormuz_exposed
+2026-01-12,WTI Crude,CL=F,59.5,hormuz_exposed
+2026-01-13,WTI Crude,CL=F,61.150001525878906,hormuz_exposed
+2026-01-14,WTI Crude,CL=F,62.02000045776367,hormuz_exposed
+2026-01-15,WTI Crude,CL=F,59.189998626708984,hormuz_exposed
+2026-01-16,WTI Crude,CL=F,59.439998626708984,hormuz_exposed
+2026-01-20,WTI Crude,CL=F,60.34000015258789,hormuz_exposed
+2026-01-21,WTI Crude,CL=F,60.619998931884766,hormuz_exposed
+2026-01-22,WTI Crude,CL=F,59.36000061035156,hormuz_exposed
+2026-01-23,WTI Crude,CL=F,61.06999969482422,hormuz_exposed
+2026-01-26,WTI Crude,CL=F,60.630001068115234,hormuz_exposed
+2026-01-27,WTI Crude,CL=F,62.38999938964844,hormuz_exposed
+2026-01-28,WTI Crude,CL=F,63.209999084472656,hormuz_exposed
+2026-01-29,WTI Crude,CL=F,65.41999816894531,hormuz_exposed
+2026-01-30,WTI Crude,CL=F,65.20999908447266,hormuz_exposed
+2026-02-02,WTI Crude,CL=F,62.13999938964844,hormuz_exposed
+2026-02-03,WTI Crude,CL=F,63.209999084472656,hormuz_exposed
+2026-02-04,WTI Crude,CL=F,65.13999938964844,hormuz_exposed
+2026-02-05,WTI Crude,CL=F,63.290000915527344,hormuz_exposed
+2026-02-06,WTI Crude,CL=F,63.54999923706055,hormuz_exposed
+2026-02-09,WTI Crude,CL=F,64.36000061035156,hormuz_exposed
+2026-02-10,WTI Crude,CL=F,63.959999084472656,hormuz_exposed
+2026-02-11,WTI Crude,CL=F,64.62999725341797,hormuz_exposed
+2026-02-12,WTI Crude,CL=F,62.84000015258789,hormuz_exposed
+2026-02-13,WTI Crude,CL=F,62.88999938964844,hormuz_exposed
+2026-02-17,WTI Crude,CL=F,62.33000183105469,hormuz_exposed
+2026-02-18,WTI Crude,CL=F,65.19000244140625,hormuz_exposed
+2026-02-19,WTI Crude,CL=F,66.43000030517578,hormuz_exposed
+2026-02-20,WTI Crude,CL=F,66.38999938964844,hormuz_exposed
+2026-02-23,WTI Crude,CL=F,66.30999755859375,hormuz_exposed
+2026-02-24,WTI Crude,CL=F,65.62999725341797,hormuz_exposed
+2026-02-25,WTI Crude,CL=F,65.41999816894531,hormuz_exposed
+2026-02-26,WTI Crude,CL=F,65.20999908447266,hormuz_exposed
+2026-02-27,WTI Crude,CL=F,67.0199966430664,hormuz_exposed
+2026-03-02,WTI Crude,CL=F,71.2300033569336,hormuz_exposed
+2026-03-03,WTI Crude,CL=F,74.55999755859375,hormuz_exposed
+2026-03-04,WTI Crude,CL=F,74.66000366210938,hormuz_exposed
+2026-03-05,WTI Crude,CL=F,81.01000213623047,hormuz_exposed
+2026-03-06,WTI Crude,CL=F,90.9000015258789,hormuz_exposed
+2026-03-09,WTI Crude,CL=F,94.7699966430664,hormuz_exposed
+2026-03-10,WTI Crude,CL=F,83.44999694824219,hormuz_exposed
+2026-03-11,WTI Crude,CL=F,87.25,hormuz_exposed
+2026-03-12,WTI Crude,CL=F,95.7300033569336,hormuz_exposed
+2026-03-13,WTI Crude,CL=F,98.70999908447266,hormuz_exposed
+2026-03-16,WTI Crude,CL=F,93.5,hormuz_exposed
+2026-03-17,WTI Crude,CL=F,96.20999908447266,hormuz_exposed
+2026-03-18,WTI Crude,CL=F,96.31999969482422,hormuz_exposed
+2026-03-19,WTI Crude,CL=F,96.13999938964844,hormuz_exposed
+2026-03-20,WTI Crude,CL=F,98.31999969482422,hormuz_exposed
+2026-03-23,WTI Crude,CL=F,88.12999725341797,hormuz_exposed
+2026-03-24,WTI Crude,CL=F,92.3499984741211,hormuz_exposed
+2026-03-25,WTI Crude,CL=F,90.31999969482422,hormuz_exposed
+2026-03-26,WTI Crude,CL=F,94.4800033569336,hormuz_exposed
+2026-03-27,WTI Crude,CL=F,99.63999938964844,hormuz_exposed
+2026-03-30,WTI Crude,CL=F,102.87999725341797,hormuz_exposed
+2026-03-31,WTI Crude,CL=F,101.37999725341797,hormuz_exposed
+2026-04-01,WTI Crude,CL=F,100.12000274658203,hormuz_exposed
+2026-04-02,WTI Crude,CL=F,111.54000091552734,hormuz_exposed

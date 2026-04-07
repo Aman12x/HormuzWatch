@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-hw-bg text-hw-text font-inter antialiased;
+  }
+  * {
+    @apply border-hw-border;
+  }
+}
+
+/* Range slider thumb styling */
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #e8b84b;
+  border: 2px solid #0a0a12;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(232, 184, 75, 0.5);
+}
+input[type='range']::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #e8b84b;
+  border: 2px solid #0a0a12;
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(232, 184, 75, 0.5);
+}
+input[type='range']::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, #89b4fa, #e8b84b 50%, #ef4444);
+}
+input[type='range']::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, #89b4fa, #e8b84b 50%, #ef4444);
+}
+
+@layer utilities {
+  .font-num {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  .scan-line {
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255,255,255,0.015) 2px,
+      rgba(255,255,255,0.015) 4px
+    );
+  }
+}

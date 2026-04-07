@@ -1,0 +1,31 @@
+country,iso3,iso_numeric,lat,lon,hormuz_oil_dependency_pct,fertilizer_import_exposure,refugee_impact,trade_with_iran_usd_bn,war_proximity,economy_score,war_score,overall_impact_score,notes
+Japan,JPN,392,36.2,138.3,87,high,low,0.3,remote,7.88,0.88,4.4,IEA: ~87% of oil imports from Middle East via Hormuz
+South Korea,KOR,410,37.6,127.0,72,high,low,0.8,remote,7.18,0.93,4.1,IEA: significant ME oil dependence; estimate
+China,CHN,156,35.9,104.2,38,high,low,14.5,remote,6.9,2.35,4.6,IEA: diversified suppliers incl. Russia; ~38% via Hormuz
+India,IND,356,20.6,78.9,58,high,medium,2.9,regional,6.7,3.95,5.3,IEA: Saudi+UAE+Iraq+Kuwait ~58%; trade estimate
+Taiwan,TWN,158,23.7,121.0,85,high,low,0.2,remote,7.77,0.87,4.3,IEA: similar to Japan; heavily ME-dependent
+Germany,DEU,276,51.2,10.5,10,medium,medium,0.8,remote,2.33,1.93,2.1,Post-Russia sanctions; mostly Norway/North Sea
+France,FRA,250,46.2,2.2,12,medium,low,0.5,remote,2.4,0.9,1.6,North Sea + Libya + Nigeria primary sources
+Italy,ITA,380,43.0,12.6,18,medium,low,0.4,remote,2.69,0.89,1.8,Libya + Algeria primary; some Gulf oil
+UK,GBR,826,54.0,-2.9,8,medium,low,0.3,regional,2.18,2.68,2.4,North Sea + Norway dominant
+Turkey,TUR,792,39.1,35.2,32,medium,high,4.8,proximate,3.85,7.2,5.5,Iraq imports + Iran border trade; major refugee host
+Pakistan,PAK,586,30.4,69.3,82,high,high,1.8,proximate,7.79,6.89,7.3,Gulf oil via Hormuz dominant; Iran border; refugee risk
+Afghanistan,AFG,4,33.9,67.7,58,high,high,1.9,proximate,6.6,6.9,6.8,Oil via Pakistan from Gulf; conflict spillover risk
+Iraq,IRQ,368,33.2,43.7,95,high,high,9.6,direct,9.24,9.49,9.4,OIL EXPORTER: 95% reflects export dependency; Iran border; IMF estimate
+Kuwait,KWT,414,29.4,47.7,95,low,medium,0.5,direct,5.5,7.3,6.4,OIL EXPORTER: all exports via Hormuz; estimate
+Saudi Arabia,SAU,682,24.0,45.1,90,low,low,0.2,proximate,5.22,4.47,4.8,OIL EXPORTER: ~90% of exports via Gulf; estimate
+UAE,ARE,784,24.5,54.4,90,medium,high,7.8,direct,7.06,9.31,8.2,OIL EXPORTER: large Iranian diaspora in Dubai; re-export hub
+Qatar,QAT,634,25.4,51.2,95,low,low,0.9,direct,5.54,6.34,5.9,OIL/LNG EXPORTER: all exports via Hormuz
+Bahrain,BHR,48,26.2,50.6,60,low,high,0.3,direct,3.73,8.53,6.1,Small exporter; Shia majority; proximity to conflict
+Oman,OMN,512,21.5,57.0,65,medium,medium,2.9,proximate,5.3,5.75,5.5,Exporter; Muscat corridor with Iran; some bypass via Mina al-Fahal
+Egypt,EGY,818,27.0,30.8,22,high,medium,0.3,regional,4.63,3.68,4.2,Suez Canal; some Gulf oil imports; wheat import dependency
+Jordan,JOR,400,31.9,36.2,92,high,high,0.5,proximate,8.15,6.75,7.5,~92% oil via Gulf Aqaba terminal; major refugee host
+Lebanon,LBN,422,33.9,35.5,88,high,high,0.7,direct,7.97,8.57,8.3,Imports all oil; Hezbollah-Iran nexus; pre-existing crisis
+Kenya,KEN,404,-0.6,37.9,78,high,medium,0.1,remote,7.41,1.86,4.6,Gulf oil via Mombasa port; fertilizer-dependent agriculture
+Ethiopia,ETH,231,9.1,40.5,72,high,medium,0.1,remote,7.11,1.86,4.5,Gulf oil via Djibouti; landlocked; food security risk
+Somalia,SOM,706,6.0,46.2,82,high,medium,0.1,regional,7.61,3.66,5.6,Gulf oil imports; fragile state; food security vulnerable
+Canada,CAN,124,60.0,-95.3,1,low,low,0.05,remote,0.76,0.86,0.8,Net oil exporter; minimal Hormuz exposure
+Australia,AUS,36,-25.3,133.8,60,medium,low,0.1,remote,4.76,0.86,2.8,Significant ME oil imports via Asia-Pacific refineries
+Brazil,BRA,76,-10.2,-53.2,5,low,low,0.2,remote,0.97,0.87,0.9,Domestic production dominant; minimal Gulf exposure
+Iran,IRN,364,32.4,53.7,98,medium,high,0,direct,10.00,10.00,10.00,PRIMARY TARGET: nuclear+military sites struck; own Hormuz closure = export revenue ~$0; rial -40%; mass internal displacement; existential threat — maximum exposure on all dimensions
+United States,USA,840,38.9,-95.7,3,low,low,0.05,direct,4.20,6.50,5.35,PRIMARY AGGRESSOR: ~$150-200B direct campaign costs; oil spike adds ~$300-400B consumer burden; defense industry boom offsets; not import-exposed
