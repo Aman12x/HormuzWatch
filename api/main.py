@@ -316,3 +316,24 @@ def health():
 def clear_cache():
     _cache.clear()
     return {"cleared": True}
+
+
+# ── Serve React frontend (production) ─────────────────────────────────────────
+from pathlib import Path
+from fastapi.responses import FileResponse
+
+_UI_DIST = Path(__file__).parent.parent / "hormuzwatch-ui" / "dist"
+
+if _UI_DIST.exists():
+    from fastapi.staticfiles import StaticFiles
+
+    @app.get("/")
+    def serve_root():
+        return FileResponse(_UI_DIST / "index.html")
+
+    @app.get("/{full_path:path}")
+    def serve_spa(full_path: str):
+        candidate = _UI_DIST / full_path
+        if candidate.exists() and candidate.is_file():
+            return FileResponse(candidate)
+        return FileResponse(_UI_DIST / "index.html")
