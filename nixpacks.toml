@@ -1,2 +1,15 @@
 [phases.setup]
-nixPkgs = ["nodejs_20"]
+nixPkgs = ["nodejs_20", "python312", "python312Packages.pip"]
+
+[phases.install]
+cmds = []
+
+[phases.build]
+cmds = [
+  "python3 -m venv /opt/venv",
+  ". /opt/venv/bin/activate && pip install -r api/requirements.txt",
+  "cd hormuzwatch-ui && npm ci && npm run build"
+]
+
+[start]
+cmd = "/opt/venv/bin/uvicorn api.main:app --host 0.0.0.0 --port $PORT"
