@@ -174,7 +174,7 @@ def _build_news() -> list[dict]:
 
     response = client.beta.messages.create(
         model="claude-haiku-4-5-20251001",
-        max_tokens=2000,
+        max_tokens=4000,
         tools=[{"type": "web_search_20250305", "name": "web_search"}],
         betas=["web-search-2025-03-05"],
         system=(
@@ -190,7 +190,7 @@ def _build_news() -> list[dict]:
                 "2. Strait of Hormuz shipping and oil prices\n"
                 "3. Global economic impact: food prices, fertilizer, energy\n"
                 "4. Diplomatic developments: ceasefire talks, UN, Turkey, Pakistan\n\n"
-                "Return a JSON array of up to 12 items, each with:\n"
+                "Return a JSON array of exactly 8 items, each with:\n"
                 "{\n"
                 '  "title": string,\n'
                 '  "summary": "string (2 sentences max)",\n'

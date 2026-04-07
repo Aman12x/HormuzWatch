@@ -52,7 +52,7 @@ export default function OverviewTab() {
         <div className="lg:col-span-3 space-y-3">
 
           {/* Situation brief */}
-          <div className="border border-hw-border p-4" style={{ background: '#16162a' }}>
+          <div className="border border-hw-border p-4" style={{ background: '#232840' }}>
             <div className="font-mono text-[10px] tracking-[0.2em] text-hw-muted mb-3">
               SITUATION BRIEF — DAY {conflictDay}
             </div>

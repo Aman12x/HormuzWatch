@@ -65,8 +65,8 @@ const MapTooltip = ({ data, x, y, warAlpha }) => {
         top: y - 10,
         pointerEvents: 'none',
         zIndex: 9999,
-        background: '#1e1e2e',
-        border: '1px solid #313244',
+        background: '#2a2f4a',
+        border: '1px solid #3a4060',
         borderLeft: `3px solid ${scoreColor}`,
         padding: '8px 12px',
         fontFamily: 'monospace',
@@ -100,7 +100,7 @@ const MapTooltip = ({ data, x, y, warAlpha }) => {
           <span>War score</span>
           <span style={{ color: '#ef4444' }}>{data.war_score.toFixed(2)}</span>
         </div>
-        <div style={{ borderTop: '1px solid #313244', marginTop: 4, paddingTop: 4 }}>
+        <div style={{ borderTop: '1px solid #3a4060', marginTop: 4, paddingTop: 4 }}>
           <div>Hormuz oil dep: <span style={{ color: '#cdd6f4' }}>{data.hormuz_oil_dependency_pct}%</span></div>
           <div>Fertilizer exp: <span style={{ color: '#cdd6f4' }}>{data.fertilizer_import_exposure.toUpperCase()}</span></div>
           <div>Iran trade: <span style={{ color: '#cdd6f4' }}>${data.trade_with_iran_usd_bn}B/yr</span></div>
@@ -117,7 +117,7 @@ const BarTooltip = ({ active, payload, warAlpha }) => {
   const score = compositeScore(d, warAlpha)
   return (
     <div style={{
-      background: '#1e1e2e', border: '1px solid #313244',
+      background: '#2a2f4a', border: '1px solid #3a4060',
       padding: '8px 12px', fontFamily: 'monospace', fontSize: 11,
     }}>
       <div style={{ color: '#cdd6f4', fontWeight: 'bold', marginBottom: 2 }}>{d.country}</div>
@@ -369,7 +369,7 @@ export default function GeoImpactTab() {
                 type="number"
                 domain={[0, 10]}
                 tick={{ fill: '#a6adc8', fontSize: 9, fontFamily: 'monospace' }}
-                axisLine={{ stroke: '#313244' }}
+                axisLine={{ stroke: '#3a4060' }}
                 tickLine={false}
                 tickFormatter={v => v.toFixed(0)}
               />
@@ -383,7 +383,7 @@ export default function GeoImpactTab() {
               />
               <Tooltip
                 content={<BarTooltipWrapper warAlpha={warAlpha} />}
-                cursor={{ fill: '#1e1e2e' }}
+                cursor={{ fill: '#2a2f4a' }}
               />
               <Bar dataKey="_score" radius={[0, 2, 2, 0]}>
                 {top15.map(entry => (

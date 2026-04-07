@@ -8,10 +8,10 @@ import { oilPrices, oilEventDates } from '../../data/oilPrices.js'
 import { attByPhase, syntheticControl, oilStats } from '../../data/metrics.js'
 
 const CHART_STYLE = {
-  bg     : '#1a1a28',
-  border : '#2a2a3a',
+  bg     : '#232840',
+  border : '#3a4060',
   text   : '#94a3b8',
-  grid   : '#2a2a3a',
+  grid   : '#3a4060',
   brent  : '#a78bfa',
   wti    : '#ef4444',
   gold   : '#e8b84b',
@@ -22,7 +22,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null
   return (
     <div style={{
-      background: '#1a1a28', border: '1px solid #2a2a3a',
+      background: '#232840', border: '1px solid #3a4060',
       padding: '8px 12px', fontSize: 11, fontFamily: 'monospace',
     }}>
       <p style={{ color: '#94a3b8', marginBottom: 4 }}>{label}</p>

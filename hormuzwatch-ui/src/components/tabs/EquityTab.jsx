@@ -13,14 +13,14 @@ const COLORS = {
   shipping_hormuz : '#ef4444',
   shipping_ctrl   : '#94a3b8',
 }
-const GRID = '#2a2a3a'
+const GRID = '#3a4060'
 const TEXT = '#94a3b8'
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null
   return (
     <div style={{
-      background: '#1a1a28', border: '1px solid #2a2a3a',
+      background: '#232840', border: '1px solid #3a4060',
       padding: '8px 12px', fontSize: 11, fontFamily: 'monospace',
     }}>
       <p style={{ color: '#94a3b8', marginBottom: 4 }}>

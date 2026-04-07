@@ -103,7 +103,7 @@ export default function Header() {
       {/* Live ticker bar */}
       <div
         className="px-4 md:px-6 py-1 flex items-center gap-6 overflow-x-auto"
-        style={{ background: '#141420', borderTop: '1px solid #2a2a3a33', borderBottom: '1px solid #2a2a3a' }}
+        style={{ background: '#1e2338', borderTop: '1px solid #3a406033', borderBottom: '1px solid #3a4060' }}
       >
         {tickerItems.map(item => (
           <div key={item.label} className="flex items-center gap-2 flex-shrink-0 py-0.5">

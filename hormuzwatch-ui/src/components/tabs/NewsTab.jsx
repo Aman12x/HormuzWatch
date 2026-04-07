@@ -50,7 +50,7 @@ function SkeletonCard() {
   return (
     <div
       className="border border-hw-border p-4 animate-pulse"
-      style={{ background: '#12121a', borderLeft: '3px solid #1e1e2e' }}
+      style={{ background: '#232840', borderLeft: '3px solid #2a2f4a' }}
     >
       <div className="flex justify-between items-start mb-3">
         <div className="h-2.5 bg-hw-border rounded w-16" />
@@ -85,7 +85,7 @@ function NewsCard({ item }) {
     <div
       className="border border-hw-border p-4 transition-all duration-150"
       style={{
-        background:  '#12121a',
+        background:  '#232840',
         borderLeft:  `3px solid ${sev.color}`,
         cursor:      item.url ? 'pointer' : 'default',
       }}
