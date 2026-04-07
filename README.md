@@ -4,8 +4,7 @@
 
 Six independent analytical methods applied to a real-world exogenous shock: synthetic control, difference-in-differences, event study, Granger causality, volatility regression, and placebo testing across commodity, equity, and food markets.
 
-Live dashboard: [hormuzwatch.up.railway.app](https://hormuzwatch.up.railway.app)  
-GitHub: [github.com/Aman12x/HormuzWatch](https://github.com/Aman12x/HormuzWatch)
+
 
 ---
 
