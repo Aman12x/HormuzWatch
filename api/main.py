@@ -172,10 +172,11 @@ def _anthropic_client():
 def _build_news() -> list[dict]:
     client = _anthropic_client()
 
-    response = client.messages.create(
+    response = client.beta.messages.create(
         model="claude-haiku-4-5-20251001",
         max_tokens=2000,
         tools=[{"type": "web_search_20250305", "name": "web_search"}],
+        betas=["web-search-2025-03-05"],
         system=(
             "You are a geopolitical intelligence analyst monitoring the 2026 "
             "US-Israel war on Iran and its global economic impact. "
@@ -236,10 +237,11 @@ def _build_news() -> list[dict]:
 def _build_news_summary() -> dict:
     client = _anthropic_client()
 
-    response = client.messages.create(
+    response = client.beta.messages.create(
         model="claude-haiku-4-5-20251001",
         max_tokens=400,
         tools=[{"type": "web_search_20250305", "name": "web_search"}],
+        betas=["web-search-2025-03-05"],
         system=(
             "You are a geopolitical intelligence analyst. "
             "Respond with plain text only. No JSON. No markdown. No bullet points."
