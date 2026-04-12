@@ -16,6 +16,8 @@ import traceback
 from datetime import date, datetime, timezone
 from typing import Any
 
+import anthropic
+import httpx
 import numpy as np
 import pandas as pd
 import yfinance as yf
@@ -268,6 +270,97 @@ def _build_news_summary() -> dict:
     }
 
 
+# ── Gemini fallback (used when Anthropic credits are exhausted) ────────────────
+# Free tier: 1500 req/day, 15 RPM. Get key at aistudio.google.com — no credit card needed.
+_GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
+
+_NEWS_PROMPT = (
+    "Search for the latest news from the last 24 hours on:\n"
+    "1. US-Israel military operations in Iran\n"
+    "2. Strait of Hormuz shipping and oil prices\n"
+    "3. Global economic impact: food prices, fertilizer, energy\n"
+    "4. Diplomatic developments: ceasefire talks, UN, Turkey, Pakistan\n\n"
+    "Return a JSON array of exactly 8 items, each with:\n"
+    "{\n"
+    '  "title": string,\n'
+    '  "summary": "string (2 sentences max)",\n'
+    '  "category": "one of [MILITARY, ENERGY, DIPLOMATIC, HUMANITARIAN, MARKETS]",\n'
+    '  "severity": "one of [CRITICAL, HIGH, MEDIUM, LOW]",\n'
+    '  "source": string,\n'
+    '  "timestamp": "ISO string (today if unknown)",\n'
+    '  "url": "string or null"\n'
+    "}\n"
+    "Return ONLY the JSON array. No markdown, no backticks, no preamble."
+)
+
+_SUMMARY_PROMPT = (
+    "Search for current news and give an executive intelligence brief "
+    "on the current state of the 2026 Iran war and its global economic impact. "
+    "In exactly 3 sentences. Be specific with numbers where possible. "
+    "Return plain text only, no JSON, no formatting."
+)
+
+
+def _gemini_request(prompt: str, system: str) -> str:
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY not set — cannot use Gemini fallback")
+    payload = {
+        "system_instruction": {"parts": [{"text": system}]},
+        "contents": [{"parts": [{"text": prompt}]}],
+        "tools": [{"google_search": {}}],
+    }
+    resp = httpx.post(
+        _GEMINI_URL,
+        params={"key": api_key},
+        json=payload,
+        timeout=30,
+    )
+    resp.raise_for_status()
+    return resp.json()["candidates"][0]["content"]["parts"][0]["text"]
+
+
+def _build_news_gemini() -> list[dict]:
+    raw = _gemini_request(
+        prompt=_NEWS_PROMPT,
+        system=(
+            "You are a geopolitical intelligence analyst monitoring the 2026 "
+            "US-Israel war on Iran and its global economic impact. "
+            "Return structured JSON only. No preamble. No markdown. No backticks."
+        ),
+    )
+    cleaned = _clean_json_response(raw)
+    items = json.loads(cleaned)
+
+    valid_categories = {"MILITARY", "ENERGY", "DIPLOMATIC", "HUMANITARIAN", "MARKETS"}
+    valid_severities = {"CRITICAL", "HIGH", "MEDIUM", "LOW"}
+    now_iso = datetime.now(timezone.utc).isoformat()
+
+    return [
+        {
+            "title":     str(item.get("title",    "No title")),
+            "summary":   str(item.get("summary",  "")),
+            "category":  item.get("category", "MARKETS") if item.get("category") in valid_categories else "MARKETS",
+            "severity":  item.get("severity",  "MEDIUM")  if item.get("severity")  in valid_severities  else "MEDIUM",
+            "source":    str(item.get("source",    "Unknown")),
+            "timestamp": str(item.get("timestamp", now_iso)),
+            "url":       item.get("url") or None,
+        }
+        for item in items
+    ]
+
+
+def _build_news_summary_gemini() -> dict:
+    text = _gemini_request(
+        prompt=_SUMMARY_PROMPT,
+        system="You are a geopolitical intelligence analyst. Respond with plain text only. No JSON. No markdown.",
+    )
+    return {
+        "brief":      text.strip(),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+    }
+
+
 # ── Routes ─────────────────────────────────────────────────────────────────────
 @app.get("/api/status")
 def status():
@@ -288,6 +381,23 @@ def news():
         )
     try:
         return cached("news", _build_news, ttl=NEWS_CACHE_TTL)
+    except (anthropic.RateLimitError, anthropic.BadRequestError) as e:
+        print(f"[news] Anthropic unavailable ({type(e).__name__}), trying Gemini fallback")
+        try:
+            return cached("news", _build_news_gemini, ttl=NEWS_CACHE_TTL)
+        except Exception:
+            traceback.print_exc()
+            if "news" in _cache:
+                return _cache["news"][0]
+            return [{
+                "title": "News feed temporarily unavailable",
+                "summary": "Both primary and fallback news providers are unavailable. Please check back later.",
+                "category": "MARKETS",
+                "severity": "LOW",
+                "source": "HormuzWatch System",
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "url": None,
+            }]
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
@@ -304,6 +414,18 @@ def news_summary():
         )
     try:
         return cached("news_summary", _build_news_summary, ttl=NEWS_CACHE_TTL)
+    except (anthropic.RateLimitError, anthropic.BadRequestError) as e:
+        print(f"[news/summary] Anthropic unavailable ({type(e).__name__}), trying Gemini fallback")
+        try:
+            return cached("news_summary", _build_news_summary_gemini, ttl=NEWS_CACHE_TTL)
+        except Exception:
+            traceback.print_exc()
+            if "news_summary" in _cache:
+                return _cache["news_summary"][0]
+            return {
+                "brief": "Intelligence brief temporarily unavailable. Both primary and fallback providers are down — please check back later.",
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+            }
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))

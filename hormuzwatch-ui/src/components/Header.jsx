@@ -6,7 +6,7 @@ const STATIC_TICKER = [
   { label: 'BRENT SPOT',   val: `$${oilStats.brentPeak}`,          dir: 'up',   sub: '+56.9% vs pre-war' },
   { label: 'FUTURES ATT',  val: `+$${syntheticControl.futuresATT}`, dir: 'up',   sub: 'causal estimate'   },
   { label: 'BASIS SPREAD', val: `$${syntheticControl.basisSpread}`, dir: 'up',   sub: 'physical premium'  },
-  { label: 'HORMUZ',       val: 'CLOSED',                           dir: 'warn', sub: 'day 30'            },
+  { label: 'HORMUZ',       val: 'CLOSED',                           dir: 'warn', sub: 'strait closed day 30' },
 ]
 
 export default function Header() {
@@ -49,7 +49,7 @@ export default function Header() {
       label: 'HORMUZ',
       val:   hormuzStatus,
       dir:   hormuzStatus === 'CLOSED' ? 'warn' : 'ok',
-      sub:   `day ${hormuzDay}`,
+      sub:   `strait closed day ${hormuzDay}`,
     },
   ] : STATIC_TICKER
 
@@ -90,12 +90,11 @@ export default function Header() {
           {!loading && !live && (
             <span className="text-hw-muted font-mono text-[10px]">CACHED</span>
           )}
-          <span className="text-hw-muted font-mono text-xs">CONFLICT</span>
           <div
             className="font-mono font-bold text-hw-gold px-2 py-0.5 border"
             style={{ fontSize: '1.1rem', borderColor: '#e8b84b55', background: '#e8b84b11' }}
           >
-            DAY {conflictDay}
+            CONFLICT DAY {conflictDay}
           </div>
         </div>
       </div>
