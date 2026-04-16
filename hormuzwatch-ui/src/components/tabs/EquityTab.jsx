@@ -4,8 +4,13 @@ import {
   ReferenceLine, ResponsiveContainer, Legend,
 } from 'recharts'
 import MetricCard from '../MetricCard.jsx'
-import { equitiesCAR } from '../../data/equities.js'
-import { equityStats, tickerCAR, shippingPlacebo } from '../../data/metrics.js'
+import { equitiesCAR as staticEquitiesCAR } from '../../data/equities.js'
+import {
+  equityStats as staticEquityStats,
+  tickerCAR as staticTickerCAR,
+  shippingPlacebo as staticShippingPlacebo,
+} from '../../data/metrics.js'
+import { useLiveData } from '../../context/LiveDataContext.jsx'
 
 const COLORS = {
   defense         : '#3b82f6',
@@ -38,6 +43,13 @@ const CustomTooltip = ({ active, payload, label }) => {
 const formatT = t => t === 0 ? 'T0' : (t > 0 ? `+${t}` : `${t}`)
 
 export default function EquityTab() {
+  const { live } = useLiveData() ?? {}
+
+  const equitiesCAR    = live?.timeseries?.equitiesCAR ?? staticEquitiesCAR
+  const equityStats    = live?.metrics?.equityStats    ?? staticEquityStats
+  const tickerCAR      = live?.metrics?.tickerCAR      ?? staticTickerCAR
+  const shippingPlacebo = live?.metrics?.shippingPlacebo ?? staticShippingPlacebo
+
   const lastPoint = equitiesCAR[equitiesCAR.length - 1] || {}
 
   return (
@@ -49,19 +61,19 @@ export default function EquityTab() {
           label="DEFENSE SECTOR CAR"
           value={`${equityStats.defense.car.toFixed(1)}%`}
           accent="red"
-          description="LMT −14.2% · RTX −5.7% · NOC −10.9%. Sell-the-news dynamics after prior pricing-in of conflict. Low market betas (R²<0.09) confirm decorrelation from SPY."
+          description={`LMT ${(tickerCAR.LMT ?? 0).toFixed(1)}% · RTX ${(tickerCAR.RTX ?? 0).toFixed(1)}% · NOC ${(tickerCAR.NOC ?? 0).toFixed(1)}%. Sell-the-news dynamics after prior pricing-in of conflict. Low market betas (R²<0.09) confirm decorrelation from SPY.`}
         />
         <MetricCard
           label="ENERGY SECTOR CAR"
-          value={`+${equityStats.energy.car.toFixed(1)}%`}
+          value={`${equityStats.energy.car >= 0 ? '+' : ''}${equityStats.energy.car.toFixed(1)}%`}
           accent="gold"
-          description="BP +16.4% · CVX −0.2% · XOM −4.7%. Entirely driven by BP's upstream exposure. XOM/CVX underperformed despite Brent +40%, consistent with demand-destruction hedging."
+          description={`BP ${(tickerCAR.BP ?? 0) >= 0 ? '+' : ''}${(tickerCAR.BP ?? 0).toFixed(1)}% · CVX ${(tickerCAR.CVX ?? 0).toFixed(1)}% · XOM ${(tickerCAR.XOM ?? 0).toFixed(1)}%. Driven by BP's upstream exposure. XOM/CVX underperformed despite Brent rally, consistent with demand-destruction hedging.`}
         />
         <MetricCard
           label="HORMUZ SHIPPING CAR"
           value={`${equityStats.shipping_hormuz.car.toFixed(1)}%`}
           accent="red"
-          description="FRO −13.4% · STNG −11.3%. Hormuz-exposed tankers sold off sharply — insurance premium spikes and seizure risk outweighed freight-rate upside."
+          description={`FRO ${(tickerCAR.FRO ?? 0).toFixed(1)}% · STNG ${(tickerCAR.STNG ?? 0).toFixed(1)}%. Hormuz-exposed tankers sold off sharply — insurance premium spikes and seizure risk outweighed freight-rate upside.`}
         />
         <MetricCard
           label="SHIPPING PLACEBO GAP"

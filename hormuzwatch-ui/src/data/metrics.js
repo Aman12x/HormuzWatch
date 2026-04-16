@@ -3,7 +3,7 @@
 
 export const CONFLICT_START = new Date('2026-02-28')
 export const HORMUZ_CLOSURE = new Date('2026-03-07')
-export const TODAY          = new Date('2026-04-06')
+export const TODAY          = new Date()
 
 export const CONFLICT_DAY = Math.floor(
   (TODAY - CONFLICT_START) / (1000 * 60 * 60 * 24)
@@ -105,9 +105,9 @@ export const timelineEvents = [
     type       : 'escalation',
   },
   {
-    date       : '06 APR 2026',
-    label      : 'Present (Day 37)',
-    description: 'Conflict ongoing. Diplomatic back-channels active. Futures curve in deep backwardation.',
+    date       : 'PRESENT',
+    label      : 'Conflict Ongoing',
+    description: 'Diplomatic back-channels active. Futures curve in deep backwardation.',
     type       : 'current',
   },
 ]

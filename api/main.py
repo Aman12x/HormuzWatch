@@ -10,10 +10,14 @@ from the hormuzwatch/ directory.
 import json
 import os
 import re
+import subprocess
+import sys
 import threading
 import time
 import traceback
+from contextlib import asynccontextmanager
 from datetime import date, datetime, timezone
+from pathlib import Path
 from typing import Any
 
 import anthropic
@@ -21,11 +25,16 @@ import httpx
 import numpy as np
 import pandas as pd
 import yfinance as yf
+from apscheduler.schedulers.background import BackgroundScheduler
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
+from api.compute import build_timeseries, build_metrics, is_stale
+
 load_dotenv()
+
+_ROOT = Path(__file__).parent.parent   # hormuzwatch/
 
 # ── Constants ──────────────────────────────────────────────────────────────────
 CONFLICT_START  = date(2026, 2, 28)
@@ -42,8 +51,52 @@ EQUITY_TICKERS  = ["LMT", "RTX", "NOC", "XOM", "CVX", "BP", "FRO", "STNG",
 CACHE_TTL       = 900   # 15 minutes
 NEWS_CACHE_TTL  = 900   # 15 minutes
 
+# ── Pipeline refresh ───────────────────────────────────────────────────────────
+_PIPELINES = ["energy", "equities", "commodities", "volatility"]
+
+def _run_pipelines() -> None:
+    """Run all data-ingestion pipelines as subprocesses, then clear cache."""
+    print("[refresh] Starting pipeline refresh …")
+    for pipe in _PIPELINES:
+        try:
+            result = subprocess.run(
+                [sys.executable, "-m", f"pipelines.{pipe}"],
+                cwd=str(_ROOT),
+                capture_output=True,
+                text=True,
+                timeout=180,
+            )
+            if result.returncode != 0:
+                print(f"[refresh] {pipe} FAILED:\n{result.stderr[:500]}")
+            else:
+                print(f"[refresh] {pipe} OK")
+        except subprocess.TimeoutExpired:
+            print(f"[refresh] {pipe} timed out")
+        except Exception as exc:
+            print(f"[refresh] {pipe} error: {exc}")
+    # Clear cached timeseries/metrics so next request recomputes from fresh CSVs
+    for k in ("timeseries", "metrics"):
+        _cache.pop(k, None)
+    print("[refresh] Done.")
+
+
+# ── Scheduler lifespan ─────────────────────────────────────────────────────────
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    scheduler = BackgroundScheduler(daemon=True)
+    scheduler.add_job(_run_pipelines, "interval", hours=24, id="daily_refresh")
+    scheduler.start()
+
+    # Refresh immediately on startup if CSVs are stale (>12 h old or missing)
+    if is_stale():
+        threading.Thread(target=_run_pipelines, daemon=True).start()
+
+    yield
+    scheduler.shutdown(wait=False)
+
+
 # ── App setup ──────────────────────────────────────────────────────────────────
-app = FastAPI(title="HormuzWatch API", version="1.1.0")
+app = FastAPI(title="HormuzWatch API", version="1.2.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -440,6 +493,46 @@ def health():
 def clear_cache():
     _cache.clear()
     return {"cleared": True}
+
+
+# ── Live econometric data ──────────────────────────────────────────────────────
+_TIMESERIES_TTL = 3600   # 1 hour — recomputed from CSVs which refresh every 24 h
+_METRICS_TTL    = 3600
+
+
+@app.get("/api/data/timeseries")
+def timeseries():
+    """
+    Time-series arrays for the frontend charts.
+    Returns: oilPrices, oilEventDates, equitiesCAR, volatility, updatedAt
+    Falls back gracefully if CSVs are missing.
+    """
+    try:
+        return cached("timeseries", build_timeseries, ttl=_TIMESERIES_TTL)
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/metrics")
+def metrics():
+    """
+    Computed econometric metrics: futuresATT, sector CARs, DiD coefficients, etc.
+    Returns: syntheticControl, attByPhase, equityStats, tickerCAR,
+             shippingPlacebo, oilStats, didResults (if available), updatedAt
+    """
+    try:
+        return cached("metrics", build_metrics, ttl=_METRICS_TTL)
+    except Exception as e:
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/refresh")
+def manual_refresh():
+    """Manually trigger a pipeline refresh (runs in background)."""
+    threading.Thread(target=_run_pipelines, daemon=True).start()
+    return {"status": "refresh_started", "time": datetime.now(timezone.utc).isoformat()}
 
 
 # ── Serve React frontend (production) ─────────────────────────────────────────

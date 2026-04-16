@@ -4,8 +4,9 @@ import {
   Legend, ReferenceLine, ResponsiveContainer, LabelList,
 } from 'recharts'
 import MetricCard from '../MetricCard.jsx'
-import { oilPrices, oilEventDates } from '../../data/oilPrices.js'
-import { attByPhase, syntheticControl, oilStats } from '../../data/metrics.js'
+import { oilPrices as staticOilPrices, oilEventDates as staticOilEventDates } from '../../data/oilPrices.js'
+import { attByPhase as staticAttByPhase, syntheticControl as staticSC, oilStats as staticOilStats } from '../../data/metrics.js'
+import { useLiveData } from '../../context/LiveDataContext.jsx'
 
 const CHART_STYLE = {
   bg     : '#232840',
@@ -42,11 +43,19 @@ const formatDate = (d) => {
   return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
-// Filter oil data: show from ~Oct 2025 to present
 const CHART_START = '2025-11-01'
-const chartOil = oilPrices.filter(d => d.date >= CHART_START)
 
 export default function EnergyTab() {
+  const { live } = useLiveData() ?? {}
+
+  const oilPrices    = live?.timeseries?.oilPrices    ?? staticOilPrices
+  const oilEventDates = live?.timeseries?.oilEventDates ?? staticOilEventDates
+  const sc           = live?.metrics?.syntheticControl ?? staticSC
+  const attByPhase   = live?.metrics?.attByPhase       ?? staticAttByPhase
+  const oilStats     = live?.metrics?.oilStats         ?? staticOilStats
+
+  const chartOil = oilPrices.filter(d => d.date >= CHART_START)
+
   return (
     <div className="space-y-4">
 
@@ -54,21 +63,21 @@ export default function EnergyTab() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <MetricCard
           label="SPOT ATT (EIA BRENT)"
-          value={`+$${syntheticControl.spotATT}`}
+          value={`+$${sc.spotATT}`}
           unit="/bbl"
           accent="gold"
           description="FRED Brent above Dubai synthetic. Note: Dubai data ends Feb 2026; spot ATT inflated by frozen synthetic. Tightens on March data."
         />
         <MetricCard
           label="FUTURES ATT (CAUSAL)"
-          value={`+$${syntheticControl.futuresATT}`}
+          value={`+$${sc.futuresATT}`}
           unit="/bbl"
           accent="blue"
-          description="Change in Brent-WTI futures spread (BZ=F − CL=F) post-treatment. Cleanest causal estimate: $3.51 Hormuz risk premium priced by paper market."
+          description="Change in Brent-WTI futures spread (BZ=F − CL=F) post-treatment. Cleanest causal estimate of Hormuz-specific war premium in the paper market."
         />
         <MetricCard
           label="BASIS SPREAD"
-          value={`$${syntheticControl.basisSpread}`}
+          value={`$${sc.basisSpread}`}
           unit="/bbl"
           accent="red"
           description="Spot ATT minus futures ATT. Physical backwardation: refineries paying acute spot premiums futures curve hasn't yet priced."

@@ -1,4 +1,5 @@
-import { timelineEvents } from '../data/metrics.js'
+import { timelineEvents, CONFLICT_DAY } from '../data/metrics.js'
+import { useLiveData } from '../context/LiveDataContext.jsx'
 
 const TYPE_COLORS = {
   critical   : '#ef4444',
@@ -8,6 +9,9 @@ const TYPE_COLORS = {
 }
 
 export default function EventTimeline() {
+  const { live } = useLiveData() ?? {}
+  const conflictDay = live?.conflict_day ?? CONFLICT_DAY
+
   return (
     <div className="bg-hw-card border border-hw-border p-4">
       <div className="font-mono text-[10px] tracking-[0.2em] text-hw-muted mb-4">
@@ -53,7 +57,7 @@ export default function EventTimeline() {
                     )}
                   </div>
                   <div className="font-inter font-semibold text-hw-text text-sm">
-                    {ev.label}
+                    {ev.type === 'current' ? `${ev.label} — Day ${conflictDay}` : ev.label}
                   </div>
                   <div className="font-inter text-hw-sub text-xs mt-0.5 leading-relaxed">
                     {ev.description}

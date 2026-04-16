@@ -1,5 +1,10 @@
 import { ExternalLink } from 'lucide-react'
-import { syntheticControl, shippingPlacebo, didResults } from '../../data/metrics.js'
+import {
+  syntheticControl as staticSC,
+  shippingPlacebo as staticShippingPlacebo,
+  didResults as staticDidResults,
+} from '../../data/metrics.js'
+import { useLiveData } from '../../context/LiveDataContext.jsx'
 
 const Section = ({ title, children }) => (
   <div className="bg-hw-card border border-hw-border p-4">
@@ -13,6 +18,11 @@ const Code = ({ children }) => (
 )
 
 export default function MethodologyTab() {
+  const { live } = useLiveData() ?? {}
+  const sc         = live?.metrics?.syntheticControl ?? staticSC
+  const shippingPlacebo = live?.metrics?.shippingPlacebo ?? staticShippingPlacebo
+  const didResults = live?.metrics?.didResults        ?? staticDidResults
+
   return (
     <div className="space-y-4 max-w-4xl">
 
@@ -196,7 +206,7 @@ export default function MethodologyTab() {
           <div className="space-y-2 text-hw-sub text-sm font-inter leading-relaxed">
             <p>
               The full post-event DiD estimate of <span className="text-hw-gold font-semibold">+${didResults.fullPost.dolBbl.toFixed(2)}/bbl</span> (t={didResults.fullPost.t.toFixed(2)}, p&lt;0.001)
-              cross-validates the synthetic control spot ATT of <span className="text-hw-gold font-semibold">+$35.99/bbl</span> from
+              cross-validates the synthetic control spot ATT of <span className="text-hw-gold font-semibold">+${sc.spotATT}/bbl</span> from
               notebook 02 — two independent identification strategies converging on the same
               ~$35–40/bbl Hormuz war premium. The two-period decomposition isolates the{' '}
               <span className="text-hw-text font-semibold">Hormuz closure increment of +${didResults.hormuzIncrement.toFixed(2)}/bbl</span>:
@@ -212,10 +222,10 @@ export default function MethodologyTab() {
                 CROSS-NOTEBOOK CONVERGENCE
               </div>
               <div className="font-mono text-[10px] text-hw-sub leading-loose">
-                SC futures ATT (NB 02): <span className="text-hw-text">+$3.51/bbl</span> (paper market war premium) ·
-                SC spot ATT (NB 02): <span className="text-hw-text">+$35.99/bbl</span> ·
-                DiD full post (NB 05): <span className="text-hw-text">+$39.40/bbl</span> ·
-                DiD Hormuz period (NB 05): <span className="text-hw-text">+$43.05/bbl</span>
+                SC futures ATT (NB 02): <span className="text-hw-text">+${sc.futuresATT}/bbl</span> (paper market war premium) ·
+                SC spot ATT (NB 02): <span className="text-hw-text">+${sc.spotATT}/bbl</span> ·
+                DiD full post (NB 05): <span className="text-hw-text">+${didResults?.fullPost?.dolBbl?.toFixed(2) ?? '—'}/bbl</span> ·
+                DiD Hormuz period (NB 05): <span className="text-hw-text">+${didResults?.p2Hormuz?.dolBbl?.toFixed(2) ?? '—'}/bbl</span>
               </div>
             </div>
           </div>
@@ -246,8 +256,8 @@ export default function MethodologyTab() {
               label: 'Dubai data lag',
               text:  'POILDUBUSDM (Dubai crude, IMF) is monthly and ends Feb 2026. ' +
                      'The all-spot synthetic forward-fills from $68.51 in the post-period, ' +
-                     'causing the spot ATT ($35.99/bbl) to reflect "price above last-known Dubai" ' +
-                     'rather than a clean war premium. The futures ATT ($3.51/bbl) is unaffected and cleaner.',
+                     `causing the spot ATT ($${sc.spotATT}/bbl) to reflect "price above last-known Dubai" ` +
+                     `rather than a clean war premium. The futures ATT ($${sc.futuresATT}/bbl) is unaffected and cleaner.`,
               severity: 'warn',
             },
             {

@@ -1,18 +1,12 @@
 import { useLiveData } from '../context/LiveDataContext.jsx'
-import { CONFLICT_DAY, oilStats, syntheticControl } from '../data/metrics.js'
-
-// Static fallback ticker bar values
-const STATIC_TICKER = [
-  { label: 'BRENT SPOT',   val: `$${oilStats.brentPeak}`,          dir: 'up',   sub: '+56.9% vs pre-war' },
-  { label: 'FUTURES ATT',  val: `+$${syntheticControl.futuresATT}`, dir: 'up',   sub: 'causal estimate'   },
-  { label: 'BASIS SPREAD', val: `$${syntheticControl.basisSpread}`, dir: 'up',   sub: 'physical premium'  },
-  { label: 'HORMUZ',       val: 'CLOSED',                           dir: 'warn', sub: 'strait closed day 30' },
-]
+import { CONFLICT_DAY, oilStats as staticOilStats, syntheticControl as staticSC } from '../data/metrics.js'
 
 export default function Header() {
   const { live, loading } = useLiveData() ?? {}
 
-  // Prefer live data; fall back to static
+  const sc        = live?.metrics?.syntheticControl ?? staticSC
+  const oilStats  = live?.metrics?.oilStats         ?? staticOilStats
+
   const conflictDay  = live?.conflict_day  ?? CONFLICT_DAY
   const hormuzDay    = live?.hormuz_day    ?? 30
   const brentPrice   = live?.oil?.brent_price
@@ -20,24 +14,33 @@ export default function Header() {
   const ovx          = live?.volatility?.ovx
   const hormuzStatus = live?.hormuz_status ?? 'CLOSED'
 
+  const brentEiaPct  = ((oilStats.brentPeak - oilStats.brentBase) / oilStats.brentBase * 100).toFixed(1)
+
   const today = new Date()
   const dateStr = today.toLocaleDateString('en-US', {
     year: 'numeric', month: 'long', day: 'numeric',
   }).toUpperCase()
 
-  // Build live ticker items if API data is available
-  const tickerItems = live ? [
+  const tickerItems = [
     {
       label: 'BRENT',
-      val:   `$${brentPrice?.toFixed(2) ?? '—'}`,
+      val:   brentPrice ? `$${brentPrice.toFixed(2)}` : `$${oilStats.brentPeak}`,
       dir:   'up',
-      sub:   brentPct != null ? `${brentPct > 0 ? '+' : ''}${brentPct.toFixed(1)}% vs pre-war` : '',
+      sub:   brentPct != null
+               ? `${brentPct > 0 ? '+' : ''}${brentPct.toFixed(1)}% vs pre-war`
+               : `+${brentEiaPct}% vs pre-war`,
     },
     {
       label: 'FUTURES ATT',
-      val:   `+$${syntheticControl.futuresATT}`,
+      val:   `+$${sc.futuresATT}`,
       dir:   'up',
       sub:   'causal estimate',
+    },
+    {
+      label: 'BASIS SPREAD',
+      val:   `$${sc.basisSpread}`,
+      dir:   'up',
+      sub:   'physical premium',
     },
     {
       label: 'OVX',
@@ -51,7 +54,7 @@ export default function Header() {
       dir:   hormuzStatus === 'CLOSED' ? 'warn' : 'ok',
       sub:   `strait closed day ${hormuzDay}`,
     },
-  ] : STATIC_TICKER
+  ]
 
   return (
     <header
