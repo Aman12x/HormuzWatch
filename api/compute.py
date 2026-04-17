@@ -438,10 +438,20 @@ def build_metrics() -> dict:
     return out
 
 
-def is_stale(max_age_hours: float = 12.0) -> bool:
-    """True if energy.csv doesn't exist or is older than max_age_hours."""
-    import time
+def is_stale(max_age_days: float = 1.0) -> bool:
+    """
+    True if energy.csv is missing or the most recent data date is more than
+    max_age_days old.  We check data content rather than file mtime because
+    container builds re-extract files from git with a fresh mtime even when
+    the data inside is weeks old.
+    """
     p = _csv("energy.csv")
     if not p.exists():
         return True
-    return (time.time() - p.stat().st_mtime) > max_age_hours * 3600
+    try:
+        df = pd.read_csv(p, parse_dates=["date"])
+        last_date = pd.to_datetime(df["date"]).max()
+        age_days = (pd.Timestamp.utcnow().tz_localize(None) - last_date).days
+        return age_days > max_age_days
+    except Exception:
+        return True

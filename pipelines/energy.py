@@ -85,16 +85,26 @@ def print_summary(df: pd.DataFrame, label: str) -> None:
 
 def main() -> None:
     api_key = os.getenv("FRED_API_KEY")
-    if not api_key:
-        sys.exit("ERROR: FRED_API_KEY not set. Copy .env.example → .env and add your key.")
 
     print("Fetching Yahoo Finance oil prices …")
     yf_df = fetch_yfinance()
 
-    print("Fetching FRED DCOILBRENTEU …")
-    fred_df = fetch_fred_brent(api_key)
+    frames = [yf_df] if not yf_df.empty else []
 
-    combined = clean(pd.concat([yf_df, fred_df], ignore_index=True))
+    if api_key:
+        print("Fetching FRED DCOILBRENTEU …")
+        try:
+            fred_df = fetch_fred_brent(api_key)
+            frames.append(fred_df)
+        except Exception as exc:
+            print(f"  [WARN] FRED fetch failed (non-fatal): {exc}", file=sys.stderr)
+    else:
+        print("  [INFO] FRED_API_KEY not set — skipping FRED, using yfinance only.")
+
+    if not frames:
+        sys.exit("ERROR: No data fetched from any source.")
+
+    combined = clean(pd.concat(frames, ignore_index=True))
 
     out_path = PROCESSED / "energy.csv"
     combined.to_csv(out_path, index=False)

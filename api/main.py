@@ -100,10 +100,10 @@ async def lifespan(app: FastAPI):
         scheduler = BackgroundScheduler()
         scheduler.add_job(_run_pipelines, "interval", hours=24, id="daily_refresh")
         scheduler.start()
-        # Refresh immediately if CSVs are stale (>12 h old or missing)
-        c = _get_compute()
-        if c and c.is_stale():
-            threading.Thread(target=_run_pipelines, daemon=True).start()
+        # Always refresh on startup in background so deploys pick up fresh data.
+        # is_stale() now checks actual data dates (not mtime) — but we run
+        # unconditionally on boot so even a same-day deploy gets current prices.
+        threading.Thread(target=_run_pipelines, daemon=True).start()
     except Exception as exc:
         print(f"[startup] scheduler/refresh failed (non-fatal): {exc}")
 
