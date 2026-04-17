@@ -25,14 +25,25 @@ import httpx
 import numpy as np
 import pandas as pd
 import yfinance as yf
-from apscheduler.schedulers.background import BackgroundScheduler
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.compute import build_timeseries, build_metrics, is_stale
-
 load_dotenv()
+
+# Lazy import of compute module — deferred so heavy deps (scipy, linearmodels)
+# don't crash the process before uvicorn can even bind.
+_compute = None
+
+def _get_compute():
+    global _compute
+    if _compute is None:
+        try:
+            import importlib
+            _compute = importlib.import_module("api.compute")
+        except Exception as exc:
+            print(f"[compute] import failed: {exc}")
+    return _compute
 
 _ROOT = Path(__file__).parent.parent   # hormuzwatch/
 
@@ -83,16 +94,26 @@ def _run_pipelines() -> None:
 # ── Scheduler lifespan ─────────────────────────────────────────────────────────
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    scheduler = BackgroundScheduler(daemon=True)
-    scheduler.add_job(_run_pipelines, "interval", hours=24, id="daily_refresh")
-    scheduler.start()
-
-    # Refresh immediately on startup if CSVs are stale (>12 h old or missing)
-    if is_stale():
-        threading.Thread(target=_run_pipelines, daemon=True).start()
+    scheduler = None
+    try:
+        from apscheduler.schedulers.background import BackgroundScheduler
+        scheduler = BackgroundScheduler()
+        scheduler.add_job(_run_pipelines, "interval", hours=24, id="daily_refresh")
+        scheduler.start()
+        # Refresh immediately if CSVs are stale (>12 h old or missing)
+        c = _get_compute()
+        if c and c.is_stale():
+            threading.Thread(target=_run_pipelines, daemon=True).start()
+    except Exception as exc:
+        print(f"[startup] scheduler/refresh failed (non-fatal): {exc}")
 
     yield
-    scheduler.shutdown(wait=False)
+
+    if scheduler is not None:
+        try:
+            scheduler.shutdown(wait=False)
+        except Exception:
+            pass
 
 
 # ── App setup ──────────────────────────────────────────────────────────────────
@@ -101,7 +122,7 @@ app = FastAPI(title="HormuzWatch API", version="1.2.0", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_methods=["GET"],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 
@@ -507,8 +528,11 @@ def timeseries():
     Returns: oilPrices, oilEventDates, equitiesCAR, volatility, updatedAt
     Falls back gracefully if CSVs are missing.
     """
+    c = _get_compute()
+    if c is None:
+        raise HTTPException(status_code=503, detail="compute module unavailable")
     try:
-        return cached("timeseries", build_timeseries, ttl=_TIMESERIES_TTL)
+        return cached("timeseries", c.build_timeseries, ttl=_TIMESERIES_TTL)
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
@@ -521,8 +545,11 @@ def metrics():
     Returns: syntheticControl, attByPhase, equityStats, tickerCAR,
              shippingPlacebo, oilStats, didResults (if available), updatedAt
     """
+    c = _get_compute()
+    if c is None:
+        raise HTTPException(status_code=503, detail="compute module unavailable")
     try:
-        return cached("metrics", build_metrics, ttl=_METRICS_TTL)
+        return cached("metrics", c.build_metrics, ttl=_METRICS_TTL)
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
