@@ -34,6 +34,11 @@ function fmtTime(iso) {
   }
 }
 
+function stripCites(text) {
+  if (!text) return text
+  return text.replace(/<cite[^>]*>|<\/cite>/gi, '')
+}
+
 function fmtDate(iso) {
   if (!iso) return ''
   try {
@@ -135,7 +140,7 @@ function NewsCard({ item }) {
         className="font-inter leading-relaxed mb-3"
         style={{ fontSize: '11px', color: '#94a3b8' }}
       >
-        {item.summary}
+        {stripCites(item.summary)}
       </p>
 
       {/* Footer: source + time */}
@@ -178,7 +183,7 @@ function ExecutiveBrief({ brief, updatedAt, loading }) {
     <div className="bg-hw-card border border-hw-border p-4" style={{ borderLeftColor: '#e8b84b', borderLeftWidth: 3 }}>
       <div className="flex items-center justify-between mb-3">
         <span className="font-mono text-[10px] tracking-[0.2em] text-hw-muted">
-          EXECUTIVE INTELLIGENCE BRIEF
+          INTELLIGENCE BRIEF
         </span>
         {updatedAt && (
           <span className="font-mono text-[10px] text-hw-muted">
@@ -366,9 +371,7 @@ export default function NewsTab() {
             ))}
           </div>
 
-          <p className="font-mono text-[10px] text-hw-muted text-center pt-1">
-            AUTO-REFRESH EVERY 5 MIN · POWERED BY CLAUDE + WEB SEARCH · HORMUZWATCH INTEL MODULE
-          </p>
+
         </>
       )}
     </div>
