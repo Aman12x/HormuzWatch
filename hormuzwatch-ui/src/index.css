@@ -5,9 +5,29 @@
 @layer base {
   body {
     @apply bg-hw-bg text-hw-text font-inter antialiased;
+    min-width: 320px;
   }
   * {
     @apply border-hw-border;
+  }
+}
+
+::selection {
+  background: rgba(232, 184, 75, 0.28);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid #e8b84b;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 

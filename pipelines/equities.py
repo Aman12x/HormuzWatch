@@ -16,11 +16,12 @@ Note: BAE Systems trades as BA.L on the LSE (not BAE.L).
 
 import sys
 from pathlib import Path
-from datetime import date
 
 import numpy as np
 import pandas as pd
 import yfinance as yf
+
+from analysis_config import YFINANCE_END
 
 # ── paths ──────────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,7 +29,7 @@ PROCESSED = ROOT / "data" / "processed"
 PROCESSED.mkdir(parents=True, exist_ok=True)
 
 START = "2025-11-01"
-END = date.today().isoformat()
+END = YFINANCE_END
 
 TICKERS = {
     # US defense

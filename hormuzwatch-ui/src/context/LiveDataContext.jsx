@@ -1,8 +1,8 @@
 /**
- * LiveDataContext — fetches live data from the API on app mount.
+ * LiveDataContext — fetches the final, cutoff-bounded dataset on app mount.
  *
  * Three endpoints are fetched in parallel:
- *   /api/status      — live prices (Brent, WTI, OVX, VIX, equities)
+ *   /api/status      — final prices (Brent, WTI, OVX, VIX, equities)
  *   /api/data/timeseries — oil price & equity CAR time series + volatility
  *   /api/metrics     — computed econometric metrics (ATTs, CARs, DiD)
  *
@@ -15,11 +15,23 @@ import { createContext, useContext, useEffect, useState } from 'react'
 const API_BASE = import.meta.env.VITE_API_URL ?? ''
 
 const LiveDataContext = createContext(null)
+let finalDataPromise
 
 async function _fetchJson(url) {
-  const r = await fetch(url)
+  const r = await fetch(url, { cache: 'force-cache' })
   if (!r.ok) throw new Error(`API ${r.status} — ${url}`)
   return r.json()
+}
+
+function loadFinalData() {
+  if (!finalDataPromise) {
+    finalDataPromise = Promise.allSettled([
+      _fetchJson(`${API_BASE}/api/status`),
+      _fetchJson(`${API_BASE}/api/data/timeseries`),
+      _fetchJson(`${API_BASE}/api/metrics`),
+    ])
+  }
+  return finalDataPromise
 }
 
 export function LiveDataProvider({ children }) {
@@ -30,11 +42,7 @@ export function LiveDataProvider({ children }) {
   useEffect(() => {
     let cancelled = false
 
-    Promise.allSettled([
-      _fetchJson(`${API_BASE}/api/status`),
-      _fetchJson(`${API_BASE}/api/data/timeseries`),
-      _fetchJson(`${API_BASE}/api/metrics`),
-    ]).then(([statusRes, tsRes, metricsRes]) => {
+    loadFinalData().then(([statusRes, tsRes, metricsRes]) => {
       if (cancelled) return
 
       const merged = {}
@@ -49,6 +57,7 @@ export function LiveDataProvider({ children }) {
       else console.warn('[LiveData] /api/metrics failed:', metricsRes.reason)
 
       setLive(Object.keys(merged).length ? merged : null)
+      setError(Object.keys(merged).length ? null : new Error('All API requests failed'))
       setLoading(false)
     })
 

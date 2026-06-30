@@ -27,7 +27,7 @@ export default function OverviewTab() {
   const brentPrice  = live?.oil?.brent_price  ?? oilStats.brentPeak
   const wtiPctChg   = live?.oil?.wti_pct_chg   ?? (oilStats.wtiIndexedEnd - 100)
   const brentPctChg = live?.oil?.brent_pct_chg ?? (oilStats.brentIndexedEnd - 100)
-  const brentEiaPct = ((oilStats.brentPeak - oilStats.brentBase) / oilStats.brentBase * 100).toFixed(1)
+  const brentPeakPct = ((oilStats.brentPeak - oilStats.brentBase) / oilStats.brentBase * 100).toFixed(1)
 
   return (
     <div className="space-y-5">
@@ -55,11 +55,11 @@ export default function OverviewTab() {
           description={`Hormuz-exposed tankers (${shippingPlacebo.hormuzCAR.toFixed(1)}%) vs non-Hormuz control (${shippingPlacebo.nonHormuzCAR.toFixed(1)}%). Route-specific underperformance — rules out sector-wide confounder.`}
         />
         <MetricCard
-          label="CONFLICT DAY"
+          label="ANALYSIS WINDOW"
           value={conflictDay}
           unit="days"
           accent="blue"
-          description="Days since US-Israel strikes began Feb 28, 2026. Hormuz closed since Mar 7 (Day 8). ~21% of global seaborne oil trade remains disrupted."
+          description="Inclusive days from the Feb 28 strikes through the formal reopening on Jun 18, 2026. All estimates are capped at reopening."
         />
       </div>
 
@@ -74,18 +74,18 @@ export default function OverviewTab() {
           {/* Situation brief */}
           <div className="border border-hw-border p-4" style={{ background: '#232840' }}>
             <div className="font-mono text-[10px] tracking-[0.2em] text-hw-muted mb-3">
-              SITUATION BRIEF — DAY {conflictDay}
+              FINAL SITUATION BRIEF — THROUGH JUN 18, 2026
             </div>
             <div className="space-y-2 text-hw-sub text-sm leading-relaxed font-inter">
               <p>
                 US and Israeli forces launched coordinated strikes on Iranian nuclear and military
                 infrastructure on February 28, 2026, triggering Iran's closure of the Strait of
-                Hormuz eight days later — removing ~21% of seaborne global oil supply from the market
-                and driving Brent spot prices from{' '}
+                Hormuz eight days later — disrupting a route carrying ~21% of seaborne global oil trade
+                and driving Brent futures from{' '}
                 <span className="text-hw-text font-semibold">${oilStats.brentBase}</span> to
                 a peak of{' '}
                 <span className="text-hw-text font-semibold">${oilStats.brentPeak}/bbl</span>
-                {' '}(+{brentEiaPct}% from baseline).
+                {' '}(+{brentPeakPct}% from baseline).
               </p>
               <p>
                 Synthetic control analysis isolates a{' '}
@@ -95,6 +95,7 @@ export default function OverviewTab() {
                 <span className="text-hw-gold font-semibold">+${sc.spotATT}/bbl</span> — a{' '}
                 <span className="text-hw-text font-semibold">${sc.basisSpread}/bbl basis spread</span> indicating
                 extreme backwardation driven by acute supply tightness, not long-term price expectation revision.
+                The analysis window ends with the strait's formal reopening on June 18.
               </p>
               <p>
                 Equity markets showed a clear sell-the-news pattern in defense stocks
@@ -120,7 +121,7 @@ export default function OverviewTab() {
                 {[
                   { label: 'WTI (futures)',    val: `${fmt(wtiPctChg)}%`,   color: '#ef4444' },
                   { label: 'Brent (futures)',   val: `${fmt(brentPctChg)}%`, color: '#a78bfa' },
-                  { label: 'Brent (EIA peak)',  val: `+${brentEiaPct}%`,     color: '#e8b84b' },
+                  { label: 'Brent futures peak', val: `+${brentPeakPct}%`,    color: '#e8b84b' },
                 ].map(r => (
                   <div key={r.label} className="flex justify-between items-center">
                     <span className="text-hw-muted font-mono text-xs">{r.label}</span>

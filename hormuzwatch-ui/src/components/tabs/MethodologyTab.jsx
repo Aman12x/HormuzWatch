@@ -56,8 +56,8 @@ export default function MethodologyTab() {
       {/* Method 2 — Synthetic Control */}
       <Section title="METHOD 2 — WHAT WOULD OIL HAVE COST WITHOUT THE WAR?">
         <p className="text-sm text-hw-sub font-inter leading-relaxed mb-3">
-          A "synthetic Brent" was built as a weighted blend of WTI crude and Henry Hub gas, calibrated to
-          match Brent's price trajectory before the conflict. After Feb 28, the real Brent price diverged
+          A synthetic spot Brent counterfactual was built from Dubai crude and FRED WTI, calibrated to
+          match Brent's pre-conflict trajectory. A separate futures estimate uses the demeaned Brent–WTI spread. After Feb 28, Brent diverged
           from this counterfactual — that gap is the estimated war premium.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
@@ -141,8 +141,8 @@ export default function MethodologyTab() {
         <div className="flex gap-3 mb-4">
           {[
             { label: 'STRIKE ONLY',     sub: 'Mar 2–6 (5 days)',     val: `+$${didResults.p1Strike.dolBbl.toFixed(2)}/bbl`, color: '#e8b84b' },
-            { label: 'HORMUZ CLOSURE',  sub: 'Mar 9+ (19 days)',     val: `+$${didResults.p2Hormuz.dolBbl.toFixed(2)}/bbl`, color: '#ef4444' },
-            { label: 'FULL PERIOD',     sub: '24 trading days',      val: `+$${didResults.fullPost.dolBbl.toFixed(2)}/bbl`, color: '#10b981' },
+            { label: 'HORMUZ CLOSURE',  sub: 'Mar 9–Jun 18',         val: `+$${didResults.p2Hormuz.dolBbl.toFixed(2)}/bbl`, color: '#ef4444' },
+            { label: 'FULL PERIOD',     sub: 'Through reopening',    val: `+$${didResults.fullPost.dolBbl.toFixed(2)}/bbl`, color: '#10b981' },
           ].map(r => (
             <div key={r.label} className="flex-1 bg-hw-bg border border-hw-border p-3 text-center">
               <div className="font-mono text-[10px] text-hw-muted mb-1">{r.label}</div>

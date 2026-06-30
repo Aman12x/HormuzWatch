@@ -12,6 +12,8 @@ import pandas as pd
 from pathlib import Path
 from scipy import stats
 
+from analysis_config import HORMUZ_REOPENED
+
 ROOT      = Path(__file__).resolve().parents[1]
 DATA      = ROOT / "data" / "processed"
 OUT       = ROOT / "hormuzwatch-ui" / "src" / "data"
@@ -20,6 +22,7 @@ OUT.mkdir(parents=True, exist_ok=True)
 EVENT_DATE = pd.Timestamp("2026-02-28")
 PRE_START  = pd.Timestamp("2025-11-01")
 PRE_END    = pd.Timestamp("2026-02-27")
+ANALYSIS_END = pd.Timestamp(HORMUZ_REOPENED)
 
 TICKERS = ["LMT", "RTX", "NOC", "XOM", "CVX", "BP", "FRO", "STNG", "HAFNI", "INSW", "NAT", "TK"]
 BASKETS = {
@@ -33,6 +36,7 @@ BASKETS = {
 print("Parsing energy.csv …")
 energy_raw = pd.read_csv(DATA / "energy.csv", parse_dates=["date"])
 energy_raw["date"] = pd.to_datetime(energy_raw["date"]).dt.normalize()
+energy_raw = energy_raw[energy_raw["date"] <= ANALYSIS_END]
 
 energy = (
     energy_raw.query("source == 'yfinance'")
@@ -83,6 +87,7 @@ print(f"  → oilPrices.js  ({len(oil_records)} rows, base Brent ${brent_base:.2
 print("Parsing equities.csv …")
 eq = pd.read_csv(DATA / "equities.csv", parse_dates=["date"])
 eq["date"] = pd.to_datetime(eq["date"]).dt.normalize()
+eq = eq[eq["date"] <= ANALYSIS_END]
 eq = eq.sort_values("date").reset_index(drop=True)
 
 trading_days = eq["date"].reset_index(drop=True)
@@ -106,9 +111,9 @@ for t in TICKERS:
     models[t] = dict(alpha=intercept, beta=slope, r2=round(r**2, 4))
     print(f"    {t}: β={slope:.3f} R²={r**2:.3f}")
 
-# Event window -5 to +30
+# Event window -5 to +30, with the global reopening cutoff as a hard ceiling
 ew_start = t_offset(-5)
-ew_end   = t_offset(30)
+ew_end   = min(t_offset(30), ANALYSIS_END)
 ew_mask  = (eq["date"] >= ew_start) & (eq["date"] <= ew_end)
 ew = eq[ew_mask].copy().reset_index(drop=True)
 

@@ -726,6 +726,377 @@ export const oilPrices = [
     "wtiRaw": 111.54,
     "brentIdx": 140.25,
     "wtiIdx": 156.59
+  },
+  {
+    "date": "2026-04-06",
+    "brentRaw": 109.77,
+    "wtiRaw": 112.41,
+    "brentIdx": 141.2,
+    "wtiIdx": 157.81
+  },
+  {
+    "date": "2026-04-07",
+    "brentRaw": 109.27,
+    "wtiRaw": 112.95,
+    "brentIdx": 140.56,
+    "wtiIdx": 158.57
+  },
+  {
+    "date": "2026-04-08",
+    "brentRaw": 94.75,
+    "wtiRaw": 94.41,
+    "brentIdx": 121.88,
+    "wtiIdx": 132.54
+  },
+  {
+    "date": "2026-04-09",
+    "brentRaw": 95.92,
+    "wtiRaw": 97.87,
+    "brentIdx": 123.39,
+    "wtiIdx": 137.4
+  },
+  {
+    "date": "2026-04-10",
+    "brentRaw": 95.2,
+    "wtiRaw": 96.57,
+    "brentIdx": 122.46,
+    "wtiIdx": 135.57
+  },
+  {
+    "date": "2026-04-13",
+    "brentRaw": 99.36,
+    "wtiRaw": 99.08,
+    "brentIdx": 127.81,
+    "wtiIdx": 139.1
+  },
+  {
+    "date": "2026-04-14",
+    "brentRaw": 94.79,
+    "wtiRaw": 91.28,
+    "brentIdx": 121.93,
+    "wtiIdx": 128.15
+  },
+  {
+    "date": "2026-04-15",
+    "brentRaw": 94.93,
+    "wtiRaw": 91.29,
+    "brentIdx": 122.11,
+    "wtiIdx": 128.16
+  },
+  {
+    "date": "2026-04-16",
+    "brentRaw": 99.39,
+    "wtiRaw": 94.69,
+    "brentIdx": 127.85,
+    "wtiIdx": 132.94
+  },
+  {
+    "date": "2026-04-17",
+    "brentRaw": 90.38,
+    "wtiRaw": 83.85,
+    "brentIdx": 116.26,
+    "wtiIdx": 117.72
+  },
+  {
+    "date": "2026-04-20",
+    "brentRaw": 95.48,
+    "wtiRaw": 89.61,
+    "brentIdx": 122.82,
+    "wtiIdx": 125.8
+  },
+  {
+    "date": "2026-04-21",
+    "brentRaw": 98.48,
+    "wtiRaw": 92.13,
+    "brentIdx": 126.68,
+    "wtiIdx": 129.34
+  },
+  {
+    "date": "2026-04-22",
+    "brentRaw": 101.91,
+    "wtiRaw": 92.96,
+    "brentIdx": 131.09,
+    "wtiIdx": 130.51
+  },
+  {
+    "date": "2026-04-23",
+    "brentRaw": 105.07,
+    "wtiRaw": 95.85,
+    "brentIdx": 135.16,
+    "wtiIdx": 134.56
+  },
+  {
+    "date": "2026-04-24",
+    "brentRaw": 105.33,
+    "wtiRaw": 94.4,
+    "brentIdx": 135.49,
+    "wtiIdx": 132.53
+  },
+  {
+    "date": "2026-04-27",
+    "brentRaw": 108.23,
+    "wtiRaw": 96.37,
+    "brentIdx": 139.22,
+    "wtiIdx": 135.29
+  },
+  {
+    "date": "2026-04-28",
+    "brentRaw": 111.26,
+    "wtiRaw": 99.93,
+    "brentIdx": 143.12,
+    "wtiIdx": 140.29
+  },
+  {
+    "date": "2026-04-29",
+    "brentRaw": 118.03,
+    "wtiRaw": 106.88,
+    "brentIdx": 151.83,
+    "wtiIdx": 150.05
+  },
+  {
+    "date": "2026-04-30",
+    "brentRaw": 114.01,
+    "wtiRaw": 105.07,
+    "brentIdx": 146.66,
+    "wtiIdx": 147.51
+  },
+  {
+    "date": "2026-05-01",
+    "brentRaw": 108.17,
+    "wtiRaw": 101.94,
+    "brentIdx": 139.14,
+    "wtiIdx": 143.11
+  },
+  {
+    "date": "2026-05-04",
+    "brentRaw": 114.44,
+    "wtiRaw": 106.42,
+    "brentIdx": 147.21,
+    "wtiIdx": 149.4
+  },
+  {
+    "date": "2026-05-05",
+    "brentRaw": 109.87,
+    "wtiRaw": 102.27,
+    "brentIdx": 141.33,
+    "wtiIdx": 143.58
+  },
+  {
+    "date": "2026-05-06",
+    "brentRaw": 101.27,
+    "wtiRaw": 95.08,
+    "brentIdx": 130.27,
+    "wtiIdx": 133.48
+  },
+  {
+    "date": "2026-05-07",
+    "brentRaw": 100.06,
+    "wtiRaw": 94.81,
+    "brentIdx": 128.71,
+    "wtiIdx": 133.1
+  },
+  {
+    "date": "2026-05-08",
+    "brentRaw": 101.29,
+    "wtiRaw": 95.42,
+    "brentIdx": 130.29,
+    "wtiIdx": 133.96
+  },
+  {
+    "date": "2026-05-11",
+    "brentRaw": 104.21,
+    "wtiRaw": 98.07,
+    "brentIdx": 134.05,
+    "wtiIdx": 137.68
+  },
+  {
+    "date": "2026-05-12",
+    "brentRaw": 107.77,
+    "wtiRaw": 102.18,
+    "brentIdx": 138.63,
+    "wtiIdx": 143.45
+  },
+  {
+    "date": "2026-05-13",
+    "brentRaw": 105.63,
+    "wtiRaw": 101.02,
+    "brentIdx": 135.88,
+    "wtiIdx": 141.82
+  },
+  {
+    "date": "2026-05-14",
+    "brentRaw": 105.72,
+    "wtiRaw": 101.17,
+    "brentIdx": 135.99,
+    "wtiIdx": 142.03
+  },
+  {
+    "date": "2026-05-15",
+    "brentRaw": 109.26,
+    "wtiRaw": 105.42,
+    "brentIdx": 140.55,
+    "wtiIdx": 148.0
+  },
+  {
+    "date": "2026-05-18",
+    "brentRaw": 112.1,
+    "wtiRaw": 108.66,
+    "brentIdx": 144.2,
+    "wtiIdx": 152.55
+  },
+  {
+    "date": "2026-05-19",
+    "brentRaw": 111.28,
+    "wtiRaw": 107.77,
+    "brentIdx": 143.14,
+    "wtiIdx": 151.3
+  },
+  {
+    "date": "2026-05-20",
+    "brentRaw": 105.02,
+    "wtiRaw": 98.26,
+    "brentIdx": 135.09,
+    "wtiIdx": 137.95
+  },
+  {
+    "date": "2026-05-21",
+    "brentRaw": 102.58,
+    "wtiRaw": 96.35,
+    "brentIdx": 131.95,
+    "wtiIdx": 135.27
+  },
+  {
+    "date": "2026-05-22",
+    "brentRaw": 103.54,
+    "wtiRaw": 96.6,
+    "brentIdx": 133.19,
+    "wtiIdx": 135.62
+  },
+  {
+    "date": "2026-05-26",
+    "brentRaw": 99.58,
+    "wtiRaw": 93.89,
+    "brentIdx": 128.09,
+    "wtiIdx": 131.81
+  },
+  {
+    "date": "2026-05-27",
+    "brentRaw": 94.29,
+    "wtiRaw": 88.68,
+    "brentIdx": 121.29,
+    "wtiIdx": 124.5
+  },
+  {
+    "date": "2026-05-28",
+    "brentRaw": 93.71,
+    "wtiRaw": 88.9,
+    "brentIdx": 120.54,
+    "wtiIdx": 124.81
+  },
+  {
+    "date": "2026-05-29",
+    "brentRaw": 92.05,
+    "wtiRaw": 87.36,
+    "brentIdx": 118.41,
+    "wtiIdx": 122.64
+  },
+  {
+    "date": "2026-06-01",
+    "brentRaw": 94.98,
+    "wtiRaw": 92.16,
+    "brentIdx": 122.18,
+    "wtiIdx": 129.38
+  },
+  {
+    "date": "2026-06-02",
+    "brentRaw": 96.0,
+    "wtiRaw": 93.76,
+    "brentIdx": 123.49,
+    "wtiIdx": 131.63
+  },
+  {
+    "date": "2026-06-03",
+    "brentRaw": 97.81,
+    "wtiRaw": 96.02,
+    "brentIdx": 125.82,
+    "wtiIdx": 134.8
+  },
+  {
+    "date": "2026-06-04",
+    "brentRaw": 95.03,
+    "wtiRaw": 93.04,
+    "brentIdx": 122.24,
+    "wtiIdx": 130.62
+  },
+  {
+    "date": "2026-06-05",
+    "brentRaw": 93.09,
+    "wtiRaw": 90.54,
+    "brentIdx": 119.75,
+    "wtiIdx": 127.11
+  },
+  {
+    "date": "2026-06-08",
+    "brentRaw": 94.25,
+    "wtiRaw": 91.3,
+    "brentIdx": 121.24,
+    "wtiIdx": 128.18
+  },
+  {
+    "date": "2026-06-09",
+    "brentRaw": 91.45,
+    "wtiRaw": 88.2,
+    "brentIdx": 117.64,
+    "wtiIdx": 123.82
+  },
+  {
+    "date": "2026-06-10",
+    "brentRaw": 93.1,
+    "wtiRaw": 90.03,
+    "brentIdx": 119.76,
+    "wtiIdx": 126.39
+  },
+  {
+    "date": "2026-06-11",
+    "brentRaw": 90.38,
+    "wtiRaw": 87.71,
+    "brentIdx": 116.26,
+    "wtiIdx": 123.14
+  },
+  {
+    "date": "2026-06-12",
+    "brentRaw": 87.33,
+    "wtiRaw": 84.88,
+    "brentIdx": 112.34,
+    "wtiIdx": 119.16
+  },
+  {
+    "date": "2026-06-15",
+    "brentRaw": 83.17,
+    "wtiRaw": 80.75,
+    "brentIdx": 106.98,
+    "wtiIdx": 113.37
+  },
+  {
+    "date": "2026-06-16",
+    "brentRaw": 78.96,
+    "wtiRaw": 76.05,
+    "brentIdx": 101.57,
+    "wtiIdx": 106.77
+  },
+  {
+    "date": "2026-06-17",
+    "brentRaw": 79.55,
+    "wtiRaw": 76.79,
+    "brentIdx": 102.33,
+    "wtiIdx": 107.81
+  },
+  {
+    "date": "2026-06-18",
+    "brentRaw": 79.85,
+    "wtiRaw": 76.6,
+    "brentIdx": 102.71,
+    "wtiIdx": 107.54
   }
 ];
 

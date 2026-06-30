@@ -10,11 +10,12 @@ Saves to data/processed/macro.csv.
 import os
 import sys
 from pathlib import Path
-from datetime import date
 
 import pandas as pd
 from dotenv import load_dotenv
 from fredapi import Fred
+
+from analysis_config import ANALYSIS_END
 
 # ── paths ──────────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parents[1]
@@ -24,7 +25,7 @@ PROCESSED.mkdir(parents=True, exist_ok=True)
 load_dotenv(ROOT / ".env")
 
 START = "2025-11-01"
-END = date.today().isoformat()
+END = ANALYSIS_END
 
 FRED_SERIES = {
     "CPIAUCSL":     "cpi_all_urban_sa",
@@ -33,13 +34,26 @@ FRED_SERIES = {
 }
 
 
-def fetch_fred(api_key: str) -> pd.DataFrame:
-    fred = Fred(api_key=api_key)
+def _series(series_id: str, api_key: str | None) -> pd.Series:
+    if api_key:
+        return Fred(api_key=api_key).get_series(
+            series_id, observation_start=START, observation_end=END
+        )
+    url = (
+        "https://fred.stlouisfed.org/graph/fredgraph.csv"
+        f"?id={series_id}&cosd={START}&coed={END}"
+    )
+    frame = pd.read_csv(url, parse_dates=["observation_date"])
+    values = pd.to_numeric(frame[series_id], errors="coerce")
+    return pd.Series(values.to_numpy(), index=frame["observation_date"])
+
+
+def fetch_fred(api_key: str | None) -> pd.DataFrame:
     frames = []
     for series_id, label in FRED_SERIES.items():
         print(f"  Fetching {series_id} ({label}) …")
         try:
-            s = fred.get_series(series_id, observation_start=START, observation_end=END)
+            s = _series(series_id, api_key)
         except Exception as exc:
             print(f"  [WARN] Failed to fetch {series_id}: {exc}", file=sys.stderr)
             continue
@@ -78,10 +92,9 @@ def print_summary(df: pd.DataFrame) -> None:
 
 def main() -> None:
     api_key = os.getenv("FRED_API_KEY")
-    if not api_key:
-        sys.exit("ERROR: FRED_API_KEY not set. Copy .env.example → .env and add your key.")
-
     print("Fetching FRED macro series …")
+    if not api_key:
+        print("  [INFO] FRED_API_KEY not set — using the public FRED CSV endpoint.")
     df = fetch_fred(api_key)
 
     if df.empty:

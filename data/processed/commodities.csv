@@ -103,6 +103,59 @@ date,commodity,ticker,price,category
 2026-03-31,Brent Crude,BZ=F,118.3499984741211,hormuz_exposed
 2026-04-01,Brent Crude,BZ=F,101.16000366210938,hormuz_exposed
 2026-04-02,Brent Crude,BZ=F,109.02999877929688,hormuz_exposed
+2026-04-06,Brent Crude,BZ=F,109.7699966430664,hormuz_exposed
+2026-04-07,Brent Crude,BZ=F,109.2699966430664,hormuz_exposed
+2026-04-08,Brent Crude,BZ=F,94.75,hormuz_exposed
+2026-04-09,Brent Crude,BZ=F,95.91999816894531,hormuz_exposed
+2026-04-10,Brent Crude,BZ=F,95.19999694824219,hormuz_exposed
+2026-04-13,Brent Crude,BZ=F,99.36000061035156,hormuz_exposed
+2026-04-14,Brent Crude,BZ=F,94.79000091552734,hormuz_exposed
+2026-04-15,Brent Crude,BZ=F,94.93000030517578,hormuz_exposed
+2026-04-16,Brent Crude,BZ=F,99.38999938964844,hormuz_exposed
+2026-04-17,Brent Crude,BZ=F,90.37999725341797,hormuz_exposed
+2026-04-20,Brent Crude,BZ=F,95.4800033569336,hormuz_exposed
+2026-04-21,Brent Crude,BZ=F,98.4800033569336,hormuz_exposed
+2026-04-22,Brent Crude,BZ=F,101.91000366210938,hormuz_exposed
+2026-04-23,Brent Crude,BZ=F,105.06999969482422,hormuz_exposed
+2026-04-24,Brent Crude,BZ=F,105.33000183105469,hormuz_exposed
+2026-04-27,Brent Crude,BZ=F,108.2300033569336,hormuz_exposed
+2026-04-28,Brent Crude,BZ=F,111.26000213623047,hormuz_exposed
+2026-04-29,Brent Crude,BZ=F,118.02999877929688,hormuz_exposed
+2026-04-30,Brent Crude,BZ=F,114.01000213623047,hormuz_exposed
+2026-05-01,Brent Crude,BZ=F,108.16999816894531,hormuz_exposed
+2026-05-04,Brent Crude,BZ=F,114.44000244140625,hormuz_exposed
+2026-05-05,Brent Crude,BZ=F,109.87000274658203,hormuz_exposed
+2026-05-06,Brent Crude,BZ=F,101.2699966430664,hormuz_exposed
+2026-05-07,Brent Crude,BZ=F,100.05999755859375,hormuz_exposed
+2026-05-08,Brent Crude,BZ=F,101.29000091552734,hormuz_exposed
+2026-05-11,Brent Crude,BZ=F,104.20999908447266,hormuz_exposed
+2026-05-12,Brent Crude,BZ=F,107.7699966430664,hormuz_exposed
+2026-05-13,Brent Crude,BZ=F,105.62999725341797,hormuz_exposed
+2026-05-14,Brent Crude,BZ=F,105.72000122070312,hormuz_exposed
+2026-05-15,Brent Crude,BZ=F,109.26000213623047,hormuz_exposed
+2026-05-18,Brent Crude,BZ=F,112.0999984741211,hormuz_exposed
+2026-05-19,Brent Crude,BZ=F,111.27999877929688,hormuz_exposed
+2026-05-20,Brent Crude,BZ=F,105.0199966430664,hormuz_exposed
+2026-05-21,Brent Crude,BZ=F,102.58000183105469,hormuz_exposed
+2026-05-22,Brent Crude,BZ=F,103.54000091552734,hormuz_exposed
+2026-05-26,Brent Crude,BZ=F,99.58000183105469,hormuz_exposed
+2026-05-27,Brent Crude,BZ=F,94.29000091552734,hormuz_exposed
+2026-05-28,Brent Crude,BZ=F,93.70999908447266,hormuz_exposed
+2026-05-29,Brent Crude,BZ=F,92.05000305175781,hormuz_exposed
+2026-06-01,Brent Crude,BZ=F,94.9800033569336,hormuz_exposed
+2026-06-02,Brent Crude,BZ=F,96.0,hormuz_exposed
+2026-06-03,Brent Crude,BZ=F,97.80999755859375,hormuz_exposed
+2026-06-04,Brent Crude,BZ=F,95.02999877929688,hormuz_exposed
+2026-06-05,Brent Crude,BZ=F,93.08999633789062,hormuz_exposed
+2026-06-08,Brent Crude,BZ=F,94.25,hormuz_exposed
+2026-06-09,Brent Crude,BZ=F,91.44999694824219,hormuz_exposed
+2026-06-10,Brent Crude,BZ=F,93.0999984741211,hormuz_exposed
+2026-06-11,Brent Crude,BZ=F,90.37999725341797,hormuz_exposed
+2026-06-12,Brent Crude,BZ=F,87.33000183105469,hormuz_exposed
+2026-06-15,Brent Crude,BZ=F,83.16999816894531,hormuz_exposed
+2026-06-16,Brent Crude,BZ=F,78.95999908447266,hormuz_exposed
+2026-06-17,Brent Crude,BZ=F,79.55000305175781,hormuz_exposed
+2026-06-18,Brent Crude,BZ=F,79.8499984741211,hormuz_exposed
 2025-11-03,CBOT Corn,ZC=F,434.25,agriculture
 2025-11-04,CBOT Corn,ZC=F,431.5,agriculture
 2025-11-05,CBOT Corn,ZC=F,435.25,agriculture
@@ -207,6 +260,59 @@ date,commodity,ticker,price,category
 2026-03-31,CBOT Corn,ZC=F,457.75,agriculture
 2026-04-01,CBOT Corn,ZC=F,454.25,agriculture
 2026-04-02,CBOT Corn,ZC=F,452.25,agriculture
+2026-04-06,CBOT Corn,ZC=F,454.0,agriculture
+2026-04-07,CBOT Corn,ZC=F,449.0,agriculture
+2026-04-08,CBOT Corn,ZC=F,447.25,agriculture
+2026-04-09,CBOT Corn,ZC=F,444.0,agriculture
+2026-04-10,CBOT Corn,ZC=F,441.0,agriculture
+2026-04-13,CBOT Corn,ZC=F,440.25,agriculture
+2026-04-14,CBOT Corn,ZC=F,443.0,agriculture
+2026-04-15,CBOT Corn,ZC=F,451.25,agriculture
+2026-04-16,CBOT Corn,ZC=F,448.5,agriculture
+2026-04-17,CBOT Corn,ZC=F,448.75,agriculture
+2026-04-20,CBOT Corn,ZC=F,452.0,agriculture
+2026-04-21,CBOT Corn,ZC=F,453.75,agriculture
+2026-04-22,CBOT Corn,ZC=F,454.25,agriculture
+2026-04-23,CBOT Corn,ZC=F,455.5,agriculture
+2026-04-24,CBOT Corn,ZC=F,455.0,agriculture
+2026-04-27,CBOT Corn,ZC=F,460.75,agriculture
+2026-04-28,CBOT Corn,ZC=F,465.25,agriculture
+2026-04-29,CBOT Corn,ZC=F,466.5,agriculture
+2026-04-30,CBOT Corn,ZC=F,464.75,agriculture
+2026-05-01,CBOT Corn,ZC=F,468.25,agriculture
+2026-05-04,CBOT Corn,ZC=F,473.75,agriculture
+2026-05-05,CBOT Corn,ZC=F,465.5,agriculture
+2026-05-06,CBOT Corn,ZC=F,452.75,agriculture
+2026-05-07,CBOT Corn,ZC=F,452.75,agriculture
+2026-05-08,CBOT Corn,ZC=F,456.25,agriculture
+2026-05-11,CBOT Corn,ZC=F,460.75,agriculture
+2026-05-12,CBOT Corn,ZC=F,467.25,agriculture
+2026-05-13,CBOT Corn,ZC=F,466.5,agriculture
+2026-05-14,CBOT Corn,ZC=F,451.5,agriculture
+2026-05-15,CBOT Corn,ZC=F,455.75,agriculture
+2026-05-18,CBOT Corn,ZC=F,477.0,agriculture
+2026-05-19,CBOT Corn,ZC=F,475.25,agriculture
+2026-05-20,CBOT Corn,ZC=F,465.75,agriculture
+2026-05-21,CBOT Corn,ZC=F,462.25,agriculture
+2026-05-22,CBOT Corn,ZC=F,463.25,agriculture
+2026-05-26,CBOT Corn,ZC=F,457.5,agriculture
+2026-05-27,CBOT Corn,ZC=F,452.5,agriculture
+2026-05-28,CBOT Corn,ZC=F,455.75,agriculture
+2026-05-29,CBOT Corn,ZC=F,446.75,agriculture
+2026-06-01,CBOT Corn,ZC=F,444.0,agriculture
+2026-06-02,CBOT Corn,ZC=F,440.5,agriculture
+2026-06-03,CBOT Corn,ZC=F,431.5,agriculture
+2026-06-04,CBOT Corn,ZC=F,424.5,agriculture
+2026-06-05,CBOT Corn,ZC=F,417.5,agriculture
+2026-06-08,CBOT Corn,ZC=F,418.75,agriculture
+2026-06-09,CBOT Corn,ZC=F,419.5,agriculture
+2026-06-10,CBOT Corn,ZC=F,419.0,agriculture
+2026-06-11,CBOT Corn,ZC=F,411.75,agriculture
+2026-06-12,CBOT Corn,ZC=F,412.75,agriculture
+2026-06-15,CBOT Corn,ZC=F,415.5,agriculture
+2026-06-16,CBOT Corn,ZC=F,413.75,agriculture
+2026-06-17,CBOT Corn,ZC=F,421.0,agriculture
+2026-06-18,CBOT Corn,ZC=F,417.5,agriculture
 2025-11-03,CBOT Wheat,ZW=F,543.5,agriculture
 2025-11-04,CBOT Wheat,ZW=F,550.25,agriculture
 2025-11-05,CBOT Wheat,ZW=F,554.75,agriculture
@@ -311,6 +417,59 @@ date,commodity,ticker,price,category
 2026-03-31,CBOT Wheat,ZW=F,616.25,agriculture
 2026-04-01,CBOT Wheat,ZW=F,597.5,agriculture
 2026-04-02,CBOT Wheat,ZW=F,598.25,agriculture
+2026-04-06,CBOT Wheat,ZW=F,595.25,agriculture
+2026-04-07,CBOT Wheat,ZW=F,598.0,agriculture
+2026-04-08,CBOT Wheat,ZW=F,580.25,agriculture
+2026-04-09,CBOT Wheat,ZW=F,574.5,agriculture
+2026-04-10,CBOT Wheat,ZW=F,571.0,agriculture
+2026-04-13,CBOT Wheat,ZW=F,582.25,agriculture
+2026-04-14,CBOT Wheat,ZW=F,592.0,agriculture
+2026-04-15,CBOT Wheat,ZW=F,593.75,agriculture
+2026-04-16,CBOT Wheat,ZW=F,598.5,agriculture
+2026-04-17,CBOT Wheat,ZW=F,591.25,agriculture
+2026-04-20,CBOT Wheat,ZW=F,597.0,agriculture
+2026-04-21,CBOT Wheat,ZW=F,605.0,agriculture
+2026-04-22,CBOT Wheat,ZW=F,599.25,agriculture
+2026-04-23,CBOT Wheat,ZW=F,610.75,agriculture
+2026-04-24,CBOT Wheat,ZW=F,608.25,agriculture
+2026-04-27,CBOT Wheat,ZW=F,621.5,agriculture
+2026-04-28,CBOT Wheat,ZW=F,649.0,agriculture
+2026-04-29,CBOT Wheat,ZW=F,642.25,agriculture
+2026-04-30,CBOT Wheat,ZW=F,623.75,agriculture
+2026-05-01,CBOT Wheat,ZW=F,624.5,agriculture
+2026-05-04,CBOT Wheat,ZW=F,629.5,agriculture
+2026-05-05,CBOT Wheat,ZW=F,616.5,agriculture
+2026-05-06,CBOT Wheat,ZW=F,606.0,agriculture
+2026-05-07,CBOT Wheat,ZW=F,601.75,agriculture
+2026-05-08,CBOT Wheat,ZW=F,607.5,agriculture
+2026-05-11,CBOT Wheat,ZW=F,622.25,agriculture
+2026-05-12,CBOT Wheat,ZW=F,665.0,agriculture
+2026-05-13,CBOT Wheat,ZW=F,665.0,agriculture
+2026-05-14,CBOT Wheat,ZW=F,647.0,agriculture
+2026-05-15,CBOT Wheat,ZW=F,635.75,agriculture
+2026-05-18,CBOT Wheat,ZW=F,664.5,agriculture
+2026-05-19,CBOT Wheat,ZW=F,667.25,agriculture
+2026-05-20,CBOT Wheat,ZW=F,660.5,agriculture
+2026-05-21,CBOT Wheat,ZW=F,647.5,agriculture
+2026-05-22,CBOT Wheat,ZW=F,646.25,agriculture
+2026-05-26,CBOT Wheat,ZW=F,635.5,agriculture
+2026-05-27,CBOT Wheat,ZW=F,622.5,agriculture
+2026-05-28,CBOT Wheat,ZW=F,624.0,agriculture
+2026-05-29,CBOT Wheat,ZW=F,610.5,agriculture
+2026-06-01,CBOT Wheat,ZW=F,608.75,agriculture
+2026-06-02,CBOT Wheat,ZW=F,603.0,agriculture
+2026-06-03,CBOT Wheat,ZW=F,587.25,agriculture
+2026-06-04,CBOT Wheat,ZW=F,581.75,agriculture
+2026-06-05,CBOT Wheat,ZW=F,580.0,agriculture
+2026-06-08,CBOT Wheat,ZW=F,583.25,agriculture
+2026-06-09,CBOT Wheat,ZW=F,585.25,agriculture
+2026-06-10,CBOT Wheat,ZW=F,587.5,agriculture
+2026-06-11,CBOT Wheat,ZW=F,586.75,agriculture
+2026-06-12,CBOT Wheat,ZW=F,584.5,agriculture
+2026-06-15,CBOT Wheat,ZW=F,589.75,agriculture
+2026-06-16,CBOT Wheat,ZW=F,596.0,agriculture
+2026-06-17,CBOT Wheat,ZW=F,612.75,agriculture
+2026-06-18,CBOT Wheat,ZW=F,605.75,agriculture
 2025-11-03,Coal Sector (ETF),COAL,22.280033111572266,non_hormuz_energy
 2025-11-04,Coal Sector (ETF),COAL,21.596847534179688,non_hormuz_energy
 2025-11-05,Coal Sector (ETF),COAL,21.749858856201172,non_hormuz_energy
@@ -415,6 +574,59 @@ date,commodity,ticker,price,category
 2026-03-31,Coal Sector (ETF),COAL,27.440000534057617,non_hormuz_energy
 2026-04-01,Coal Sector (ETF),COAL,27.469999313354492,non_hormuz_energy
 2026-04-02,Coal Sector (ETF),COAL,27.709999084472656,non_hormuz_energy
+2026-04-06,Coal Sector (ETF),COAL,27.889999389648438,non_hormuz_energy
+2026-04-07,Coal Sector (ETF),COAL,27.559999465942383,non_hormuz_energy
+2026-04-08,Coal Sector (ETF),COAL,26.639999389648438,non_hormuz_energy
+2026-04-09,Coal Sector (ETF),COAL,25.940000534057617,non_hormuz_energy
+2026-04-10,Coal Sector (ETF),COAL,26.0,non_hormuz_energy
+2026-04-13,Coal Sector (ETF),COAL,26.1200008392334,non_hormuz_energy
+2026-04-14,Coal Sector (ETF),COAL,25.68000030517578,non_hormuz_energy
+2026-04-15,Coal Sector (ETF),COAL,26.030000686645508,non_hormuz_energy
+2026-04-16,Coal Sector (ETF),COAL,25.6200008392334,non_hormuz_energy
+2026-04-17,Coal Sector (ETF),COAL,24.940000534057617,non_hormuz_energy
+2026-04-20,Coal Sector (ETF),COAL,24.959999084472656,non_hormuz_energy
+2026-04-21,Coal Sector (ETF),COAL,25.579999923706055,non_hormuz_energy
+2026-04-22,Coal Sector (ETF),COAL,25.75,non_hormuz_energy
+2026-04-23,Coal Sector (ETF),COAL,25.5,non_hormuz_energy
+2026-04-24,Coal Sector (ETF),COAL,25.09000015258789,non_hormuz_energy
+2026-04-27,Coal Sector (ETF),COAL,25.360000610351562,non_hormuz_energy
+2026-04-28,Coal Sector (ETF),COAL,25.649999618530273,non_hormuz_energy
+2026-04-29,Coal Sector (ETF),COAL,25.649999618530273,non_hormuz_energy
+2026-04-30,Coal Sector (ETF),COAL,26.09000015258789,non_hormuz_energy
+2026-05-01,Coal Sector (ETF),COAL,25.68000030517578,non_hormuz_energy
+2026-05-04,Coal Sector (ETF),COAL,25.65999984741211,non_hormuz_energy
+2026-05-05,Coal Sector (ETF),COAL,26.1299991607666,non_hormuz_energy
+2026-05-06,Coal Sector (ETF),COAL,25.959999084472656,non_hormuz_energy
+2026-05-07,Coal Sector (ETF),COAL,25.489999771118164,non_hormuz_energy
+2026-05-08,Coal Sector (ETF),COAL,25.09000015258789,non_hormuz_energy
+2026-05-11,Coal Sector (ETF),COAL,25.700000762939453,non_hormuz_energy
+2026-05-12,Coal Sector (ETF),COAL,25.350000381469727,non_hormuz_energy
+2026-05-13,Coal Sector (ETF),COAL,25.049999237060547,non_hormuz_energy
+2026-05-14,Coal Sector (ETF),COAL,25.09000015258789,non_hormuz_energy
+2026-05-15,Coal Sector (ETF),COAL,24.690000534057617,non_hormuz_energy
+2026-05-18,Coal Sector (ETF),COAL,24.854999542236328,non_hormuz_energy
+2026-05-19,Coal Sector (ETF),COAL,24.59000015258789,non_hormuz_energy
+2026-05-20,Coal Sector (ETF),COAL,24.799999237060547,non_hormuz_energy
+2026-05-21,Coal Sector (ETF),COAL,24.780000686645508,non_hormuz_energy
+2026-05-22,Coal Sector (ETF),COAL,24.610000610351562,non_hormuz_energy
+2026-05-26,Coal Sector (ETF),COAL,26.100000381469727,non_hormuz_energy
+2026-05-27,Coal Sector (ETF),COAL,26.579999923706055,non_hormuz_energy
+2026-05-28,Coal Sector (ETF),COAL,27.280000686645508,non_hormuz_energy
+2026-05-29,Coal Sector (ETF),COAL,26.440000534057617,non_hormuz_energy
+2026-06-01,Coal Sector (ETF),COAL,27.950000762939453,non_hormuz_energy
+2026-06-02,Coal Sector (ETF),COAL,27.969999313354492,non_hormuz_energy
+2026-06-03,Coal Sector (ETF),COAL,27.774999618530273,non_hormuz_energy
+2026-06-04,Coal Sector (ETF),COAL,28.350000381469727,non_hormuz_energy
+2026-06-05,Coal Sector (ETF),COAL,27.0,non_hormuz_energy
+2026-06-08,Coal Sector (ETF),COAL,26.760000228881836,non_hormuz_energy
+2026-06-09,Coal Sector (ETF),COAL,26.219999313354492,non_hormuz_energy
+2026-06-10,Coal Sector (ETF),COAL,25.81999969482422,non_hormuz_energy
+2026-06-11,Coal Sector (ETF),COAL,25.959999084472656,non_hormuz_energy
+2026-06-12,Coal Sector (ETF),COAL,26.3799991607666,non_hormuz_energy
+2026-06-15,Coal Sector (ETF),COAL,25.459999084472656,non_hormuz_energy
+2026-06-16,Coal Sector (ETF),COAL,25.149999618530273,non_hormuz_energy
+2026-06-17,Coal Sector (ETF),COAL,25.0,non_hormuz_energy
+2026-06-18,Coal Sector (ETF),COAL,24.34000015258789,non_hormuz_energy
 2025-11-03,Henry Hub Nat Gas,NG=F,4.265999794006348,non_hormuz_energy
 2025-11-04,Henry Hub Nat Gas,NG=F,4.3429999351501465,non_hormuz_energy
 2025-11-05,Henry Hub Nat Gas,NG=F,4.23199987411499,non_hormuz_energy
@@ -519,6 +731,59 @@ date,commodity,ticker,price,category
 2026-03-31,Henry Hub Nat Gas,NG=F,2.884000062942505,non_hormuz_energy
 2026-04-01,Henry Hub Nat Gas,NG=F,2.819000005722046,non_hormuz_energy
 2026-04-02,Henry Hub Nat Gas,NG=F,2.799999952316284,non_hormuz_energy
+2026-04-06,Henry Hub Nat Gas,NG=F,2.811000108718872,non_hormuz_energy
+2026-04-07,Henry Hub Nat Gas,NG=F,2.869999885559082,non_hormuz_energy
+2026-04-08,Henry Hub Nat Gas,NG=F,2.7239999771118164,non_hormuz_energy
+2026-04-09,Henry Hub Nat Gas,NG=F,2.6700000762939453,non_hormuz_energy
+2026-04-10,Henry Hub Nat Gas,NG=F,2.6480000019073486,non_hormuz_energy
+2026-04-13,Henry Hub Nat Gas,NG=F,2.627000093460083,non_hormuz_energy
+2026-04-14,Henry Hub Nat Gas,NG=F,2.5989999771118164,non_hormuz_energy
+2026-04-15,Henry Hub Nat Gas,NG=F,2.609999895095825,non_hormuz_energy
+2026-04-16,Henry Hub Nat Gas,NG=F,2.6470000743865967,non_hormuz_energy
+2026-04-17,Henry Hub Nat Gas,NG=F,2.6740000247955322,non_hormuz_energy
+2026-04-20,Henry Hub Nat Gas,NG=F,2.688999891281128,non_hormuz_energy
+2026-04-21,Henry Hub Nat Gas,NG=F,2.697000026702881,non_hormuz_energy
+2026-04-22,Henry Hub Nat Gas,NG=F,2.7219998836517334,non_hormuz_energy
+2026-04-23,Henry Hub Nat Gas,NG=F,2.614000082015991,non_hormuz_energy
+2026-04-24,Henry Hub Nat Gas,NG=F,2.5230000019073486,non_hormuz_energy
+2026-04-27,Henry Hub Nat Gas,NG=F,2.549999952316284,non_hormuz_energy
+2026-04-28,Henry Hub Nat Gas,NG=F,2.559000015258789,non_hormuz_energy
+2026-04-29,Henry Hub Nat Gas,NG=F,2.6470000743865967,non_hormuz_energy
+2026-04-30,Henry Hub Nat Gas,NG=F,2.7669999599456787,non_hormuz_energy
+2026-05-01,Henry Hub Nat Gas,NG=F,2.7799999713897705,non_hormuz_energy
+2026-05-04,Henry Hub Nat Gas,NG=F,2.867000102996826,non_hormuz_energy
+2026-05-05,Henry Hub Nat Gas,NG=F,2.7880001068115234,non_hormuz_energy
+2026-05-06,Henry Hub Nat Gas,NG=F,2.7300000190734863,non_hormuz_energy
+2026-05-07,Henry Hub Nat Gas,NG=F,2.7690000534057617,non_hormuz_energy
+2026-05-08,Henry Hub Nat Gas,NG=F,2.756999969482422,non_hormuz_energy
+2026-05-11,Henry Hub Nat Gas,NG=F,2.9100000858306885,non_hormuz_energy
+2026-05-12,Henry Hub Nat Gas,NG=F,2.8429999351501465,non_hormuz_energy
+2026-05-13,Henry Hub Nat Gas,NG=F,2.864000082015991,non_hormuz_energy
+2026-05-14,Henry Hub Nat Gas,NG=F,2.8940000534057617,non_hormuz_energy
+2026-05-15,Henry Hub Nat Gas,NG=F,2.9600000381469727,non_hormuz_energy
+2026-05-18,Henry Hub Nat Gas,NG=F,3.0239999294281006,non_hormuz_energy
+2026-05-19,Henry Hub Nat Gas,NG=F,3.114000082015991,non_hormuz_energy
+2026-05-20,Henry Hub Nat Gas,NG=F,3.003999948501587,non_hormuz_energy
+2026-05-21,Henry Hub Nat Gas,NG=F,3.0179998874664307,non_hormuz_energy
+2026-05-22,Henry Hub Nat Gas,NG=F,2.9070000648498535,non_hormuz_energy
+2026-05-26,Henry Hub Nat Gas,NG=F,2.8940000534057617,non_hormuz_energy
+2026-05-27,Henry Hub Nat Gas,NG=F,3.0399999618530273,non_hormuz_energy
+2026-05-28,Henry Hub Nat Gas,NG=F,3.2850000858306885,non_hormuz_energy
+2026-05-29,Henry Hub Nat Gas,NG=F,3.2899999618530273,non_hormuz_energy
+2026-06-01,Henry Hub Nat Gas,NG=F,3.178999900817871,non_hormuz_energy
+2026-06-02,Henry Hub Nat Gas,NG=F,3.1670000553131104,non_hormuz_energy
+2026-06-03,Henry Hub Nat Gas,NG=F,3.2139999866485596,non_hormuz_energy
+2026-06-04,Henry Hub Nat Gas,NG=F,3.3359999656677246,non_hormuz_energy
+2026-06-05,Henry Hub Nat Gas,NG=F,3.2290000915527344,non_hormuz_energy
+2026-06-08,Henry Hub Nat Gas,NG=F,3.1470000743865967,non_hormuz_energy
+2026-06-09,Henry Hub Nat Gas,NG=F,3.140000104904175,non_hormuz_energy
+2026-06-10,Henry Hub Nat Gas,NG=F,3.184999942779541,non_hormuz_energy
+2026-06-11,Henry Hub Nat Gas,NG=F,3.0869998931884766,non_hormuz_energy
+2026-06-12,Henry Hub Nat Gas,NG=F,3.119999885559082,non_hormuz_energy
+2026-06-15,Henry Hub Nat Gas,NG=F,3.1470000743865967,non_hormuz_energy
+2026-06-16,Henry Hub Nat Gas,NG=F,3.239000082015991,non_hormuz_energy
+2026-06-17,Henry Hub Nat Gas,NG=F,3.1449999809265137,non_hormuz_energy
+2026-06-18,Henry Hub Nat Gas,NG=F,3.2330000400543213,non_hormuz_energy
 2025-11-03,WTI Crude,CL=F,61.04999923706055,hormuz_exposed
 2025-11-04,WTI Crude,CL=F,60.560001373291016,hormuz_exposed
 2025-11-05,WTI Crude,CL=F,59.599998474121094,hormuz_exposed
@@ -623,3 +888,56 @@ date,commodity,ticker,price,category
 2026-03-31,WTI Crude,CL=F,101.37999725341797,hormuz_exposed
 2026-04-01,WTI Crude,CL=F,100.12000274658203,hormuz_exposed
 2026-04-02,WTI Crude,CL=F,111.54000091552734,hormuz_exposed
+2026-04-06,WTI Crude,CL=F,112.41000366210938,hormuz_exposed
+2026-04-07,WTI Crude,CL=F,112.94999694824219,hormuz_exposed
+2026-04-08,WTI Crude,CL=F,94.41000366210938,hormuz_exposed
+2026-04-09,WTI Crude,CL=F,97.87000274658203,hormuz_exposed
+2026-04-10,WTI Crude,CL=F,96.56999969482422,hormuz_exposed
+2026-04-13,WTI Crude,CL=F,99.08000183105469,hormuz_exposed
+2026-04-14,WTI Crude,CL=F,91.27999877929688,hormuz_exposed
+2026-04-15,WTI Crude,CL=F,91.29000091552734,hormuz_exposed
+2026-04-16,WTI Crude,CL=F,94.69000244140625,hormuz_exposed
+2026-04-17,WTI Crude,CL=F,83.8499984741211,hormuz_exposed
+2026-04-20,WTI Crude,CL=F,89.61000061035156,hormuz_exposed
+2026-04-21,WTI Crude,CL=F,92.12999725341797,hormuz_exposed
+2026-04-22,WTI Crude,CL=F,92.95999908447266,hormuz_exposed
+2026-04-23,WTI Crude,CL=F,95.8499984741211,hormuz_exposed
+2026-04-24,WTI Crude,CL=F,94.4000015258789,hormuz_exposed
+2026-04-27,WTI Crude,CL=F,96.37000274658203,hormuz_exposed
+2026-04-28,WTI Crude,CL=F,99.93000030517578,hormuz_exposed
+2026-04-29,WTI Crude,CL=F,106.87999725341797,hormuz_exposed
+2026-04-30,WTI Crude,CL=F,105.06999969482422,hormuz_exposed
+2026-05-01,WTI Crude,CL=F,101.94000244140625,hormuz_exposed
+2026-05-04,WTI Crude,CL=F,106.41999816894531,hormuz_exposed
+2026-05-05,WTI Crude,CL=F,102.2699966430664,hormuz_exposed
+2026-05-06,WTI Crude,CL=F,95.08000183105469,hormuz_exposed
+2026-05-07,WTI Crude,CL=F,94.80999755859375,hormuz_exposed
+2026-05-08,WTI Crude,CL=F,95.41999816894531,hormuz_exposed
+2026-05-11,WTI Crude,CL=F,98.06999969482422,hormuz_exposed
+2026-05-12,WTI Crude,CL=F,102.18000030517578,hormuz_exposed
+2026-05-13,WTI Crude,CL=F,101.0199966430664,hormuz_exposed
+2026-05-14,WTI Crude,CL=F,101.16999816894531,hormuz_exposed
+2026-05-15,WTI Crude,CL=F,105.41999816894531,hormuz_exposed
+2026-05-18,WTI Crude,CL=F,108.66000366210938,hormuz_exposed
+2026-05-19,WTI Crude,CL=F,107.7699966430664,hormuz_exposed
+2026-05-20,WTI Crude,CL=F,98.26000213623047,hormuz_exposed
+2026-05-21,WTI Crude,CL=F,96.3499984741211,hormuz_exposed
+2026-05-22,WTI Crude,CL=F,96.5999984741211,hormuz_exposed
+2026-05-26,WTI Crude,CL=F,93.88999938964844,hormuz_exposed
+2026-05-27,WTI Crude,CL=F,88.68000030517578,hormuz_exposed
+2026-05-28,WTI Crude,CL=F,88.9000015258789,hormuz_exposed
+2026-05-29,WTI Crude,CL=F,87.36000061035156,hormuz_exposed
+2026-06-01,WTI Crude,CL=F,92.16000366210938,hormuz_exposed
+2026-06-02,WTI Crude,CL=F,93.76000213623047,hormuz_exposed
+2026-06-03,WTI Crude,CL=F,96.0199966430664,hormuz_exposed
+2026-06-04,WTI Crude,CL=F,93.04000091552734,hormuz_exposed
+2026-06-05,WTI Crude,CL=F,90.54000091552734,hormuz_exposed
+2026-06-08,WTI Crude,CL=F,91.30000305175781,hormuz_exposed
+2026-06-09,WTI Crude,CL=F,88.19999694824219,hormuz_exposed
+2026-06-10,WTI Crude,CL=F,90.02999877929688,hormuz_exposed
+2026-06-11,WTI Crude,CL=F,87.70999908447266,hormuz_exposed
+2026-06-12,WTI Crude,CL=F,84.87999725341797,hormuz_exposed
+2026-06-15,WTI Crude,CL=F,80.75,hormuz_exposed
+2026-06-16,WTI Crude,CL=F,76.05000305175781,hormuz_exposed
+2026-06-17,WTI Crude,CL=F,76.79000091552734,hormuz_exposed
+2026-06-18,WTI Crude,CL=F,76.5999984741211,hormuz_exposed

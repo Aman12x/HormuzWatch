@@ -230,5 +230,61 @@ export const equitiesCAR = [
     "energy": 3.85,
     "shipping_hormuz": -12.33,
     "shipping_ctrl": -6.32
+  },
+  {
+    "date": "2026-04-06",
+    "t": 24,
+    "defense": -9.8,
+    "energy": 4.3,
+    "shipping_hormuz": -12.98,
+    "shipping_ctrl": -6.29
+  },
+  {
+    "date": "2026-04-07",
+    "t": 25,
+    "defense": -10.98,
+    "energy": 4.39,
+    "shipping_hormuz": -17.0,
+    "shipping_ctrl": -9.27
+  },
+  {
+    "date": "2026-04-08",
+    "t": 26,
+    "defense": -10.93,
+    "energy": -0.23,
+    "shipping_hormuz": -14.63,
+    "shipping_ctrl": -8.37
+  },
+  {
+    "date": "2026-04-09",
+    "t": 27,
+    "defense": -11.48,
+    "energy": -1.27,
+    "shipping_hormuz": -17.6,
+    "shipping_ctrl": -9.07
+  },
+  {
+    "date": "2026-04-10",
+    "t": 28,
+    "defense": -13.41,
+    "energy": -2.03,
+    "shipping_hormuz": -19.75,
+    "shipping_ctrl": -12.5
+  },
+  {
+    "date": "2026-04-13",
+    "t": 29,
+    "defense": -13.22,
+    "energy": -1.84,
+    "shipping_hormuz": -18.38,
+    "shipping_ctrl": -11.31
+  },
+  {
+    "date": "2026-04-14",
+    "t": 30,
+    "defense": -14.01,
+    "energy": -4.05,
+    "shipping_hormuz": -21.98,
+    "shipping_ctrl": -14.04
   }
 ];

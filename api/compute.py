@@ -1,6 +1,6 @@
 """
 compute.py — HormuzWatch
-Reads data/processed/ CSVs and computes live econometric outputs:
+Reads data/processed/ CSVs and computes cutoff-bounded econometric outputs:
   - Oil price time series (indexed to Feb 28 base)
   - Equity CARs by sector and ticker (market-model OLS)
   - Volatility index time series
@@ -22,6 +22,8 @@ import numpy as np
 import pandas as pd
 from scipy import stats as sp_stats
 
+from analysis_config import HORMUZ_REOPENED
+
 # ── Paths ──────────────────────────────────────────────────────────────────────
 _ROOT    = Path(__file__).parent.parent          # hormuzwatch/
 DATA_DIR = _ROOT / "data" / "processed"
@@ -29,6 +31,7 @@ DATA_DIR = _ROOT / "data" / "processed"
 # ── Event constants ────────────────────────────────────────────────────────────
 EVENT_DATE  = pd.Timestamp("2026-02-28")   # US-Israel strikes
 HORMUZ_DATE = pd.Timestamp("2026-03-07")   # Hormuz closure
+ANALYSIS_END = pd.Timestamp(HORMUZ_REOPENED)
 PRE_START   = pd.Timestamp("2025-11-01")   # Estimation window start
 PRE_END     = pd.Timestamp("2026-02-27")   # Estimation window end
 DID_BASE    = pd.Timestamp("2026-01-02")   # DiD price index base date
@@ -55,6 +58,7 @@ def _load_energy_yf() -> pd.DataFrame:
     """Return pivot of yfinance rows from energy.csv with 'brent' and 'wti' columns."""
     df = pd.read_csv(_csv("energy.csv"), parse_dates=["date"])
     df["date"] = pd.to_datetime(df["date"]).dt.normalize()
+    df = df[df["date"] <= ANALYSIS_END]
     yf = (
         df.query("source == 'yfinance'")
           .pivot_table(index="date", columns="series", values="price")
@@ -69,6 +73,7 @@ def _load_energy_yf() -> pd.DataFrame:
 def _load_equities() -> pd.DataFrame:
     eq = pd.read_csv(_csv("equities.csv"), parse_dates=["date"])
     eq["date"] = pd.to_datetime(eq["date"]).dt.normalize()
+    eq = eq[eq["date"] <= ANALYSIS_END]
     return eq.sort_values("date").reset_index(drop=True)
 
 
@@ -104,7 +109,10 @@ def _compute_cars(eq: pd.DataFrame, models: dict) -> pd.DataFrame:
     def t_off(n: int) -> pd.Timestamp:
         return trading_days.iloc[max(0, min(ev_idx + n, len(trading_days) - 1))]
 
-    ew = eq[eq["date"] >= t_off(-5)].copy().reset_index(drop=True)
+    event_window_end = min(t_off(30), ANALYSIS_END)
+    ew = eq[
+        (eq["date"] >= t_off(-5)) & (eq["date"] <= event_window_end)
+    ].copy().reset_index(drop=True)
     ew_dates = ew["date"].sort_values().reset_index(drop=True)
     try:
         ev_pos = list(ew_dates).index(ev_date)
@@ -206,6 +214,7 @@ def build_timeseries() -> dict:
     try:
         vol = pd.read_csv(_csv("volatility.csv"), parse_dates=["date"])
         vol["date"] = pd.to_datetime(vol["date"]).dt.normalize()
+        vol = vol[vol["date"] <= ANALYSIS_END]
         pivot = (
             vol.pivot_table(index="date", columns="series", values="value")
                .rename_axis(None, axis=1)
@@ -224,6 +233,7 @@ def build_timeseries() -> dict:
         traceback.print_exc()
 
     out["updatedAt"] = datetime.now(timezone.utc).isoformat()
+    out["analysisEnd"] = ANALYSIS_END.strftime("%Y-%m-%d")
     return out
 
 
@@ -231,7 +241,7 @@ def build_metrics() -> dict:
     """
     Returns computed econometric metrics:
       oilStats          — base/peak prices
-      syntheticControl  — futuresATT (live), spotATT (frozen), basisSpread
+      syntheticControl  — futuresATT (through reopening), spotATT (frozen), basisSpread
       attByPhase        — ATT broken out by strike / Hormuz phases
       equityStats       — sector-level final CARs
       tickerCAR         — per-ticker final CARs
@@ -273,24 +283,24 @@ def build_metrics() -> dict:
         p1     = spread[(spread.index >= EVENT_DATE) & (spread.index < HORMUZ_DATE)]
         p2     = spread[spread.index >= HORMUZ_DATE]
 
-        futures_att_full = round(float(p_full.mean()) - pre_mean, 2) if len(p_full) else 3.51
+        futures_att_full = round(float(p_full.mean()) - pre_mean, 2) if len(p_full) else 1.27
         futures_att_p1   = round(float(p1.mean())     - pre_mean, 2) if len(p1)     else 0.94
-        futures_att_p2   = round(float(p2.mean())     - pre_mean, 2) if len(p2)     else 4.18
+        futures_att_p2   = round(float(p2.mean())     - pre_mean, 2) if len(p2)     else 1.29
 
-        # spotATT stays frozen: Dubai crude data ends Feb 2026; synthetic inflated
-        FROZEN_SPOT_ATT = 35.99
-        FROZEN_SPOT_P1  = 16.77
-        FROZEN_SPOT_P2  = 41.04
+        # Dubai crude ends Feb 2026, so the final spot result is reproduced from
+        # the cutoff-bounded notebook and remains fixed until that series updates.
+        FROZEN_SPOT_ATT = 7.73
+        FROZEN_SPOT_P1  = -2.41
+        FROZEN_SPOT_P2  = 8.44
 
         out["syntheticControl"] = {
             "spotATT"      : FROZEN_SPOT_ATT,
             "futuresATT"   : futures_att_full,
             "basisSpread"  : round(FROZEN_SPOT_ATT - futures_att_full, 2),
-            "prePeriodRMSE": 0.78,
+            "prePeriodRMSE": 4.17,
             "donorWeights" : [
-                {"name": "FRED Brent (DCOILBRENTEU)", "weight": 77.1},
-                {"name": "WTI (yfinance CL=F)",       "weight": 22.9},
-                {"name": "Henry Hub (DHHNGSP)",        "weight": 0.0},
+                {"name": "Dubai crude (POILDUBUSDM)", "weight": 20.2},
+                {"name": "FRED WTI (DCOILWTICO)",     "weight": 79.8},
             ],
         }
         out["attByPhase"] = [
@@ -302,13 +312,13 @@ def build_metrics() -> dict:
             },
             {
                 "phase": "Hormuz onward",
-                "label": "Mar 7\n– present",
+                "label": "Mar 7\n– Jun 18",
                 "spotATT"   : FROZEN_SPOT_P2,
                 "futuresATT": futures_att_p2,
             },
             {
                 "phase": "Full post",
-                "label": "Mar 1\n– present",
+                "label": "Mar 1\n– Jun 18",
                 "spotATT"   : FROZEN_SPOT_ATT,
                 "futuresATT": futures_att_full,
             },
@@ -356,6 +366,7 @@ def build_metrics() -> dict:
 
         comm = pd.read_csv(_csv("commodities.csv"), parse_dates=["date"])
         comm["date"] = pd.to_datetime(comm["date"]).dt.normalize()
+        comm = comm[comm["date"] <= ANALYSIS_END]
 
         # Use only the four DiD series
         did_tickers = {"BZ=F", "CL=F", "NG=F", "COAL"}
@@ -435,6 +446,7 @@ def build_metrics() -> dict:
         # didResults omitted — frontend falls back to static value
 
     out["updatedAt"] = datetime.now(timezone.utc).isoformat()
+    out["analysisEnd"] = ANALYSIS_END.strftime("%Y-%m-%d")
     return out
 
 
@@ -451,7 +463,6 @@ def is_stale(max_age_days: float = 1.0) -> bool:
     try:
         df = pd.read_csv(p, parse_dates=["date"])
         last_date = pd.to_datetime(df["date"]).max()
-        age_days = (pd.Timestamp.utcnow().tz_localize(None) - last_date).days
-        return age_days > max_age_days
+        return last_date.normalize() < ANALYSIS_END
     except Exception:
         return True

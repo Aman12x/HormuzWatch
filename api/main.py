@@ -1,33 +1,38 @@
 """
 HormuzWatch API — FastAPI backend
-Serves live market data fetched from yfinance + AI-powered news feed via Anthropic.
+Serves the final June 18 market snapshot and cutoff-bounded intelligence feed.
 
 Run:
     uvicorn api.main:app --reload --port 8000
 from the hormuzwatch/ directory.
 """
 
-import json
 import os
-import re
+import secrets
 import subprocess
 import sys
 import threading
 import time
 import traceback
 from contextlib import asynccontextmanager
-from datetime import date, datetime, timezone
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
-import anthropic
-import httpx
 import numpy as np
 import pandas as pd
-import yfinance as yf
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+
+from analysis_config import (
+    ANALYSIS_END,
+    CONFLICT_START,
+    HORMUZ_CLOSURE,
+    HORMUZ_REOPENED,
+)
+from api.news_snapshot import final_news_items, final_news_summary
 
 load_dotenv()
 
@@ -48,72 +53,57 @@ def _get_compute():
 _ROOT = Path(__file__).parent.parent   # hormuzwatch/
 
 # ── Constants ──────────────────────────────────────────────────────────────────
-CONFLICT_START  = date(2026, 2, 28)
-HORMUZ_CLOSURE  = date(2026, 3, 7)
 BRENT_BASE_DATE = "2026-03-02"
 BRENT_BASE      = 77.74
 WTI_BASE        = 71.23
 
-PRICE_TICKERS   = ["BZ=F", "CL=F"]
 VOL_TICKERS     = ["^OVX", "^VIX"]
 EQUITY_TICKERS  = ["LMT", "RTX", "NOC", "XOM", "CVX", "BP", "FRO", "STNG",
                    "INSW", "NAT", "TK"]
 
 CACHE_TTL       = 900   # 15 minutes
-NEWS_CACHE_TTL  = 900   # 15 minutes
 
 # ── Pipeline refresh ───────────────────────────────────────────────────────────
-_PIPELINES = ["energy", "equities", "commodities", "volatility"]
+_PIPELINES = ["energy", "equities", "commodities", "volatility", "macro", "donors"]
+_refresh_lock = threading.Lock()
 
 def _run_pipelines() -> None:
     """Run all data-ingestion pipelines as subprocesses, then clear cache."""
+    if not _refresh_lock.acquire(blocking=False):
+        print("[refresh] Refresh already running; skipping duplicate request.")
+        return
     print("[refresh] Starting pipeline refresh …")
-    for pipe in _PIPELINES:
-        try:
-            result = subprocess.run(
-                [sys.executable, "-m", f"pipelines.{pipe}"],
-                cwd=str(_ROOT),
-                capture_output=True,
-                text=True,
-                timeout=180,
-            )
-            if result.returncode != 0:
-                print(f"[refresh] {pipe} FAILED:\n{result.stderr[:500]}")
-            else:
-                print(f"[refresh] {pipe} OK")
-        except subprocess.TimeoutExpired:
-            print(f"[refresh] {pipe} timed out")
-        except Exception as exc:
-            print(f"[refresh] {pipe} error: {exc}")
-    # Clear cached timeseries/metrics so next request recomputes from fresh CSVs
-    for k in ("timeseries", "metrics"):
-        _cache.pop(k, None)
-    print("[refresh] Done.")
+    try:
+        for pipe in _PIPELINES:
+            try:
+                result = subprocess.run(
+                    [sys.executable, "-m", f"pipelines.{pipe}"],
+                    cwd=str(_ROOT),
+                    capture_output=True,
+                    text=True,
+                    timeout=180,
+                )
+                if result.returncode != 0:
+                    print(f"[refresh] {pipe} FAILED:\n{result.stderr[:500]}")
+                else:
+                    print(f"[refresh] {pipe} OK")
+            except subprocess.TimeoutExpired:
+                print(f"[refresh] {pipe} timed out")
+            except Exception as exc:
+                print(f"[refresh] {pipe} error: {exc}")
+        for k in ("status", "timeseries", "metrics"):
+            _cache.pop(k, None)
+        print("[refresh] Done.")
+    finally:
+        _refresh_lock.release()
 
 
 # ── Scheduler lifespan ─────────────────────────────────────────────────────────
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    scheduler = None
-    try:
-        from apscheduler.schedulers.background import BackgroundScheduler
-        scheduler = BackgroundScheduler()
-        scheduler.add_job(_run_pipelines, "interval", hours=24, id="daily_refresh")
-        scheduler.start()
-        # Always refresh on startup in background so deploys pick up fresh data.
-        # is_stale() now checks actual data dates (not mtime) — but we run
-        # unconditionally on boot so even a same-day deploy gets current prices.
-        threading.Thread(target=_run_pipelines, daemon=True).start()
-    except Exception as exc:
-        print(f"[startup] scheduler/refresh failed (non-fatal): {exc}")
-
+    # The study window is closed at the reopening date; deployments must not
+    # silently extend the dataset with newer observations.
     yield
-
-    if scheduler is not None:
-        try:
-            scheduler.shutdown(wait=False)
-        except Exception:
-            pass
 
 
 # ── App setup ──────────────────────────────────────────────────────────────────
@@ -121,7 +111,11 @@ app = FastAPI(title="HormuzWatch API", version="1.2.0", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        origin.strip()
+        for origin in os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
+        if origin.strip()
+    ],
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
@@ -155,6 +149,14 @@ def cached(key: str, fn, ttl: int = CACHE_TTL):
         return val
 
 
+def _require_admin(x_admin_key: str | None = Header(default=None)) -> None:
+    configured = os.getenv("ADMIN_API_KEY")
+    if not configured:
+        raise HTTPException(status_code=503, detail="Administrative API is disabled")
+    if not x_admin_key or not secrets.compare_digest(x_admin_key, configured):
+        raise HTTPException(status_code=401, detail="Invalid administrative credentials")
+
+
 # ── Market data helpers ────────────────────────────────────────────────────────
 def _safe_float(val, default=0.0) -> float:
     try:
@@ -164,44 +166,58 @@ def _safe_float(val, default=0.0) -> float:
         return default
 
 
-def _latest_close(tickers: list[str], auto_adjust: bool = True) -> dict[str, float]:
+def _final_market_snapshot() -> tuple[dict[str, float], dict[str, float], dict[str, float]]:
+    """Read cutoff-bounded final observations instead of re-querying the network."""
+    prices: dict[str, float] = {}
+    volatility: dict[str, float] = {}
+    equities: dict[str, float] = {}
     try:
-        raw = yf.download(
-            tickers, period="5d",
-            auto_adjust=auto_adjust,
-            progress=False, threads=False,
-        )
-        if raw.empty:
-            return {}
-        close = raw["Close"].dropna(how="all")
-        if isinstance(close, pd.Series):
-            close = close.to_frame(name=tickers[0])
-        last = close.iloc[-1]
-        return {t: _safe_float(last.get(t, 0)) for t in tickers}
-    except Exception:
+        energy = pd.read_csv(_ROOT / "data" / "processed" / "energy.csv")
+        energy = energy[energy["date"] <= ANALYSIS_END]
+        for series, ticker in (("brent", "BZ=F"), ("wti", "CL=F")):
+            values = energy.loc[energy["series"] == series, "price"].dropna()
+            if not values.empty:
+                prices[ticker] = _safe_float(values.iloc[-1])
+
+        vol = pd.read_csv(_ROOT / "data" / "processed" / "volatility.csv")
+        vol = vol[vol["date"] <= ANALYSIS_END]
+        for ticker in VOL_TICKERS:
+            values = vol.loc[vol["ticker"] == ticker, "value"].dropna()
+            if not values.empty:
+                volatility[ticker] = _safe_float(values.iloc[-1])
+
+        eq = pd.read_csv(_ROOT / "data" / "processed" / "equities.csv")
+        eq = eq[eq["date"] <= ANALYSIS_END]
+        for ticker in EQUITY_TICKERS:
+            column = f"{ticker}_close"
+            if column in eq:
+                values = eq[column].dropna()
+                if not values.empty:
+                    equities[ticker] = _safe_float(values.iloc[-1])
+    except (FileNotFoundError, KeyError, pd.errors.ParserError):
         traceback.print_exc()
-        return {}
+    return prices, volatility, equities
 
 
 def _build_status() -> dict:
-    today        = date.today()
-    conflict_day = max(1, (today - CONFLICT_START).days + 1)
-    hormuz_day   = max(0, (today - HORMUZ_CLOSURE).days + 1)
+    conflict_day = (HORMUZ_REOPENED - CONFLICT_START).days + 1
+    hormuz_day   = (HORMUZ_REOPENED - HORMUZ_CLOSURE).days
 
-    prices   = _latest_close(PRICE_TICKERS)
-    vol      = _latest_close(VOL_TICKERS, auto_adjust=False)
-    equities = _latest_close(EQUITY_TICKERS)
+    prices, vol, equities = _final_market_snapshot()
 
     brent = prices.get("BZ=F", 0) or BRENT_BASE
     wti   = prices.get("CL=F", 0) or WTI_BASE
 
     return {
-        "as_of":         today.isoformat(),
+        "as_of":         ANALYSIS_END,
         "fetched_at":    datetime.now(timezone.utc).isoformat(),
         "cache_ttl_s":   CACHE_TTL,
         "conflict_day":  conflict_day,
         "hormuz_day":    hormuz_day,
-        "hormuz_status": "CLOSED" if today >= HORMUZ_CLOSURE else "OPEN",
+        "hormuz_status": "OPEN",
+        "hormuz_reopened_on": ANALYSIS_END,
+        "study_status": "FINAL",
+        "market_data_status": "OBSERVED" if prices.get("BZ=F") and prices.get("CL=F") else "FALLBACK",
         "oil": {
             "brent_price":   round(brent, 2),
             "wti_price":     round(wti, 2),
@@ -221,219 +237,17 @@ def _build_status() -> dict:
 
 
 # ── News helpers ───────────────────────────────────────────────────────────────
-def _clean_json_response(raw: str) -> str:
-    """Strip markdown fences and extract the JSON array."""
-    raw = raw.strip()
-    raw = re.sub(r'^```json\s*', '', raw, flags=re.MULTILINE)
-    raw = re.sub(r'^```\s*',     '', raw, flags=re.MULTILINE)
-    raw = re.sub(r'```$',        '', raw, flags=re.MULTILINE)
-    raw = raw.strip()
-
-    start = raw.find('[')
-    end   = raw.rfind(']')
-    if start == -1 or end == -1:
-        print(f"[news] No JSON array found. Raw response (first 500 chars):\n{raw[:500]}")
-        raise ValueError(f"No JSON array found in Claude response: {raw[:200]}")
-    return raw[start:end + 1]
-
-
-def _anthropic_client():
-    import anthropic as _anthropic
-    api_key = os.getenv("ANTHROPIC_API_KEY")
-    if not api_key:
-        raise RuntimeError("ANTHROPIC_API_KEY not set in environment / .env")
-    return _anthropic.Anthropic(api_key=api_key)
-
-
-def _build_news() -> list[dict]:
-    client = _anthropic_client()
-
-    response = client.beta.messages.create(
-        model="claude-haiku-4-5-20251001",
-        max_tokens=4000,
-        tools=[{"type": "web_search_20250305", "name": "web_search"}],
-        betas=["web-search-2025-03-05"],
-        system=(
-            "You are a geopolitical intelligence analyst monitoring the 2026 "
-            "US-Israel war on Iran and its global economic impact. "
-            "Return structured JSON only. No preamble. No markdown. No backticks."
-        ),
-        messages=[{
-            "role": "user",
-            "content": (
-                "Search for the latest news from the last 24 hours on:\n"
-                "1. US-Israel military operations in Iran\n"
-                "2. Strait of Hormuz shipping and oil prices\n"
-                "3. Global economic impact: food prices, fertilizer, energy\n"
-                "4. Diplomatic developments: ceasefire talks, UN, Turkey, Pakistan\n\n"
-                "Return a JSON array of exactly 8 items, each with:\n"
-                "{\n"
-                '  "title": string,\n'
-                '  "summary": "string (2 sentences max)",\n'
-                '  "category": "one of [MILITARY, ENERGY, DIPLOMATIC, HUMANITARIAN, MARKETS]",\n'
-                '  "severity": "one of [CRITICAL, HIGH, MEDIUM, LOW]",\n'
-                '  "source": string,\n'
-                '  "timestamp": "ISO string (today if unknown)",\n'
-                '  "url": "string or null"\n'
-                "}\n"
-                "Return ONLY the JSON array. Absolutely no markdown, no backticks, "
-                "no preamble, no explanation."
-            ),
-        }],
-    )
-
-    raw = ""
-    for block in response.content:
-        if block.type == "text":
-            raw += block.text
-
-    cleaned = _clean_json_response(raw)
-    items   = json.loads(cleaned)
-
-    # Validate and normalise each item
-    valid_categories = {"MILITARY", "ENERGY", "DIPLOMATIC", "HUMANITARIAN", "MARKETS"}
-    valid_severities = {"CRITICAL", "HIGH", "MEDIUM", "LOW"}
-    now_iso = datetime.now(timezone.utc).isoformat()
-
-    result = []
-    for item in items:
-        result.append({
-            "title":     str(item.get("title",    "No title")),
-            "summary":   str(item.get("summary",  "")),
-            "category":  item.get("category", "MARKETS") if item.get("category") in valid_categories else "MARKETS",
-            "severity":  item.get("severity",  "MEDIUM")  if item.get("severity")  in valid_severities  else "MEDIUM",
-            "source":    str(item.get("source",    "Unknown")),
-            "timestamp": str(item.get("timestamp", now_iso)),
-            "url":       item.get("url") or None,
-        })
-
-    return result
-
-
-def _build_news_summary() -> dict:
-    client = _anthropic_client()
-
-    response = client.beta.messages.create(
-        model="claude-haiku-4-5-20251001",
-        max_tokens=400,
-        tools=[{"type": "web_search_20250305", "name": "web_search"}],
-        betas=["web-search-2025-03-05"],
-        system=(
-            "You are a geopolitical intelligence analyst. "
-            "Respond with plain text only. No JSON. No markdown. No bullet points."
-        ),
-        messages=[{
-            "role": "user",
-            "content": (
-                "Search for current news and give an executive intelligence brief "
-                "on the current state of the 2026 Iran war and its global economic impact. "
-                "In exactly 3 sentences. Be specific with numbers where possible. "
-                "Return plain text only, no JSON, no formatting."
-            ),
-        }],
-    )
-
-    text = ""
-    for block in response.content:
-        if block.type == "text":
-            text += block.text
-
-    return {
-        "brief":      text.strip(),
-        "updated_at": datetime.now(timezone.utc).isoformat(),
-    }
-
-
-# ── Gemini fallback (used when Anthropic credits are exhausted) ────────────────
-# Free tier: 1500 req/day, 15 RPM. Get key at aistudio.google.com — no credit card needed.
-_GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
-
-_NEWS_PROMPT = (
-    "Search for the latest news from the last 24 hours on:\n"
-    "1. US-Israel military operations in Iran\n"
-    "2. Strait of Hormuz shipping and oil prices\n"
-    "3. Global economic impact: food prices, fertilizer, energy\n"
-    "4. Diplomatic developments: ceasefire talks, UN, Turkey, Pakistan\n\n"
-    "Return a JSON array of exactly 8 items, each with:\n"
-    "{\n"
-    '  "title": string,\n'
-    '  "summary": "string (2 sentences max)",\n'
-    '  "category": "one of [MILITARY, ENERGY, DIPLOMATIC, HUMANITARIAN, MARKETS]",\n'
-    '  "severity": "one of [CRITICAL, HIGH, MEDIUM, LOW]",\n'
-    '  "source": string,\n'
-    '  "timestamp": "ISO string (today if unknown)",\n'
-    '  "url": "string or null"\n'
-    "}\n"
-    "Return ONLY the JSON array. No markdown, no backticks, no preamble."
-)
-
-_SUMMARY_PROMPT = (
-    "Search for current news and give an executive intelligence brief "
-    "on the current state of the 2026 Iran war and its global economic impact. "
-    "In exactly 3 sentences. Be specific with numbers where possible. "
-    "Return plain text only, no JSON, no formatting."
-)
-
-
-def _gemini_request(prompt: str, system: str) -> str:
-    api_key = os.getenv("GEMINI_API_KEY")
-    if not api_key:
-        raise RuntimeError("GEMINI_API_KEY not set — cannot use Gemini fallback")
-    payload = {
-        "system_instruction": {"parts": [{"text": system}]},
-        "contents": [{"parts": [{"text": prompt}]}],
-        "tools": [{"google_search": {}}],
-    }
-    resp = httpx.post(
-        _GEMINI_URL,
-        params={"key": api_key},
-        json=payload,
-        timeout=30,
-    )
-    resp.raise_for_status()
-    return resp.json()["candidates"][0]["content"]["parts"][0]["text"]
-
-
-def _build_news_gemini() -> list[dict]:
-    raw = _gemini_request(
-        prompt=_NEWS_PROMPT,
-        system=(
-            "You are a geopolitical intelligence analyst monitoring the 2026 "
-            "US-Israel war on Iran and its global economic impact. "
-            "Return structured JSON only. No preamble. No markdown. No backticks."
-        ),
-    )
-    cleaned = _clean_json_response(raw)
-    items = json.loads(cleaned)
-
-    valid_categories = {"MILITARY", "ENERGY", "DIPLOMATIC", "HUMANITARIAN", "MARKETS"}
-    valid_severities = {"CRITICAL", "HIGH", "MEDIUM", "LOW"}
-    now_iso = datetime.now(timezone.utc).isoformat()
-
-    return [
-        {
-            "title":     str(item.get("title",    "No title")),
-            "summary":   str(item.get("summary",  "")),
-            "category":  item.get("category", "MARKETS") if item.get("category") in valid_categories else "MARKETS",
-            "severity":  item.get("severity",  "MEDIUM")  if item.get("severity")  in valid_severities  else "MEDIUM",
-            "source":    str(item.get("source",    "Unknown")),
-            "timestamp": str(item.get("timestamp", now_iso)),
-            "url":       item.get("url") or None,
-        }
-        for item in items
-    ]
-
-
-def _build_news_summary_gemini() -> dict:
-    text = _gemini_request(
-        prompt=_SUMMARY_PROMPT,
-        system="You are a geopolitical intelligence analyst. Respond with plain text only. No JSON. No markdown.",
-    )
-    return {
-        "brief":      text.strip(),
-        "updated_at": datetime.now(timezone.utc).isoformat(),
-    }
-
+def _safe_external_url(value: Any) -> str | None:
+    """Allow only absolute HTTP(S) links in source metadata."""
+    if not isinstance(value, str):
+        return None
+    try:
+        parsed = urlparse(value.strip())
+    except ValueError:
+        return None
+    if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+        return None
+    return value.strip()
 
 # ── Routes ─────────────────────────────────────────────────────────────────────
 @app.get("/api/status")
@@ -446,63 +260,14 @@ def status():
 
 @app.get("/api/news")
 def news():
-    """AI-powered news feed. Cached for NEWS_CACHE_TTL seconds."""
-    api_key = os.getenv("ANTHROPIC_API_KEY")
-    if not api_key:
-        raise HTTPException(
-            status_code=503,
-            detail="ANTHROPIC_API_KEY not configured. Add it to the .env file.",
-        )
-    try:
-        return cached("news", _build_news, ttl=NEWS_CACHE_TTL)
-    except (anthropic.RateLimitError, anthropic.BadRequestError) as e:
-        print(f"[news] Anthropic unavailable ({type(e).__name__}), trying Gemini fallback")
-        try:
-            return cached("news", _build_news_gemini, ttl=NEWS_CACHE_TTL)
-        except Exception:
-            traceback.print_exc()
-            if "news" in _cache:
-                return _cache["news"][0]
-            return [{
-                "title": "News feed temporarily unavailable",
-                "summary": "Both primary and fallback news providers are unavailable. Please check back later.",
-                "category": "MARKETS",
-                "severity": "LOW",
-                "source": "HormuzWatch System",
-                "timestamp": datetime.now(timezone.utc).isoformat(),
-                "url": None,
-            }]
-    except Exception as e:
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=str(e))
+    """Source-linked final archive, capped at the analysis end date."""
+    return final_news_items()
 
 
 @app.get("/api/news/summary")
 def news_summary():
-    """Executive intelligence brief. Cached for NEWS_CACHE_TTL seconds."""
-    api_key = os.getenv("ANTHROPIC_API_KEY")
-    if not api_key:
-        raise HTTPException(
-            status_code=503,
-            detail="ANTHROPIC_API_KEY not configured. Add it to the .env file.",
-        )
-    try:
-        return cached("news_summary", _build_news_summary, ttl=NEWS_CACHE_TTL)
-    except (anthropic.RateLimitError, anthropic.BadRequestError) as e:
-        print(f"[news/summary] Anthropic unavailable ({type(e).__name__}), trying Gemini fallback")
-        try:
-            return cached("news_summary", _build_news_summary_gemini, ttl=NEWS_CACHE_TTL)
-        except Exception:
-            traceback.print_exc()
-            if "news_summary" in _cache:
-                return _cache["news_summary"][0]
-            return {
-                "brief": "Intelligence brief temporarily unavailable. Both primary and fallback providers are down — please check back later.",
-                "updated_at": datetime.now(timezone.utc).isoformat(),
-            }
-    except Exception as e:
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=str(e))
+    """Final executive brief, capped at the analysis end date."""
+    return final_news_summary()
 
 
 @app.get("/api/health")
@@ -510,14 +275,14 @@ def health():
     return {"ok": True, "time": datetime.now(timezone.utc).isoformat()}
 
 
-@app.get("/api/cache/clear")
-def clear_cache():
+@app.post("/api/cache/clear")
+def clear_cache(_: None = Depends(_require_admin)):
     _cache.clear()
     return {"cleared": True}
 
 
-# ── Live econometric data ──────────────────────────────────────────────────────
-_TIMESERIES_TTL = 3600   # 1 hour — recomputed from CSVs which refresh every 24 h
+# ── Final econometric data ─────────────────────────────────────────────────────
+_TIMESERIES_TTL = 3600
 _METRICS_TTL    = 3600
 
 
@@ -556,8 +321,10 @@ def metrics():
 
 
 @app.post("/api/refresh")
-def manual_refresh():
-    """Manually trigger a pipeline refresh (runs in background)."""
+def manual_refresh(_: None = Depends(_require_admin)):
+    """Reproduce the fixed-window datasets in the background."""
+    if _refresh_lock.locked():
+        return {"status": "already_running"}
     threading.Thread(target=_run_pipelines, daemon=True).start()
     return {"status": "refresh_started", "time": datetime.now(timezone.utc).isoformat()}
 
@@ -567,17 +334,27 @@ from pathlib import Path
 from fastapi.responses import FileResponse
 
 _UI_DIST = Path(__file__).parent.parent / "hormuzwatch-ui" / "dist"
+_UI_DIST_RESOLVED = _UI_DIST.resolve()
+
+
+def _safe_ui_candidate(full_path: str) -> Path | None:
+    candidate = (_UI_DIST_RESOLVED / full_path).resolve()
+    if (
+        candidate.is_relative_to(_UI_DIST_RESOLVED)
+        and candidate.exists()
+        and candidate.is_file()
+    ):
+        return candidate
+    return None
 
 if _UI_DIST.exists():
-    from fastapi.staticfiles import StaticFiles
-
     @app.get("/")
     def serve_root():
         return FileResponse(_UI_DIST / "index.html")
 
     @app.get("/{full_path:path}")
     def serve_spa(full_path: str):
-        candidate = _UI_DIST / full_path
-        if candidate.exists() and candidate.is_file():
+        candidate = _safe_ui_candidate(full_path)
+        if candidate is not None:
             return FileResponse(candidate)
         return FileResponse(_UI_DIST / "index.html")
