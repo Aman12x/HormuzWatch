@@ -1,17 +1,13 @@
-import { timelineEvents, CONFLICT_DAY } from '../data/metrics.js'
-import { useLiveData } from '../context/LiveDataContext.jsx'
+import { timelineEvents } from '../data/metrics.js'
 
 const TYPE_COLORS = {
   critical   : '#ef4444',
   escalation : '#e8b84b',
-  current    : '#10b981',
+  final      : '#10b981',
   default    : '#475569',
 }
 
 export default function EventTimeline() {
-  const { live } = useLiveData() ?? {}
-  const conflictDay = live?.conflict_day ?? CONFLICT_DAY
-
   return (
     <div className="bg-hw-card border border-hw-border p-4">
       <div className="font-mono text-[10px] tracking-[0.2em] text-hw-muted mb-4">
@@ -34,14 +30,6 @@ export default function EventTimeline() {
                   className="absolute -left-[1.65rem] top-0.5 w-3 h-3 rounded-full border-2 bg-hw-bg"
                   style={{ borderColor: color }}
                 />
-                {/* Pulse on current */}
-                {ev.type === 'current' && (
-                  <div
-                    className="absolute -left-[1.65rem] top-0.5 w-3 h-3 rounded-full animate-ping opacity-40"
-                    style={{ backgroundColor: color }}
-                  />
-                )}
-
                 <div>
                   <div className="flex items-center gap-3 mb-0.5">
                     <span className="font-mono text-[10px] tracking-wider" style={{ color }}>
@@ -57,7 +45,7 @@ export default function EventTimeline() {
                     )}
                   </div>
                   <div className="font-inter font-semibold text-hw-text text-sm">
-                    {ev.type === 'current' ? `${ev.label} — Day ${conflictDay}` : ev.label}
+                    {ev.label}
                   </div>
                   <div className="font-inter text-hw-sub text-xs mt-0.5 leading-relaxed">
                     {ev.description}

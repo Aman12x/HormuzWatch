@@ -7,12 +7,13 @@ Saves clean CSVs to data/processed/.
 import os
 import sys
 from pathlib import Path
-from datetime import date
 
 import pandas as pd
 import yfinance as yf
 from dotenv import load_dotenv
 from fredapi import Fred
+
+from analysis_config import ANALYSIS_END, YFINANCE_END
 
 # ── paths ──────────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,7 +23,7 @@ PROCESSED.mkdir(parents=True, exist_ok=True)
 load_dotenv(ROOT / ".env")
 
 START = "2025-11-01"
-END = date.today().isoformat()
+END = YFINANCE_END
 
 
 def fetch_yfinance() -> pd.DataFrame:
@@ -51,7 +52,9 @@ def fetch_yfinance() -> pd.DataFrame:
 def fetch_fred_brent(api_key: str) -> pd.DataFrame:
     """Pull DCOILBRENTEU from FRED as a secondary Brent source."""
     fred = Fred(api_key=api_key)
-    series = fred.get_series("DCOILBRENTEU", observation_start=START, observation_end=END)
+    series = fred.get_series(
+        "DCOILBRENTEU", observation_start=START, observation_end=ANALYSIS_END
+    )
     df = pd.DataFrame({
         "date": pd.to_datetime(series.index).normalize(),
         "price": series.values,

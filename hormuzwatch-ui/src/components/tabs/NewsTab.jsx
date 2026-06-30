@@ -1,377 +1,156 @@
-import { useState, useEffect, useCallback } from 'react'
-import { RefreshCw, ExternalLink, AlertTriangle, Radio } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { Archive, ExternalLink, ShieldCheck } from 'lucide-react'
 
-// ── Config ────────────────────────────────────────────────────────────────────
-const API_BASE      = import.meta.env.VITE_API_URL ?? ''
-const AUTO_REFRESH  = 5 * 60 * 1000   // 5 minutes
+const API_BASE = import.meta.env.VITE_API_URL ?? ''
 
-// ── Severity ──────────────────────────────────────────────────────────────────
 const SEVERITY = {
-  CRITICAL: { color: '#ef4444', label: 'CRITICAL' },
-  HIGH:     { color: '#f97316', label: 'HIGH'     },
-  MEDIUM:   { color: '#e8b84b', label: 'MEDIUM'   },
-  LOW:      { color: '#3b82f6', label: 'LOW'       },
+  HIGH:   { color: '#f97316', label: 'HIGH' },
+  MEDIUM: { color: '#e8b84b', label: 'MEDIUM' },
+  LOW:    { color: '#60a5fa', label: 'LOW' },
 }
 
-// ── Category ──────────────────────────────────────────────────────────────────
 const CATEGORY = {
-  MILITARY:    { bg: '#ef444418', color: '#ef4444' },
-  ENERGY:      { bg: '#e8b84b18', color: '#e8b84b' },
-  DIPLOMATIC:  { bg: '#3b82f618', color: '#3b82f6' },
-  HUMANITARIAN:{ bg: '#10b98118', color: '#10b981' },
-  MARKETS:     { bg: '#a78bfa18', color: '#a78bfa' },
+  MILITARY:   { background: '#ef444416', color: '#f87171' },
+  ENERGY:     { background: '#e8b84b16', color: '#e8b84b' },
+  DIPLOMATIC: { background: '#3b82f616', color: '#60a5fa' },
+  MARKETS:    { background: '#a78bfa16', color: '#a78bfa' },
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-function fmtTime(iso) {
-  if (!iso) return ''
+function formatDate(iso) {
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC',
+  }).format(new Date(iso)).toUpperCase()
+}
+
+function safeUrl(value) {
   try {
-    return new Date(iso).toLocaleTimeString('en-US', {
-      hour: '2-digit', minute: '2-digit', timeZoneName: 'short',
-    })
+    const url = new URL(value)
+    return ['http:', 'https:'].includes(url.protocol) ? url.href : null
   } catch {
-    return iso
+    return null
   }
 }
 
-function stripCites(text) {
-  if (!text) return text
-  return text.replace(/<cite[^>]*>|<\/cite>/gi, '')
+async function getJson(path) {
+  const response = await fetch(`${API_BASE}${path}`, { cache: 'no-store' })
+  if (!response.ok) throw new Error(`Archive request failed (${response.status})`)
+  return response.json()
 }
 
-function fmtDate(iso) {
-  if (!iso) return ''
-  try {
-    return new Date(iso).toLocaleDateString('en-US', {
-      month: 'short', day: 'numeric', year: 'numeric',
-    }).toUpperCase()
-  } catch {
-    return iso
-  }
-}
-
-// ── Skeleton card ─────────────────────────────────────────────────────────────
-function SkeletonCard() {
-  return (
-    <div
-      className="border border-hw-border p-4 animate-pulse"
-      style={{ background: '#232840', borderLeft: '3px solid #2a2f4a' }}
-    >
-      <div className="flex justify-between items-start mb-3">
-        <div className="h-2.5 bg-hw-border rounded w-16" />
-        <div className="h-4 bg-hw-border rounded w-20" />
-      </div>
-      <div className="space-y-2 mb-3">
-        <div className="h-3.5 bg-hw-border rounded w-full" />
-        <div className="h-3.5 bg-hw-border rounded w-5/6" />
-      </div>
-      <div className="space-y-1.5">
-        <div className="h-2.5 bg-hw-border rounded w-full" />
-        <div className="h-2.5 bg-hw-border rounded w-4/5" />
-      </div>
-      <div className="flex gap-3 mt-3">
-        <div className="h-2 bg-hw-border rounded w-24" />
-        <div className="h-2 bg-hw-border rounded w-20" />
-      </div>
-    </div>
-  )
-}
-
-// ── News card ─────────────────────────────────────────────────────────────────
 function NewsCard({ item }) {
-  const sev = SEVERITY[item.severity] ?? SEVERITY.MEDIUM
-  const cat = CATEGORY[item.category] ?? CATEGORY.MARKETS
+  const severity = SEVERITY[item.severity] ?? SEVERITY.MEDIUM
+  const category = CATEGORY[item.category] ?? CATEGORY.MARKETS
+  const url = safeUrl(item.url)
 
-  const handleClick = () => {
-    if (item.url) window.open(item.url, '_blank', 'noopener,noreferrer')
-  }
-
-  return (
-    <div
-      className="border border-hw-border p-4 transition-all duration-150"
-      style={{
-        background:  '#232840',
-        borderLeft:  `3px solid ${sev.color}`,
-        cursor:      item.url ? 'pointer' : 'default',
-      }}
-      onClick={handleClick}
-      onMouseEnter={e => { if (item.url) e.currentTarget.style.filter = 'brightness(1.15)' }}
-      onMouseLeave={e => { e.currentTarget.style.filter = 'brightness(1)' }}
-    >
-      {/* Top row: severity dot + category badge */}
-      <div className="flex items-center justify-between mb-2.5">
-        <div className="flex items-center gap-1.5">
-          <div
-            className="w-1.5 h-1.5 rounded-full"
-            style={{ background: sev.color, boxShadow: `0 0 4px ${sev.color}` }}
-          />
-          <span
-            className="font-mono text-[9px] tracking-widest font-bold"
-            style={{ color: sev.color }}
-          >
-            {sev.label}
-          </span>
-        </div>
-        <span
-          className="font-mono text-[9px] tracking-wider px-1.5 py-0.5 rounded-sm"
-          style={{ background: cat.bg, color: cat.color }}
-        >
+  const content = (
+    <>
+      <div className="flex items-center justify-between gap-3">
+        <span className="flex items-center gap-2 font-mono text-[10px] font-bold tracking-[0.16em]" style={{ color: severity.color }}>
+          <span className="h-1.5 w-1.5 rounded-full" style={{ background: severity.color }} />
+          {severity.label}
+        </span>
+        <span className="rounded-sm px-2 py-1 font-mono text-[9px] tracking-[0.14em]" style={category}>
           {item.category}
         </span>
       </div>
-
-      {/* Title */}
-      <div
-        className="font-inter font-medium leading-snug mb-2"
-        style={{ fontSize: '13px', color: '#e2e8f0' }}
-      >
+      <h3 className="mt-4 text-[15px] font-semibold leading-snug text-hw-text group-hover:text-white">
         {item.title}
-        {item.url && (
-          <ExternalLink
-            size={10}
-            className="inline ml-1.5 opacity-40"
-            style={{ verticalAlign: 'middle' }}
-          />
-        )}
+        {url && <ExternalLink size={12} className="ml-2 inline opacity-50" aria-hidden="true" />}
+      </h3>
+      <p className="mt-2 text-xs leading-5 text-hw-sub">{item.summary}</p>
+      <div className="mt-5 flex items-center justify-between gap-3 border-t border-hw-border/70 pt-3 font-mono text-[10px] tracking-wide text-hw-muted">
+        <span>{item.source}</span>
+        <time dateTime={item.timestamp}>{formatDate(item.timestamp)}</time>
       </div>
+    </>
+  )
 
-      {/* Summary */}
-      <p
-        className="font-inter leading-relaxed mb-3"
-        style={{ fontSize: '11px', color: '#94a3b8' }}
-      >
-        {stripCites(item.summary)}
-      </p>
-
-      {/* Footer: source + time */}
-      <div className="flex items-center justify-between">
-        <span
-          className="font-mono tracking-wide uppercase"
-          style={{ fontSize: '10px', color: '#64748b' }}
-        >
-          {item.source}
-        </span>
-        <span
-          className="font-mono"
-          style={{ fontSize: '10px', color: '#475569' }}
-        >
-          {fmtTime(item.timestamp)}
-        </span>
-      </div>
-    </div>
+  const classes = 'group block min-h-56 border border-hw-border bg-hw-card/80 p-5 transition hover:-translate-y-0.5 hover:border-hw-gold/40 hover:bg-hw-card'
+  return url ? (
+    <a className={classes} href={url} target="_blank" rel="noreferrer">{content}</a>
+  ) : (
+    <article className={classes}>{content}</article>
   )
 }
 
-// ── Executive brief ───────────────────────────────────────────────────────────
-function ExecutiveBrief({ brief, updatedAt, loading }) {
-  if (loading) {
-    return (
-      <div className="bg-hw-card border border-hw-border p-4 animate-pulse">
-        <div className="h-2.5 bg-hw-border rounded w-40 mb-3" />
-        <div className="space-y-2">
-          <div className="h-3 bg-hw-border rounded w-full" />
-          <div className="h-3 bg-hw-border rounded w-11/12" />
-          <div className="h-3 bg-hw-border rounded w-4/5" />
-        </div>
-      </div>
-    )
-  }
-
-  if (!brief) return null
-
-  return (
-    <div className="bg-hw-card border border-hw-border p-4" style={{ borderLeftColor: '#e8b84b', borderLeftWidth: 3 }}>
-      <div className="flex items-center justify-between mb-3">
-        <span className="font-mono text-[10px] tracking-[0.2em] text-hw-muted">
-          INTELLIGENCE BRIEF
-        </span>
-        {updatedAt && (
-          <span className="font-mono text-[10px] text-hw-muted">
-            {fmtDate(updatedAt)} · {fmtTime(updatedAt)}
-          </span>
-        )}
-      </div>
-      <p className="font-inter text-sm leading-relaxed" style={{ color: '#cbd5e1' }}>
-        {brief}
-      </p>
-    </div>
-  )
+function Skeleton() {
+  return <div className="min-h-56 animate-pulse border border-hw-border bg-hw-card p-5"><div className="h-3 w-24 bg-hw-border" /><div className="mt-7 h-4 w-4/5 bg-hw-border" /><div className="mt-3 h-3 w-full bg-hw-border" /><div className="mt-2 h-3 w-3/4 bg-hw-border" /></div>
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
 export default function NewsTab() {
-  const [news,       setNews]       = useState([])
-  const [brief,      setBrief]      = useState(null)
-  const [briefAt,    setBriefAt]    = useState(null)
-  const [loading,    setLoading]    = useState(false)
-  const [briefLoad,  setBriefLoad]  = useState(false)
-  const [error,      setError]      = useState(null)
-  const [lastFetch,  setLastFetch]  = useState(null)
+  const [state, setState] = useState({ items: [], summary: null, loading: true, error: null })
+  const [filter, setFilter] = useState('ALL')
 
-  const fetchNews = useCallback(async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const res = await fetch(`${API_BASE}/api/news`)
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}))
-        throw new Error(body.detail ?? `HTTP ${res.status}`)
-      }
-      const data = await res.json()
-      setNews(Array.isArray(data) ? data : [])
-      setLastFetch(new Date())
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
+  useEffect(() => {
+    let active = true
+    Promise.all([getJson('/api/news'), getJson('/api/news/summary')])
+      .then(([items, summary]) => {
+        if (active) setState({ items, summary, loading: false, error: null })
+      })
+      .catch(error => {
+        if (active) setState({ items: [], summary: null, loading: false, error: error.message })
+      })
+    return () => { active = false }
   }, [])
 
-  const fetchBrief = useCallback(async () => {
-    setBriefLoad(true)
-    try {
-      const res = await fetch(`${API_BASE}/api/news/summary`)
-      if (!res.ok) return
-      const data = await res.json()
-      setBrief(data.brief ?? null)
-      setBriefAt(data.updated_at ?? null)
-    } catch {
-      // brief is optional — fail silently
-    } finally {
-      setBriefLoad(false)
-    }
-  }, [])
-
-  // Initial load
-  useEffect(() => {
-    fetchNews()
-    fetchBrief()
-  }, [fetchNews, fetchBrief])
-
-  // Auto-refresh every 5 minutes
-  useEffect(() => {
-    const id = setInterval(() => {
-      fetchNews()
-      fetchBrief()
-    }, AUTO_REFRESH)
-    return () => clearInterval(id)
-  }, [fetchNews, fetchBrief])
-
-  const now = new Date()
-  const dateStr = now.toLocaleDateString('en-US', {
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
-  }).toUpperCase()
+  const categories = useMemo(
+    () => ['ALL', ...new Set(state.items.map(item => item.category))],
+    [state.items],
+  )
+  const visible = filter === 'ALL' ? state.items : state.items.filter(item => item.category === filter)
 
   return (
-    <div className="space-y-4">
-
-      {/* ── Header ─────────────────────────────────────────────────────────── */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-          <span className="font-mono font-bold tracking-[0.3em] text-hw-gold" style={{ fontSize: '1rem' }}>
-            INTELLIGENCE FEED
-          </span>
-          <span className="font-mono text-[10px] text-hw-muted hidden sm:inline tracking-wider">
-            {dateStr}
-          </span>
-        </div>
-
-        <div className="flex items-center gap-3">
-          {lastFetch && (
-            <span className="font-mono text-[10px] text-hw-muted hidden md:inline">
-              UPDATED {fmtTime(lastFetch.toISOString())}
-            </span>
-          )}
-          <button
-            onClick={() => { fetchNews(); fetchBrief() }}
-            disabled={loading}
-            className="flex items-center gap-1.5 border border-hw-border px-3 py-1.5 font-mono text-[10px] tracking-wider text-hw-muted hover:text-hw-text hover:border-hw-gold transition-colors duration-150 disabled:opacity-40"
-          >
-            <RefreshCw size={10} className={loading ? 'animate-spin' : ''} />
-            REFRESH FEED
-          </button>
-        </div>
-      </div>
-
-      {/* ── Executive brief ─────────────────────────────────────────────────── */}
-      <ExecutiveBrief brief={brief} updatedAt={briefAt} loading={briefLoad && !brief} />
-
-      {/* ── Loading state ────────────────────────────────────────────────────── */}
-      {loading && news.length === 0 && (
-        <>
-          <div className="flex items-center gap-2 py-2">
-            <Radio size={12} className="animate-pulse" style={{ color: '#e8b84b' }} />
-            <span className="font-mono text-[11px] tracking-[0.2em] text-hw-muted animate-pulse">
-              ESTABLISHING SECURE CONNECTION...
-            </span>
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            {Array.from({ length: 12 }).map((_, i) => <SkeletonCard key={i} />)}
-          </div>
-        </>
-      )}
-
-      {/* ── Error state ──────────────────────────────────────────────────────── */}
-      {error && news.length === 0 && (
-        <div className="bg-hw-card border border-red-900 p-6 flex flex-col items-center gap-4">
-          <AlertTriangle size={32} style={{ color: '#ef4444' }} />
-          <div className="text-center">
-            <div className="font-mono font-bold tracking-[0.3em] text-red-400 mb-2">
-              FEED UNAVAILABLE
+    <div className="space-y-5">
+      <section className="overflow-hidden border border-hw-border bg-hw-card">
+        <div className="grid gap-6 p-5 md:grid-cols-[1fr_auto] md:p-7">
+          <div>
+            <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.22em] text-hw-gold">
+              <Archive size={14} aria-hidden="true" /> FINAL · SOURCE-LINKED ARCHIVE
             </div>
-            <p className="font-mono text-[11px] text-hw-muted max-w-sm leading-relaxed">
-              {error}
+            <h1 className="mt-3 text-2xl font-semibold tracking-tight text-white">The reopening, in context</h1>
+            <p className="mt-3 max-w-4xl text-sm leading-6 text-hw-sub">
+              {state.summary?.brief ?? 'Reporting is frozen at the formal June 18, 2026 reopening date so the evidence stays aligned with the analysis window.'}
             </p>
-            {error.includes('ANTHROPIC_API_KEY') && (
-              <p className="font-mono text-[10px] text-hw-muted mt-2 opacity-60">
-                Add ANTHROPIC_API_KEY to hormuzwatch/.env and restart the API server.
-              </p>
-            )}
           </div>
-          <button
-            onClick={() => { fetchNews(); fetchBrief() }}
-            className="border border-red-800 px-4 py-1.5 font-mono text-[10px] tracking-wider text-red-400 hover:bg-red-900/20 transition-colors"
-          >
-            RETRY CONNECTION
-          </button>
+          <div className="flex h-fit items-center gap-3 border border-emerald-500/25 bg-emerald-500/5 px-4 py-3">
+            <ShieldCheck size={18} className="text-emerald-400" aria-hidden="true" />
+            <div>
+              <div className="font-mono text-[10px] tracking-[0.16em] text-emerald-400">ARCHIVE VERIFIED</div>
+              <div className="mt-1 font-mono text-[10px] text-hw-muted">DATA THROUGH JUN 18, 2026</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {state.error && (
+        <div role="alert" className="border border-red-900/70 bg-red-950/20 p-5 text-sm text-red-300">
+          The source archive could not be loaded. {state.error}
         </div>
       )}
 
-      {/* ── Partial-error banner (has stale data but refresh failed) ─────────── */}
-      {error && news.length > 0 && (
-        <div className="border border-red-900/50 bg-red-950/20 px-4 py-2 flex items-center gap-2">
-          <AlertTriangle size={12} style={{ color: '#ef4444' }} />
-          <span className="font-mono text-[10px] text-red-400">
-            Refresh failed: {error} — showing cached data
-          </span>
-        </div>
-      )}
-
-      {/* ── News grid ────────────────────────────────────────────────────────── */}
-      {news.length > 0 && (
+      {state.loading ? (
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{Array.from({ length: 6 }, (_, i) => <Skeleton key={i} />)}</div>
+      ) : state.items.length > 0 && (
         <>
-          {/* Filter summary row */}
-          <div className="flex items-center gap-4 text-[10px] font-mono text-hw-muted">
-            <span>{news.length} ITEMS</span>
-            {['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'].map(s => {
-              const count = news.filter(n => n.severity === s).length
-              if (!count) return null
-              return (
-                <span key={s} style={{ color: SEVERITY[s].color }}>
-                  {count} {s}
-                </span>
-              )
-            })}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap gap-2" role="group" aria-label="Filter archive by category">
+              {categories.map(category => (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => setFilter(category)}
+                  aria-pressed={filter === category}
+                  className={`border px-3 py-1.5 font-mono text-[10px] tracking-[0.14em] transition ${filter === category ? 'border-hw-gold/60 bg-hw-gold/10 text-hw-gold' : 'border-hw-border text-hw-muted hover:border-hw-muted hover:text-hw-text'}`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+            <span className="font-mono text-[10px] tracking-widest text-hw-muted">{visible.length} SOURCES</span>
           </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            {news.map((item, i) => (
-              <NewsCard key={`${item.title}-${i}`} item={item} />
-            ))}
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {visible.map(item => <NewsCard key={`${item.source}-${item.title}`} item={item} />)}
           </div>
-
-
         </>
       )}
     </div>
