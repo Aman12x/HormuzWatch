@@ -2,6 +2,8 @@
 
 **Causal inference pipeline quantifying the global economic and humanitarian impact of the 2026 US-Israel war on Iran, capped at the Strait of Hormuz reopening on June 18, 2026.**
 
+**Live dashboard: [hormuzwatch.singhaman.dev](https://hormuzwatch.singhaman.dev)**
+
 Six independent analytical methods applied to a real-world exogenous shock: synthetic control, difference-in-differences, event study, Granger causality, volatility regression, and placebo testing across commodity, equity, and food markets.
 
 
