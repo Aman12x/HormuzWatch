@@ -1,58 +1,41 @@
-import { useLiveData } from '../context/LiveDataContext.jsx'
-import { CONFLICT_DAY, oilStats as staticOilStats, syntheticControl as staticSC } from '../data/metrics.js'
+import { CONFLICT_DAY, oilStats, ovxPlacebo } from '../data/metrics.js'
+
+const HORMUZ_DAYS_CLOSED = 103
 
 export default function Header() {
-  const { live, loading } = useLiveData() ?? {}
+  const brentPeakPct = ((oilStats.brentPeak - oilStats.brentBase) / oilStats.brentBase * 100).toFixed(1)
 
-  const sc        = live?.metrics?.syntheticControl ?? staticSC
-  const oilStats  = live?.metrics?.oilStats         ?? staticOilStats
-
-  const conflictDay  = live?.conflict_day  ?? CONFLICT_DAY
-  const hormuzDay    = live?.hormuz_day    ?? 103
-  const brentPrice   = live?.oil?.brent_price
-  const brentPct     = live?.oil?.brent_pct_chg
-  const ovx          = live?.volatility?.ovx
-  const hormuzStatus = live?.hormuz_status ?? 'OPEN'
-
-  const brentFallbackPct = ((oilStats.brentPeak - oilStats.brentBase) / oilStats.brentBase * 100).toFixed(1)
-
-  const analysisDate = new Date(`${live?.as_of ?? '2026-06-18'}T12:00:00Z`)
-  const dateStr = analysisDate.toLocaleDateString('en-US', {
+  const dateStr = new Date('2026-06-18T12:00:00Z').toLocaleDateString('en-US', {
     year: 'numeric', month: 'long', day: 'numeric',
   }).toUpperCase()
 
+  // The ticker carries the one reported finding plus descriptive facts.
+  // It deliberately does NOT show the synthetic-control or basis-spread
+  // numbers — those are exploratory and failed review.
   const tickerItems = [
     {
-      label: 'BRENT',
-      val:   brentPrice ? `$${brentPrice.toFixed(2)}` : `$${oilStats.brentPeak}`,
+      label: 'BRENT PEAK',
+      val:   `$${oilStats.brentPeak}`,
       dir:   'up',
-      sub:   brentPct != null
-               ? `${brentPct > 0 ? '+' : ''}${brentPct.toFixed(1)}% vs pre-war`
-               : `+${brentFallbackPct}% vs pre-war`,
+      sub:   `+${brentPeakPct}% vs pre-war`,
     },
     {
-      label: 'FUTURES ATT',
-      val:   `+$${sc.futuresATT}`,
+      label: 'OVX PREMIUM',
+      val:   `+${ovxPlacebo.premiumLog.toFixed(2)}`,
       dir:   'up',
-      sub:   'causal estimate',
+      sub:   'log pts vs VIX-implied',
     },
     {
-      label: 'BASIS SPREAD',
-      val:   `$${sc.basisSpread}`,
+      label: 'VS 2007–2026',
+      val:   `${ovxPlacebo.exceedances} / ${ovxPlacebo.nNullWindows.toLocaleString()}`,
       dir:   'up',
-      sub:   'physical premium',
-    },
-    {
-      label: 'OVX',
-      val:   ovx ? ovx.toFixed(1) : '—',
-      dir:   'up',
-      sub:   'oil vol index',
+      sub:   'windows more extreme',
     },
     {
       label: 'HORMUZ',
-      val:   hormuzStatus,
-      dir:   hormuzStatus === 'CLOSED' ? 'warn' : 'ok',
-      sub:   `reopened Jun 18 · ${hormuzDay} days closed`,
+      val:   'REOPENED',
+      dir:   'ok',
+      sub:   `Jun 18 · ${HORMUZ_DAYS_CLOSED} days closed`,
     },
   ]
 
@@ -84,22 +67,12 @@ export default function Header() {
 
         {/* Conflict day counter */}
         <div className="flex items-center gap-2 flex-shrink-0">
-          {loading && (
-            <span className="text-hw-muted font-mono text-[10px] animate-pulse hidden sm:inline">LOADING</span>
-          )}
-          {!loading && live && (
-            <span className={live.market_data_status === 'FALLBACK' ? 'text-yellow-500 font-mono text-[10px] hidden sm:inline' : 'text-green-500 font-mono text-[10px] hidden sm:inline'}>
-              ● {live.market_data_status === 'FALLBACK' ? 'BUNDLED DATA' : 'FINAL DATA'}
-            </span>
-          )}
-          {!loading && !live && (
-            <span className="text-hw-muted font-mono text-[10px] hidden sm:inline">BUNDLED</span>
-          )}
+          <span className="text-hw-muted font-mono text-[10px] hidden sm:inline">● ARCHIVED</span>
           <div
             className="font-mono font-bold text-hw-gold px-2.5 py-1 border whitespace-nowrap"
             style={{ fontSize: '0.75rem', borderColor: '#e8b84b55', background: '#e8b84b11' }}
           >
-            <span className="hidden sm:inline">FINAL · </span>DAY {conflictDay}
+            <span className="hidden sm:inline">FINAL · </span>DAY {CONFLICT_DAY}
           </div>
         </div>
       </div>
@@ -123,11 +96,9 @@ export default function Header() {
             )}
           </div>
         ))}
-        {live?.fetched_at && (
-          <span className="text-hw-muted font-mono text-[10px] ml-auto flex-shrink-0 self-center pl-4">
-            DATA THROUGH {live.as_of}
-          </span>
-        )}
+        <span className="text-hw-muted font-mono text-[10px] ml-auto flex-shrink-0 self-center pl-4">
+          DATA THROUGH 2026-06-18
+        </span>
       </div>
     </header>
   )

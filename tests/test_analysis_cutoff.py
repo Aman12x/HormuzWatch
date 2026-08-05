@@ -1,8 +1,29 @@
-import numpy as np
-import pandas as pd
+"""The June 18 2026 reopening is a hard boundary — assert nothing crosses it.
 
-import api.compute as compute
+The FastAPI layer these tests used to exercise was retired when the project was
+archived, so the cutoff is now enforced where it still matters: the shared date
+config, the committed datasets, and the two analysis scripts.
+"""
+
+from pathlib import Path
+
+import pandas as pd
+import pytest
+
 from analysis_config import ANALYSIS_END, HORMUZ_REOPENED, YFINANCE_END
+
+ROOT = Path(__file__).resolve().parents[1]
+PROCESSED = ROOT / "data" / "processed"
+CUTOFF = pd.Timestamp(HORMUZ_REOPENED)
+
+DATED_CSVS = [
+    "commodities.csv",
+    "energy.csv",
+    "equities.csv",
+    "food_fertilizer.csv",
+    "macro.csv",
+    "volatility.csv",
+]
 
 
 def test_yfinance_end_is_exclusive_day_after_cutoff():
@@ -10,28 +31,32 @@ def test_yfinance_end_is_exclusive_day_after_cutoff():
     assert YFINANCE_END == "2026-06-19"
 
 
-def test_energy_loader_drops_observations_after_reopening(tmp_path, monkeypatch):
-    pd.DataFrame(
-        [
-            {"date": "2026-06-18", "price": 80, "series": "brent", "source": "yfinance"},
-            {"date": "2026-06-18", "price": 75, "series": "wti", "source": "yfinance"},
-            {"date": "2026-06-19", "price": 81, "series": "brent", "source": "yfinance"},
-            {"date": "2026-06-19", "price": 76, "series": "wti", "source": "yfinance"},
-        ]
-    ).to_csv(tmp_path / "energy.csv", index=False)
-    monkeypatch.setattr(compute, "DATA_DIR", tmp_path)
-
-    result = compute._load_energy_yf()
-    assert result["date"].max() == pd.Timestamp(HORMUZ_REOPENED)
+@pytest.mark.parametrize("name", DATED_CSVS)
+def test_processed_dataset_stops_at_reopening(name):
+    path = PROCESSED / name
+    if not path.exists():
+        pytest.skip(f"{name} not present")
+    df = pd.read_csv(path, parse_dates=["date"])
+    assert df["date"].max() <= CUTOFF, (
+        f"{name} contains observations after the {ANALYSIS_END} reopening"
+    )
 
 
-def test_event_study_drops_observations_after_reopening():
-    dates = pd.date_range("2026-02-20", "2026-06-22", freq="B")
-    eq = pd.DataFrame({"date": dates, "SPY_log_ret": np.zeros(len(dates))})
-    for ticker in compute.TICKERS:
-        eq[f"{ticker}_log_ret"] = 0.001
-    models = {ticker: {"alpha": 0.0, "beta": 1.0} for ticker in compute.TICKERS}
+def test_ovx_history_cache_is_not_truncated_before_the_event():
+    """The placebo needs history BEFORE the event; only the tail is capped."""
+    path = ROOT / "data" / "raw" / "ovx_vix_history.csv"
+    if not path.exists():
+        pytest.skip("history cache not fetched yet")
+    df = pd.read_csv(path, parse_dates=["date"])
+    assert df["date"].max() <= CUTOFF
+    assert df["date"].min() <= pd.Timestamp("2007-12-31"), (
+        "in-time placebo needs the full OVX record back to 2007"
+    )
+    assert len(df) > 4000
 
-    result = compute._compute_cars(eq, models)
-    assert result["date"].max() <= pd.Timestamp(HORMUZ_REOPENED)
-    assert result["t"].max() == 30
+
+def test_refit_and_placebo_scripts_declare_the_cutoff():
+    """Guard against a future edit that quietly extends the window."""
+    for script in ["refit_core.py", "ovx_placebo.py", "make_placebo_chart.py"]:
+        src = (ROOT / "scripts" / script).read_text()
+        assert "2026-06-18" in src, f"{script} does not pin the reopening date"

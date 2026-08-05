@@ -10,7 +10,7 @@ import {
   tickerCAR as staticTickerCAR,
   shippingPlacebo as staticShippingPlacebo,
 } from '../../data/metrics.js'
-import { useLiveData } from '../../context/LiveDataContext.jsx'
+import ExploratoryNotice from '../ExploratoryNotice.jsx'
 
 const COLORS = {
   defense         : '#3b82f6',
@@ -28,6 +28,10 @@ const CustomTooltip = ({ active, payload, label }) => {
       background: '#232840', border: '1px solid #3a4060',
       padding: '8px 12px', fontSize: 11, fontFamily: 'monospace',
     }}>
+      <ExploratoryNotice>
+        The cumulative abnormal returns here come from market models with almost no explanatory power (R² 0.000–0.022), and no test statistic was computed on any of them. The route placebo cannot reach significance with six tankers.
+      </ExploratoryNotice>
+
       <p style={{ color: '#94a3b8', marginBottom: 4 }}>
         {label > 0 ? `+${label}d` : label === 0 ? 'T0 (Strike)' : `${label}d`}
       </p>
@@ -43,12 +47,11 @@ const CustomTooltip = ({ active, payload, label }) => {
 const formatT = t => t === 0 ? 'T0' : (t > 0 ? `+${t}` : `${t}`)
 
 export default function EquityTab() {
-  const { live } = useLiveData() ?? {}
 
-  const equitiesCAR    = live?.timeseries?.equitiesCAR ?? staticEquitiesCAR
-  const equityStats    = live?.metrics?.equityStats    ?? staticEquityStats
-  const tickerCAR      = live?.metrics?.tickerCAR      ?? staticTickerCAR
-  const shippingPlacebo = live?.metrics?.shippingPlacebo ?? staticShippingPlacebo
+  const equitiesCAR    = staticEquitiesCAR
+  const equityStats    = staticEquityStats
+  const tickerCAR      = staticTickerCAR
+  const shippingPlacebo = staticShippingPlacebo
 
   const lastPoint = equitiesCAR[equitiesCAR.length - 1] || {}
 

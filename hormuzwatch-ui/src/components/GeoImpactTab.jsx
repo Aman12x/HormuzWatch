@@ -11,8 +11,11 @@ import {
 } from 'recharts'
 import { countryData, dataByNumeric } from '../data/geoImpact.js'
 import MetricCard from './MetricCard.jsx'
+import ExploratoryNotice from './ExploratoryNotice.jsx'
+// Vendored from world-atlas@2 so the archive makes no runtime network calls.
+// react-simple-maps accepts a topojson object directly, not just a URL.
+import worldAtlas from '../data/countries-110m.json'
 
-const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
 
 // ── Color scale ──────────────────────────────────────────────────────────────
 function scoreToColor(score) {
@@ -173,6 +176,11 @@ export default function GeoImpactTab() {
   return (
     <div className="space-y-4">
 
+      <ExploratoryNotice>
+        These impact scores are a hand-assigned index, not an estimate. There is no identification
+        strategy, no uncertainty, and no way to falsify them.
+      </ExploratoryNotice>
+
       {/* ── Slider ─────────────────────────────────────────────────────────── */}
       <div className="bg-hw-card border border-hw-border p-4">
         <div className="font-mono text-[10px] tracking-[0.2em] text-hw-muted mb-3">
@@ -295,7 +303,7 @@ export default function GeoImpactTab() {
             height={420}
           >
             <ZoomableGroup zoom={1}>
-              <Geographies geography={GEO_URL}>
+              <Geographies geography={worldAtlas}>
                 {({ geographies }) =>
                   geographies.map(geo => {
                     const found = scoredByNumeric[String(parseInt(geo.id))]

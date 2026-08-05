@@ -1,13 +1,12 @@
 import MetricCard    from '../MetricCard.jsx'
 import EventTimeline from '../EventTimeline.jsx'
 import {
-  syntheticControl as staticSC,
   CONFLICT_DAY,
   oilStats as staticOilStats,
   shippingPlacebo as staticShippingPlacebo,
   equityStats as staticEquityStats,
+  ovxPlacebo,
 } from '../../data/metrics.js'
-import { useLiveData } from '../../context/LiveDataContext.jsx'
 
 const fmt = (n, decimals = 1) => {
   const v = parseFloat(n)
@@ -16,43 +15,58 @@ const fmt = (n, decimals = 1) => {
 }
 
 export default function OverviewTab() {
-  const { live } = useLiveData() ?? {}
 
-  const sc             = live?.metrics?.syntheticControl ?? staticSC
-  const shippingPlacebo = live?.metrics?.shippingPlacebo ?? staticShippingPlacebo
-  const oilStats       = live?.metrics?.oilStats         ?? staticOilStats
-  const equityStats    = live?.metrics?.equityStats      ?? staticEquityStats
+  const shippingPlacebo = staticShippingPlacebo
+  const oilStats       = staticOilStats
+  const equityStats    = staticEquityStats
 
-  const conflictDay = live?.conflict_day ?? CONFLICT_DAY
-  const brentPrice  = live?.oil?.brent_price  ?? oilStats.brentPeak
-  const wtiPctChg   = live?.oil?.wti_pct_chg   ?? (oilStats.wtiIndexedEnd - 100)
-  const brentPctChg = live?.oil?.brent_pct_chg ?? (oilStats.brentIndexedEnd - 100)
+  const conflictDay = CONFLICT_DAY
+  const brentPrice  = oilStats.brentPeak
+  const wtiPctChg   = (oilStats.wtiIndexedEnd - 100)
+  const brentPctChg = (oilStats.brentIndexedEnd - 100)
   const brentPeakPct = ((oilStats.brentPeak - oilStats.brentBase) / oilStats.brentBase * 100).toFixed(1)
 
   return (
     <div className="space-y-5">
 
-      {/* Top metric cards */}
+      {/* Scope banner — this page led with refuted numbers before the review */}
+      <div className="border border-hw-border bg-hw-card/70 p-4">
+        <div className="font-mono text-[10px] tracking-[0.2em] text-hw-gold mb-2">
+          ONE REPORTED FINDING · NINE EXPLORATORY
+        </div>
+        <p className="text-hw-sub text-sm leading-relaxed font-inter">
+          Ten analyses were run on this event. After an inference review, one survived and is
+          reported below. The synthetic control, difference-in-differences, basis spread, Granger
+          chain, food-cost and geographic-score analyses failed identification or inference and are
+          retained only as exploratory work — their numbers appear in the other tabs marked as such,
+          not as results. The synthetic control failed its own placebo test and returned a{' '}
+          <span className="text-hw-text font-semibold">negative</span> estimate. See{' '}
+          <span className="text-hw-text">METHOD</span> and the repository README for the specific
+          failure in each case.
+        </p>
+      </div>
+
+      {/* Top metric cards — the reported finding + descriptive context only */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         <MetricCard
-          label="FUTURES ATT — CAUSAL ESTIMATE"
-          value={`+$${sc.futuresATT}`}
-          unit="/bbl"
+          label="OVX PREMIUM — REPORTED"
+          value={`+${ovxPlacebo.premiumLog.toFixed(2)}`}
+          unit="log pts"
           accent="gold"
-          description="Average treatment effect on Brent futures (BZ=F vs CL=F synthetic control, demeaned). Cleanest causal estimate of Hormuz-specific war premium in the paper market."
+          description="Mean deviation of oil-implied volatility above its VIX-implied level over the 77-day closure window. Tested against every comparable window since 2007, not an assumed error process."
         />
         <MetricCard
-          label="SPOT–FUTURES BASIS SPREAD"
-          value={`$${sc.basisSpread}`}
+          label="VS 2007–2026 RECORD"
+          value={`${ovxPlacebo.exceedances} / ${ovxPlacebo.nNullWindows.toLocaleString()}`}
+          accent="gold"
+          description={`Historical 77-day windows at least as extreme. Conservative non-overlapping p = ${ovxPlacebo.pNonOverlapping} — the floor this test can resolve. Nearest rival: ${ovxPlacebo.nearestRival}.`}
+        />
+        <MetricCard
+          label="BRENT PEAK — DESCRIPTIVE"
+          value={`$${oilStats.brentPeak}`}
           unit="/bbl"
-          accent="red"
-          description="Physical market premium above futures counterfactual. Reflects extreme backwardation — refineries paying immediate spot premiums futures curve hasn't yet absorbed."
-        />
-        <MetricCard
-          label="SHIPPING PLACEBO GAP"
-          value={`${shippingPlacebo.gap.toFixed(1)}pp`}
-          accent="red"
-          description={`Hormuz-exposed tankers (${shippingPlacebo.hormuzCAR.toFixed(1)}%) vs non-Hormuz control (${shippingPlacebo.nonHormuzCAR.toFixed(1)}%). Route-specific underperformance — rules out sector-wide confounder.`}
+          accent="blue"
+          description={`Futures peak during the window, +${brentPeakPct}% from the Feb 28 baseline of $${oilStats.brentBase}. A descriptive fact, not a causal estimate — no counterfactual is claimed.`}
         />
         <MetricCard
           label="ANALYSIS WINDOW"
@@ -88,27 +102,35 @@ export default function OverviewTab() {
                 {' '}(+{brentPeakPct}% from baseline).
               </p>
               <p>
-                Synthetic control analysis isolates a{' '}
-                <span className="text-hw-gold font-semibold">+${sc.futuresATT}/bbl</span> causal
-                Hormuz-specific war premium in the Brent futures curve, while the physical
-                (EIA spot) market priced in{' '}
-                <span className="text-hw-gold font-semibold">+${sc.spotATT}/bbl</span> — a{' '}
-                <span className="text-hw-text font-semibold">${sc.basisSpread}/bbl basis spread</span> indicating
-                extreme backwardation driven by acute supply tightness, not long-term price expectation revision.
-                The analysis window ends with the strait's formal reopening on June 18.
+                Oil-implied volatility ran{' '}
+                <span className="text-hw-gold font-semibold">
+                  +{ovxPlacebo.premiumLog.toFixed(2)} log points
+                </span>{' '}
+                above the level implied by equity volatility across the window — further than in
+                any of the {ovxPlacebo.nNullWindows.toLocaleString()} comparable 77-day stretches
+                since OVX began in 2007 ({ovxPlacebo.exceedances} were more extreme; conservative{' '}
+                <span className="text-hw-text font-semibold">p&nbsp;=&nbsp;{ovxPlacebo.pNonOverlapping}</span>).
+                The nearest historical rival is the {ovxPlacebo.nearestRival}. This establishes that
+                the episode was an extreme oil-volatility dislocation; it does{' '}
+                <span className="text-hw-text font-semibold">not</span> separate the chokepoint from
+                the wider war.
               </p>
               <p>
-                Equity markets showed a clear sell-the-news pattern in defense stocks
+                Equity markets showed a sell-the-news pattern in defense stocks
                 (sector CAR{' '}
                 <span className="text-red-400 font-semibold">{fmt(equityStats.defense.car)}%</span>),
                 modest energy major outperformance led by BP
                 (<span className="text-hw-gold font-semibold">{fmt(equityStats.energy.car)}%</span>),
-                and sharp route-specific selling in Hormuz-exposed tankers
+                and heavier selling in Hormuz-exposed tankers
                 (<span className="text-red-400 font-semibold">{fmt(equityStats.shipping_hormuz.car)}%</span> vs{' '}
-                <span style={{ color: '#94a3b8' }} className="font-semibold">{fmt(shippingPlacebo.nonHormuzCAR)}%</span> for non-Hormuz control),
-                a{' '}
-                <span className="text-hw-text font-semibold">{shippingPlacebo.gap.toFixed(1)}pp placebo gap</span> confirming insurance and seizure-risk pricing,
-                not sector-wide pessimism.
+                <span style={{ color: '#94a3b8' }} className="font-semibold">{fmt(shippingPlacebo.nonHormuzCAR)}%</span> for
+                non-Hormuz control). These are{' '}
+                <span className="text-hw-text font-semibold">descriptive</span>: the underlying
+                market models have almost no explanatory power (R² 0.000–0.022), and an exact
+                permutation test over all 15 possible route splits ranks the observed{' '}
+                {shippingPlacebo.gap.toFixed(1)}pp gap second, p&nbsp;=&nbsp;{shippingPlacebo.pPermutation}.
+                With six tankers the smallest attainable p-value is {shippingPlacebo.minAttainableP},
+                so the design cannot establish a route effect at any effect size.
               </p>
             </div>
           </div>

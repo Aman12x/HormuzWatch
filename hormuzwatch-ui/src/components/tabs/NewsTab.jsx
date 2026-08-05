@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Archive, ExternalLink, ShieldCheck } from 'lucide-react'
-
-const API_BASE = import.meta.env.VITE_API_URL ?? ''
+import { NEWS_ITEMS, NEWS_BRIEF } from '../../data/newsArchive.js'
 
 const SEVERITY = {
   HIGH:   { color: '#f97316', label: 'HIGH' },
@@ -29,12 +28,6 @@ function safeUrl(value) {
   } catch {
     return null
   }
-}
-
-async function getJson(path) {
-  const response = await fetch(`${API_BASE}${path}`, { cache: 'no-store' })
-  if (!response.ok) throw new Error(`Archive request failed (${response.status})`)
-  return response.json()
 }
 
 function NewsCard({ item }) {
@@ -73,31 +66,14 @@ function NewsCard({ item }) {
   )
 }
 
-function Skeleton() {
-  return <div className="min-h-56 animate-pulse border border-hw-border bg-hw-card p-5"><div className="h-3 w-24 bg-hw-border" /><div className="mt-7 h-4 w-4/5 bg-hw-border" /><div className="mt-3 h-3 w-full bg-hw-border" /><div className="mt-2 h-3 w-3/4 bg-hw-border" /></div>
-}
-
 export default function NewsTab() {
-  const [state, setState] = useState({ items: [], summary: null, loading: true, error: null })
   const [filter, setFilter] = useState('ALL')
 
-  useEffect(() => {
-    let active = true
-    Promise.all([getJson('/api/news'), getJson('/api/news/summary')])
-      .then(([items, summary]) => {
-        if (active) setState({ items, summary, loading: false, error: null })
-      })
-      .catch(error => {
-        if (active) setState({ items: [], summary: null, loading: false, error: error.message })
-      })
-    return () => { active = false }
-  }, [])
-
   const categories = useMemo(
-    () => ['ALL', ...new Set(state.items.map(item => item.category))],
-    [state.items],
+    () => ['ALL', ...new Set(NEWS_ITEMS.map(item => item.category))],
+    [],
   )
-  const visible = filter === 'ALL' ? state.items : state.items.filter(item => item.category === filter)
+  const visible = filter === 'ALL' ? NEWS_ITEMS : NEWS_ITEMS.filter(item => item.category === filter)
 
   return (
     <div className="space-y-5">
@@ -109,7 +85,7 @@ export default function NewsTab() {
             </div>
             <h1 className="mt-3 text-2xl font-semibold tracking-tight text-white">The reopening, in context</h1>
             <p className="mt-3 max-w-4xl text-sm leading-6 text-hw-sub">
-              {state.summary?.brief ?? 'Reporting is frozen at the formal June 18, 2026 reopening date so the evidence stays aligned with the analysis window.'}
+              {NEWS_BRIEF}
             </p>
           </div>
           <div className="flex h-fit items-center gap-3 border border-emerald-500/25 bg-emerald-500/5 px-4 py-3">
@@ -122,37 +98,25 @@ export default function NewsTab() {
         </div>
       </section>
 
-      {state.error && (
-        <div role="alert" className="border border-red-900/70 bg-red-950/20 p-5 text-sm text-red-300">
-          The source archive could not be loaded. {state.error}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Filter archive by category">
+          {categories.map(category => (
+            <button
+              key={category}
+              type="button"
+              onClick={() => setFilter(category)}
+              aria-pressed={filter === category}
+              className={`border px-3 py-1.5 font-mono text-[10px] tracking-[0.14em] transition ${filter === category ? 'border-hw-gold/60 bg-hw-gold/10 text-hw-gold' : 'border-hw-border text-hw-muted hover:border-hw-muted hover:text-hw-text'}`}
+            >
+              {category}
+            </button>
+          ))}
         </div>
-      )}
-
-      {state.loading ? (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">{Array.from({ length: 6 }, (_, i) => <Skeleton key={i} />)}</div>
-      ) : state.items.length > 0 && (
-        <>
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap gap-2" role="group" aria-label="Filter archive by category">
-              {categories.map(category => (
-                <button
-                  key={category}
-                  type="button"
-                  onClick={() => setFilter(category)}
-                  aria-pressed={filter === category}
-                  className={`border px-3 py-1.5 font-mono text-[10px] tracking-[0.14em] transition ${filter === category ? 'border-hw-gold/60 bg-hw-gold/10 text-hw-gold' : 'border-hw-border text-hw-muted hover:border-hw-muted hover:text-hw-text'}`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-            <span className="font-mono text-[10px] tracking-widest text-hw-muted">{visible.length} SOURCES</span>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {visible.map(item => <NewsCard key={`${item.source}-${item.title}`} item={item} />)}
-          </div>
-        </>
-      )}
+        <span className="font-mono text-[10px] tracking-widest text-hw-muted">{visible.length} SOURCES</span>
+      </div>
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {visible.map(item => <NewsCard key={`${item.source}-${item.title}`} item={item} />)}
+      </div>
     </div>
   )
 }

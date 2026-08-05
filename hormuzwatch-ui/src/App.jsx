@@ -1,5 +1,4 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
-import { LiveDataProvider } from './context/LiveDataContext.jsx'
 import Header from './components/Header.jsx'
 import OverviewTab from './components/tabs/OverviewTab.jsx'
 
@@ -60,7 +59,7 @@ export default function App() {
   }
 
   return (
-    <LiveDataProvider>
+    <>
       <div className="min-h-screen bg-hw-bg flex flex-col">
         <Header />
 
@@ -96,11 +95,11 @@ export default function App() {
 
         <footer className="border-t border-hw-border bg-hw-card/40 px-4 py-4">
           <div className="mx-auto flex max-w-screen-2xl flex-col gap-2 font-mono text-[10px] tracking-wide text-hw-muted sm:flex-row sm:items-center sm:justify-between">
-            <span>HORMUZWATCH · FINAL DATASET · JUN 18, 2026</span>
+            <span>HORMUZWATCH · ARCHIVED · DATA THROUGH JUN 18, 2026</span>
             <a className="transition hover:text-hw-gold" href="https://github.com/Aman12x/hormuzwatch" target="_blank" rel="noreferrer">SOURCE & METHODOLOGY ↗</a>
           </div>
         </footer>
       </div>
-    </LiveDataProvider>
+    </>
   )
 }

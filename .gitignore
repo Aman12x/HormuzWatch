@@ -24,7 +24,10 @@ Thumbs.db
 .idea/
 
 # Data — keep CSVs, exclude raw downloads
-data/raw/
+data/raw/*
+# ...except the OVX/VIX history the reported finding is tested against.
+# Committed so scripts/ovx_placebo.py reproduces offline, with no live fetch.
+!data/raw/ovx_vix_history.csv
 
 # Secrets
 *.pem

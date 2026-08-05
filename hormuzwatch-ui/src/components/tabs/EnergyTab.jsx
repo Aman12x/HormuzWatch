@@ -6,7 +6,7 @@ import {
 import MetricCard from '../MetricCard.jsx'
 import { oilPrices as staticOilPrices, oilEventDates as staticOilEventDates } from '../../data/oilPrices.js'
 import { attByPhase as staticAttByPhase, syntheticControl as staticSC, oilStats as staticOilStats } from '../../data/metrics.js'
-import { useLiveData } from '../../context/LiveDataContext.jsx'
+import ExploratoryNotice from '../ExploratoryNotice.jsx'
 
 const CHART_STYLE = {
   bg     : '#232840',
@@ -26,6 +26,10 @@ const CustomTooltip = ({ active, payload, label }) => {
       background: '#232840', border: '1px solid #3a4060',
       padding: '8px 12px', fontSize: 11, fontFamily: 'monospace',
     }}>
+      <ExploratoryNotice>
+        Oil price levels and the synthetic-control estimates shown here did not survive review — the synthetic control failed its own placebo test and returned a negative estimate, and the difference-in-differences has an effective sample size of four.
+      </ExploratoryNotice>
+
       <p style={{ color: '#94a3b8', marginBottom: 4 }}>{label}</p>
       {payload.map(p => (
         <div key={p.name} style={{ color: p.color, marginBottom: 2 }}>
@@ -46,13 +50,12 @@ const formatDate = (d) => {
 const CHART_START = '2025-11-01'
 
 export default function EnergyTab() {
-  const { live } = useLiveData() ?? {}
 
-  const oilPrices    = live?.timeseries?.oilPrices    ?? staticOilPrices
-  const oilEventDates = live?.timeseries?.oilEventDates ?? staticOilEventDates
-  const sc           = live?.metrics?.syntheticControl ?? staticSC
-  const attByPhase   = live?.metrics?.attByPhase       ?? staticAttByPhase
-  const oilStats     = live?.metrics?.oilStats         ?? staticOilStats
+  const oilPrices    = staticOilPrices
+  const oilEventDates = staticOilEventDates
+  const sc           = staticSC
+  const attByPhase   = staticAttByPhase
+  const oilStats     = staticOilStats
 
   const chartOil = oilPrices.filter(d => d.date >= CHART_START)
 
