@@ -4,7 +4,7 @@
 
 > **Status: archived.** The Strait reopened on **June 18, 2026**, and every number here stops on that date. The live dashboard and its API have been retired — the site is now a static build that fetches no data at runtime (every figure is bundled; the world map is vendored; the only external request is the Google Fonts stylesheet), and the repository reproduces its own figures offline.
 >
-> **Static archive:** [aman12x.github.io/HormuzWatch](https://aman12x.github.io/HormuzWatch/)
+> **Static archive:** [hormuzwatch.singhaman.dev](https://hormuzwatch.singhaman.dev)
 
 ---
 

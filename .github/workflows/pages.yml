@@ -32,8 +32,6 @@ jobs:
           cache-dependency-path: hormuzwatch-ui/package-lock.json
       - run: npm ci
       - run: npm run build
-        env:
-          GITHUB_PAGES: '1'
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
