@@ -122,7 +122,7 @@ export default function MethodologyTab() {
                 <td className="py-2 font-mono font-semibold text-sm text-ink-3">{d.weight.toFixed(1)}%</td>
                 <td className="py-2">
                   <div className="bg-line h-1.5 w-full max-w-[120px]">
-                    <div className="h-full" style={{ width: `${d.weight}%`, background: '#4b535b' }} />
+                    <div className="h-full" style={{ width: `${d.weight}%`, background: '#8a949e' }} />
                   </div>
                 </td>
               </tr>

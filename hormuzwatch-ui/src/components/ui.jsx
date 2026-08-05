@@ -18,21 +18,21 @@ const STATUS = {
     text: 'text-reported',
     border: 'border-reported/40',
     bg: 'bg-reported/10',
-    rule: '#3987e5',
+    rule: '#1d68c3',
   },
   exploratory: {
     label: 'Exploratory — not reported',
     text: 'text-ink-2',
     border: 'border-line-strong',
     bg: 'bg-surface-3',
-    rule: '#6b747d',
+    rule: '#8a949e',
   },
   refuted: {
     label: 'Failed its own placebo test',
     text: 'text-refuted',
     border: 'border-refuted/40',
     bg: 'bg-refuted/10',
-    rule: '#e66767',
+    rule: '#c0272d',
   },
 }
 
@@ -87,7 +87,7 @@ export function Stat({ label, value, unit, note, emphasis = false }) {
 
 /** Callout for a caveat, limitation or failure explanation. */
 export function Callout({ tone = 'neutral', title, children }) {
-  const rule = tone === 'refuted' ? '#e66767' : tone === 'reported' ? '#3987e5' : '#333a42'
+  const rule = tone === 'refuted' ? '#c0272d' : tone === 'reported' ? '#1d68c3' : '#c6ced6'
   const titleColor =
     tone === 'refuted' ? 'text-refuted' : tone === 'reported' ? 'text-reported' : 'text-ink-2'
   return (
@@ -137,14 +137,15 @@ export function ExploratoryBanner({ children }) {
 
 /** Shared recharts theming so every chart in the app agrees. */
 export const CHART = {
-  grid: '#262b31',
-  axis: '#6b747d',
-  surface: '#15181c',
-  series: ['#3987e5', '#d95926', '#199e70', '#c98500'],
-  context: '#4b535b',
-  reported: '#3987e5',
-  refuted: '#e66767',
-  tick: { fill: '#6b747d', fontSize: 11, fontFamily: 'JetBrains Mono, monospace' },
+  grid: '#e2e6ea',
+  axis: '#626c76',
+  surface: '#ffffff',
+  // Fixed order — violet sits third to break the protan orange↔green pair.
+  series: ['#1d68c3', '#d9531f', '#6b3fa0', '#12805a'],
+  context: '#8a949e',
+  reported: '#1d68c3',
+  refuted: '#c0272d',
+  tick: { fill: '#626c76', fontSize: 11, fontFamily: 'JetBrains Mono, monospace' },
 }
 
 export function ChartTooltip({ active, payload, label, unit = '', labelPrefix = '' }) {

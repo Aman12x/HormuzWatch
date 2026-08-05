@@ -21,10 +21,10 @@ import worldAtlas from '../data/countries-110m.json'
 // Score is a magnitude, so the encoding is a single hue running dark → light,
 // not a rainbow. The previous dark→gold→red ramp implied three categories where
 // the data has one ordered dimension, and put a hue at the midpoint.
-const RAMP = ['#16222e', '#1d3b57', '#215681', '#2472ad', '#3987e5', '#6ba6ee']
+const RAMP = ['#dbe7f6', '#b7cfec', '#8db3e1', '#5f93d4', '#3576c4', '#1d68c3']
 
 function scoreToColor(score) {
-  if (score == null || score === 0) return '#15181c'
+  if (score == null || score === 0) return '#eef1f4'
   const t = Math.min(10, Math.max(0, score)) / 10
   return RAMP[Math.min(RAMP.length - 1, Math.floor(t * RAMP.length))]
 }
@@ -38,10 +38,10 @@ function compositeScore(d, warAlpha) {
 // ── War proximity badge ───────────────────────────────────────────────────────
 // Proximity is ordered, not categorical — one hue, stepped by intensity.
 const PROXIMITY_COLORS = {
-  direct:     '#e66767',
-  proximate:  '#c25a5a',
-  regional:   '#8f4a4a',
-  remote:     '#4b535b',
+  direct:     '#c0272d',
+  proximate:  '#cf5b52',
+  regional:   '#d98d80',
+  remote:     '#8a949e',
 }
 const PROXIMITY_LABELS = {
   direct:    'DIRECT',
@@ -63,8 +63,8 @@ const MapTooltip = ({ data, x, y, warAlpha }) => {
         top: y - 10,
         pointerEvents: 'none',
         zIndex: 9999,
-        background: '#1b1f24',
-        border: '1px solid #262b31',
+        background: '#ffffff',
+        border: '1px solid #e2e6ea',
         borderLeft: `3px solid ${scoreColor}`,
         padding: '8px 12px',
         fontFamily: 'monospace',
@@ -73,7 +73,7 @@ const MapTooltip = ({ data, x, y, warAlpha }) => {
         boxShadow: '0 4px 20px rgba(0,0,0,0.6)',
       }}
     >
-      <div style={{ color: '#e9ecef', fontWeight: 'bold', marginBottom: 4, fontSize: 12 }}>
+      <div style={{ color: '#10151a', fontWeight: 'bold', marginBottom: 4, fontSize: 12 }}>
         {data.country}
         {data.war_proximity && (
           <span style={{
@@ -89,19 +89,19 @@ const MapTooltip = ({ data, x, y, warAlpha }) => {
       <div style={{ color: scoreColor, fontSize: 16, fontWeight: 'bold', marginBottom: 6 }}>
         {score.toFixed(1)} / 10
       </div>
-      <div style={{ color: '#a4acb4', lineHeight: 1.8, fontSize: 10 }}>
+      <div style={{ color: '#4a545e', lineHeight: 1.8, fontSize: 10 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
           <span>Economy score</span>
-          <span style={{ color: '#3987e5' }}>{data.economy_score.toFixed(2)}</span>
+          <span style={{ color: '#1d68c3' }}>{data.economy_score.toFixed(2)}</span>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
           <span>War score</span>
-          <span style={{ color: '#e66767' }}>{data.war_score.toFixed(2)}</span>
+          <span style={{ color: '#c0272d' }}>{data.war_score.toFixed(2)}</span>
         </div>
-        <div style={{ borderTop: '1px solid #262b31', marginTop: 4, paddingTop: 4 }}>
-          <div>Hormuz oil dep: <span style={{ color: '#e9ecef' }}>{data.hormuz_oil_dependency_pct}%</span></div>
-          <div>Fertilizer exp: <span style={{ color: '#e9ecef' }}>{data.fertilizer_import_exposure.toUpperCase()}</span></div>
-          <div>Iran trade: <span style={{ color: '#e9ecef' }}>${data.trade_with_iran_usd_bn}B/yr</span></div>
+        <div style={{ borderTop: '1px solid #e2e6ea', marginTop: 4, paddingTop: 4 }}>
+          <div>Hormuz oil dep: <span style={{ color: '#10151a' }}>{data.hormuz_oil_dependency_pct}%</span></div>
+          <div>Fertilizer exp: <span style={{ color: '#10151a' }}>{data.fertilizer_import_exposure.toUpperCase()}</span></div>
+          <div>Iran trade: <span style={{ color: '#10151a' }}>${data.trade_with_iran_usd_bn}B/yr</span></div>
         </div>
       </div>
     </div>
@@ -115,17 +115,17 @@ const BarTooltip = ({ active, payload, warAlpha }) => {
   const score = compositeScore(d, warAlpha)
   return (
     <div style={{
-      background: '#1b1f24', border: '1px solid #262b31',
+      background: '#ffffff', border: '1px solid #e2e6ea',
       padding: '8px 12px', fontFamily: 'monospace', fontSize: 11,
     }}>
-      <div style={{ color: '#e9ecef', fontWeight: 'bold', marginBottom: 2 }}>{d.country}</div>
+      <div style={{ color: '#10151a', fontWeight: 'bold', marginBottom: 2 }}>{d.country}</div>
       <div style={{ color: scoreToColor(score), fontSize: 13, fontWeight: 'bold' }}>
         Score: {score.toFixed(1)}
       </div>
-      <div style={{ color: '#a4acb4', marginTop: 4, fontSize: 10, lineHeight: 1.7 }}>
-        <div>Economy: <span style={{ color: '#3987e5' }}>{d.economy_score.toFixed(2)}</span></div>
-        <div>War:     <span style={{ color: '#e66767' }}>{d.war_score.toFixed(2)}</span></div>
-        <div style={{ color: '#4b535b', marginTop: 2 }}>
+      <div style={{ color: '#4a545e', marginTop: 4, fontSize: 10, lineHeight: 1.7 }}>
+        <div>Economy: <span style={{ color: '#1d68c3' }}>{d.economy_score.toFixed(2)}</span></div>
+        <div>War:     <span style={{ color: '#c0272d' }}>{d.war_score.toFixed(2)}</span></div>
+        <div style={{ color: '#8a949e', marginTop: 2 }}>
           {PROXIMITY_LABELS[d.war_proximity] ?? '—'} proximity
         </div>
       </div>
@@ -183,7 +183,7 @@ export default function GeoImpactTab() {
         </div>
         <div className="flex items-center gap-4">
           <div className="text-left w-36 flex-shrink-0">
-            <div className="font-mono text-xs font-bold" style={{ color: '#3987e5' }}>
+            <div className="font-mono text-xs font-bold" style={{ color: '#1d68c3' }}>
               ECONOMY {econPct}%
             </div>
             <div className="font-mono text-micro text-ink-3 leading-tight mt-0.5">
@@ -198,7 +198,7 @@ export default function GeoImpactTab() {
               style={{
                 height: 4,
                 left: 0, right: 0,
-                background: 'linear-gradient(to right, #3987e5, #4b535b 50%, #e66767)',
+                background: 'linear-gradient(to right, #1d68c3, #8a949e 50%, #c0272d)',
                 opacity: 0.5,
               }}
             />
@@ -221,7 +221,7 @@ export default function GeoImpactTab() {
           </div>
 
           <div className="text-right w-36 flex-shrink-0">
-            <div className="font-mono text-xs font-bold" style={{ color: '#e66767' }}>
+            <div className="font-mono text-xs font-bold" style={{ color: '#c0272d' }}>
               WAR IMPACT {warPct}%
             </div>
             <div className="font-mono text-micro text-ink-3 leading-tight mt-0.5">
@@ -283,7 +283,7 @@ export default function GeoImpactTab() {
             <span className="text-label text-ink-3">impact score</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span style={{ color: '#e9ecef', fontSize: 12 }}>★</span>
+            <span style={{ color: '#10151a', fontSize: 12 }}>★</span>
             <span className="text-label text-ink-3">Strait of Hormuz</span>
           </div>
         </div>
@@ -299,17 +299,17 @@ export default function GeoImpactTab() {
                 {({ geographies }) =>
                   geographies.map(geo => {
                     const found = scoredByNumeric[String(parseInt(geo.id))]
-                    const fill  = found ? scoreToColor(found._score) : '#191d22'
+                    const fill  = found ? scoreToColor(found._score) : '#eef1f4'
                     return (
                       <Geography
                         key={geo.rsmKey}
                         geography={geo}
                         fill={fill}
-                        stroke="#0d0f11"
+                        stroke="#f7f8f9"
                         strokeWidth={0.4}
                         style={{
                           default: { outline: 'none' },
-                          hover:   { outline: 'none', fill: found ? fill : '#1b1f24', cursor: found ? 'crosshair' : 'default' },
+                          hover:   { outline: 'none', fill: found ? fill : '#ffffff', cursor: found ? 'crosshair' : 'default' },
                           pressed: { outline: 'none' },
                         }}
                         onMouseEnter={found ? (evt) => handleMouseEnter(found, evt) : undefined}
@@ -323,11 +323,11 @@ export default function GeoImpactTab() {
 
               {/* Strait of Hormuz marker */}
               <Marker coordinates={[56.5, 26.5]}>
-                <circle r={5} fill="#e66767" opacity={0.9} />
-                <circle r={9} fill="none" stroke="#e66767" strokeWidth={1} opacity={0.4} />
+                <circle r={5} fill="#c0272d" opacity={0.9} />
+                <circle r={9} fill="none" stroke="#c0272d" strokeWidth={1} opacity={0.4} />
                 <text
                   textAnchor="start" x={10} y={4}
-                  style={{ fontFamily: 'monospace', fontSize: '7px', fill: '#e66767', fontWeight: 'bold' }}
+                  style={{ fontFamily: 'monospace', fontSize: '7px', fill: '#c0272d', fontWeight: 'bold' }}
                 >
                   HORMUZ
                 </text>
@@ -368,22 +368,22 @@ export default function GeoImpactTab() {
               <XAxis
                 type="number"
                 domain={[0, 10]}
-                tick={{ fill: '#a4acb4', fontSize: 9, fontFamily: 'monospace' }}
-                axisLine={{ stroke: '#262b31' }}
+                tick={{ fill: '#4a545e', fontSize: 9, fontFamily: 'monospace' }}
+                axisLine={{ stroke: '#e2e6ea' }}
                 tickLine={false}
                 tickFormatter={v => v.toFixed(0)}
               />
               <YAxis
                 type="category"
                 dataKey="country"
-                tick={{ fill: '#e9ecef', fontSize: 9, fontFamily: 'monospace' }}
+                tick={{ fill: '#10151a', fontSize: 9, fontFamily: 'monospace' }}
                 axisLine={false}
                 tickLine={false}
                 width={85}
               />
               <Tooltip
                 content={<BarTooltipWrapper warAlpha={warAlpha} />}
-                cursor={{ fill: '#1b1f24' }}
+                cursor={{ fill: '#ffffff' }}
               />
               <Bar dataKey="_score" radius={[0, 2, 2, 0]} isAnimationActive={false}>
                 {top15.map(entry => (
@@ -423,17 +423,17 @@ export default function GeoImpactTab() {
                   <td className="py-2 px-2 font-bold text-sm" style={{ color: scoreToColor(d._score) }}>
                     {d._score.toFixed(1)}
                   </td>
-                  <td className="py-2 px-2" style={{ color: '#3987e5' }}>
+                  <td className="py-2 px-2" style={{ color: '#1d68c3' }}>
                     {d.economy_score.toFixed(2)}
                   </td>
-                  <td className="py-2 px-2" style={{ color: '#e66767' }}>
+                  <td className="py-2 px-2" style={{ color: '#c0272d' }}>
                     {d.war_score.toFixed(2)}
                   </td>
                   <td className="py-2 px-2">
                     <span style={{
-                      color: PROXIMITY_COLORS[d.war_proximity] ?? '#4b535b',
+                      color: PROXIMITY_COLORS[d.war_proximity] ?? '#8a949e',
                       fontSize: 9,
-                      border: `1px solid ${PROXIMITY_COLORS[d.war_proximity] ?? '#4b535b'}`,
+                      border: `1px solid ${PROXIMITY_COLORS[d.war_proximity] ?? '#8a949e'}`,
                       padding: '1px 4px',
                     }}>
                       {PROXIMITY_LABELS[d.war_proximity] ?? '—'}

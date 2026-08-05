@@ -27,10 +27,10 @@ const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null
   return (
     <div style={{
-      background: '#15181c', border: '1px solid #262b31',
+      background: '#ffffff', border: '1px solid #e2e6ea',
       padding: '8px 12px', fontSize: 11, fontFamily: 'monospace',
     }}>
-      <p style={{ color: '#6b747d', marginBottom: 4 }}>
+      <p style={{ color: '#626c76', marginBottom: 4 }}>
         {label > 0 ? `+${label}d` : label === 0 ? 'T0 (Strike)' : `${label}d`}
       </p>
       {payload.map(p => (
@@ -204,7 +204,7 @@ export default function EquityTab() {
                   <td className="py-2 font-mono font-semibold text-ink text-sm">{row.t}</td>
                   <td className="py-2 font-mono text-xs text-ink-3">{row.s}</td>
                   <td className="py-2 font-mono font-semibold text-sm" style={{
-                    color: row.c >= 0 ? '#199e70' : '#e66767'
+                    color: row.c >= 0 ? '#12805a' : '#c0272d'
                   }}>
                     {row.c >= 0 ? '+' : ''}{row.c.toFixed(2)}%
                   </td>
@@ -225,21 +225,21 @@ export default function EquityTab() {
             <div className="grid grid-cols-3 gap-2 text-center">
               <div className="bg-bg border border-line p-2">
                 <div className="font-mono text-micro text-ink-3 mb-1">HORMUZ BASKET</div>
-                <div className="font-mono font-bold text-base" style={{ color: '#e66767' }}>
+                <div className="font-mono font-bold text-base" style={{ color: '#c0272d' }}>
                   {shippingPlacebo.hormuzCAR.toFixed(1)}%
                 </div>
                 <div className="font-mono text-micro text-ink-3 mt-0.5">FRO · STNG</div>
               </div>
               <div className="bg-bg border border-line p-2">
                 <div className="font-mono text-micro text-ink-3 mb-1">CTRL BASKET</div>
-                <div className="font-mono font-bold text-base" style={{ color: '#6b747d' }}>
+                <div className="font-mono font-bold text-base" style={{ color: '#626c76' }}>
                   {shippingPlacebo.nonHormuzCAR.toFixed(1)}%
                 </div>
                 <div className="font-mono text-micro text-ink-3 mt-0.5">HAFNI · INSW · NAT · TK</div>
               </div>
               <div className="bg-bg border border-line p-2">
                 <div className="font-mono text-micro text-ink-3 mb-1">GAP</div>
-                <div className="font-mono font-bold text-base" style={{ color: '#e66767' }}>
+                <div className="font-mono font-bold text-base" style={{ color: '#c0272d' }}>
                   {shippingPlacebo.gap.toFixed(1)}pp
                 </div>
                 <div className="font-mono text-micro text-ink-3 mt-0.5">Hormuz − Ctrl</div>

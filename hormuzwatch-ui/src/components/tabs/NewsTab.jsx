@@ -4,18 +4,18 @@ import { NEWS_ITEMS, NEWS_BRIEF } from '../../data/newsArchive.js'
 
 // Severity is an ordered scale — one hue stepped by intensity, not three hues.
 const SEVERITY = {
-  HIGH:   { color: '#e9ecef', label: 'High' },
-  MEDIUM: { color: '#a4acb4', label: 'Medium' },
-  LOW:    { color: '#6b747d', label: 'Low' },
+  HIGH:   { color: '#10151a', label: 'High' },
+  MEDIUM: { color: '#4a545e', label: 'Medium' },
+  LOW:    { color: '#626c76', label: 'Low' },
 }
 
 // Category is genuinely categorical: fixed-order assignment from the validated
 // set, and MARKETS previously duplicated DIPLOMATIC's hue.
 const CATEGORY = {
-  DIPLOMATIC: { background: '#3987e518', color: '#3987e5' },
-  ENERGY:     { background: '#d9592618', color: '#d95926' },
-  MARKETS:    { background: '#199e7018', color: '#199e70' },
-  MILITARY:   { background: '#c9850018', color: '#c98500' },
+  DIPLOMATIC: { background: '#1d68c318', color: '#1d68c3' },
+  ENERGY:     { background: '#d9531f18', color: '#d9531f' },
+  MARKETS:    { background: '#12805a18', color: '#12805a' },
+  MILITARY:   { background: '#6b3fa018', color: '#6b3fa0' },
 }
 
 function formatDate(iso) {
