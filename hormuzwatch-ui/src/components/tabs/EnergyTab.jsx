@@ -3,42 +3,22 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip,
   Legend, ReferenceLine, ResponsiveContainer, LabelList,
 } from 'recharts'
-import MetricCard from '../MetricCard.jsx'
+import { Stat, Panel, CHART, ChartTooltip } from '../ui.jsx'
 import { oilPrices as staticOilPrices, oilEventDates as staticOilEventDates } from '../../data/oilPrices.js'
 import { attByPhase as staticAttByPhase, syntheticControl as staticSC, oilStats as staticOilStats } from '../../data/metrics.js'
-import ExploratoryNotice from '../ExploratoryNotice.jsx'
+import { ExploratoryBanner } from '../ui.jsx'
 
+// Series colours come from the validated set in ui.jsx, assigned in fixed
+// order so a filter can never repaint a series.
 const CHART_STYLE = {
-  bg     : '#232840',
-  border : '#3a4060',
-  text   : '#94a3b8',
-  grid   : '#3a4060',
-  brent  : '#a78bfa',
-  wti    : '#ef4444',
-  gold   : '#e8b84b',
-  blue   : '#3b82f6',
-}
-
-const CustomTooltip = ({ active, payload, label }) => {
-  if (!active || !payload?.length) return null
-  return (
-    <div style={{
-      background: '#232840', border: '1px solid #3a4060',
-      padding: '8px 12px', fontSize: 11, fontFamily: 'monospace',
-    }}>
-      <ExploratoryNotice>
-        Oil price levels and the synthetic-control estimates shown here did not survive review — the synthetic control failed its own placebo test and returned a negative estimate, and the difference-in-differences has an effective sample size of four.
-      </ExploratoryNotice>
-
-      <p style={{ color: '#94a3b8', marginBottom: 4 }}>{label}</p>
-      {payload.map(p => (
-        <div key={p.name} style={{ color: p.color, marginBottom: 2 }}>
-          {p.name}: <strong>{typeof p.value === 'number' ? p.value.toFixed(2) : p.value}</strong>
-          {p.name.includes('ATT') ? ' $/bbl' : ''}
-        </div>
-      ))}
-    </div>
-  )
+  border: CHART.grid,
+  text: CHART.axis,
+  grid: CHART.grid,
+  brent: CHART.series[0],
+  wti: CHART.series[1],
+  gold: CHART.series[3],
+  blue: CHART.series[0],
+  marker: CHART.context,
 }
 
 const formatDate = (d) => {
@@ -60,37 +40,40 @@ export default function EnergyTab() {
   const chartOil = oilPrices.filter(d => d.date >= CHART_START)
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
 
-      {/* Metric cards */}
+      <ExploratoryBanner>
+        Nothing on this tab is a reported finding. The synthetic control failed its own placebo
+        test and returned a negative estimate; the difference-in-differences has an effective
+        sample size of four.
+      </ExploratoryBanner>
+
+      {/* Withdrawn estimates */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <MetricCard
-          label="SPOT ATT (EIA BRENT)"
+        <Stat
+          label="Spot estimate — withdrawn"
           value={`+$${sc.spotATT}`}
           unit="/bbl"
-          accent="gold"
-          description="FRED Brent above Dubai synthetic. Note: Dubai data ends Feb 2026; spot ATT inflated by frozen synthetic. Tightens on March data."
+          note="Not a result. 20.2% of this counterfactual is a Dubai series whose last observation predates treatment and is held flat, so the gap grows by construction."
         />
-        <MetricCard
-          label="FUTURES ATT (CAUSAL)"
+        <Stat
+          label="Futures estimate — withdrawn"
           value={`+$${sc.futuresATT}`}
           unit="/bbl"
-          accent="blue"
-          description="Change in Brent-WTI futures spread (BZ=F − CL=F) post-treatment. Cleanest causal estimate of Hormuz-specific war premium in the paper market."
+          note="Not a synthetic control. With one donor the convexity constraint pins the weight to 1.0, making this the demeaned Brent–WTI spread."
         />
-        <MetricCard
-          label="BASIS SPREAD"
+        <Stat
+          label="Basis spread — withdrawn"
           value={`$${sc.basisSpread}`}
           unit="/bbl"
-          accent="red"
-          description="Spot ATT minus futures ATT. Physical backwardation: refineries paying acute spot premiums futures curve hasn't yet priced."
+          note="Arithmetic on the two figures beside it, not an independent estimate. Carries no information they do not already contain."
         />
       </div>
 
       {/* Oil indexed price chart */}
-      <div className="bg-hw-card border border-hw-border p-4">
+      <div className="bg-surface border border-line p-4">
         <div className="flex items-center justify-between mb-3">
-          <span className="font-mono text-[10px] tracking-[0.2em] text-hw-muted">
+          <span className="font-mono text-micro text-ink-3">
             BRENT &amp; WTI — INDEXED TO 100 ON FEB 28, 2026
           </span>
           <div className="flex items-center gap-4">
@@ -100,7 +83,7 @@ export default function EnergyTab() {
             ].map(l => (
               <div key={l.label} className="flex items-center gap-1.5">
                 <div className="w-4 h-0.5" style={{ background: l.color }} />
-                <span className="font-mono text-[10px] text-hw-muted">{l.label}</span>
+                <span className="font-mono text-micro text-ink-3">{l.label}</span>
               </div>
             ))}
           </div>
@@ -117,32 +100,32 @@ export default function EnergyTab() {
               <XAxis
                 dataKey="date"
                 tickFormatter={formatDate}
-                tick={{ fill: CHART_STYLE.text, fontSize: 10, fontFamily: 'monospace' }}
+                tick={{ fill: CHART_STYLE.text, fontSize: 11, fontFamily: 'JetBrains Mono, monospace' }}
                 interval={19}
                 axisLine={{ stroke: CHART_STYLE.border }}
                 tickLine={false}
               />
               <YAxis
-                tick={{ fill: CHART_STYLE.text, fontSize: 10, fontFamily: 'monospace' }}
+                tick={{ fill: CHART_STYLE.text, fontSize: 11, fontFamily: 'JetBrains Mono, monospace' }}
                 axisLine={false}
                 tickLine={false}
                 tickFormatter={v => `${v}`}
                 domain={['auto', 'auto']}
               />
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip content={<ChartTooltip />} cursor={{ stroke: CHART.grid }} />
               <ReferenceLine
                 x={oilEventDates.t1}
-                stroke={CHART_STYLE.gold}
+                stroke={CHART_STYLE.marker}
                 strokeDasharray="4 4"
                 strokeOpacity={0.7}
-                label={{ value: 'T1 Strike', fill: CHART_STYLE.gold, fontSize: 9, fontFamily: 'monospace' }}
+                label={{ value: 'Strikes', fill: CHART.axis, fontSize: 11, fontFamily: 'JetBrains Mono, monospace' }}
               />
               <ReferenceLine
                 x={oilEventDates.t2}
-                stroke="#ef4444"
+                stroke={CHART_STYLE.marker}
                 strokeDasharray="4 4"
                 strokeOpacity={0.7}
-                label={{ value: 'T2 Hormuz', fill: '#ef4444', fontSize: 9, fontFamily: 'monospace' }}
+                label={{ value: 'Closure', fill: CHART.axis, fontSize: 11, fontFamily: 'JetBrains Mono, monospace' }}
               />
               <ReferenceLine y={100} stroke={CHART_STYLE.grid} strokeDasharray="2 2" strokeOpacity={0.6} />
               <Line
@@ -153,7 +136,7 @@ export default function EnergyTab() {
                 dot={false}
                 name="Brent (BZ=F)"
                 connectNulls
-              />
+               isAnimationActive={false} />
               <Line
                 type="monotone"
                 dataKey="wtiIdx"
@@ -162,12 +145,12 @@ export default function EnergyTab() {
                 dot={false}
                 name="WTI (CL=F)"
                 connectNulls
-              />
+               isAnimationActive={false} />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="mt-2 flex gap-6 text-[10px] font-mono text-hw-muted">
+        <div className="mt-2 flex gap-6 text-micro font-mono text-ink-3">
           <span>BASE: Brent ${oilStats.brentBase} · WTI ${oilStats.wtiBase} (Feb 28)</span>
           <span>BRENT PEAK: ${oilStats.brentPeak} (EIA spot)</span>
           <span>WTI PEAK: ${oilStats.wtiPeak}</span>
@@ -175,9 +158,9 @@ export default function EnergyTab() {
       </div>
 
       {/* ATT by phase bar chart */}
-      <div className="bg-hw-card border border-hw-border p-4">
+      <div className="bg-surface border border-line p-4">
         <div className="flex items-center justify-between mb-3">
-          <span className="font-mono text-[10px] tracking-[0.2em] text-hw-muted">
+          <span className="font-mono text-micro text-ink-3">
             AVERAGE TREATMENT EFFECT BY PHASE — SPOT vs FUTURES ($/BBL)
           </span>
           <div className="flex items-center gap-4">
@@ -187,7 +170,7 @@ export default function EnergyTab() {
             ].map(l => (
               <div key={l.label} className="flex items-center gap-1.5">
                 <div className="w-3 h-3" style={{ background: l.color, opacity: 0.8 }} />
-                <span className="font-mono text-[10px] text-hw-muted">{l.label}</span>
+                <span className="font-mono text-micro text-ink-3">{l.label}</span>
               </div>
             ))}
           </div>
@@ -199,18 +182,18 @@ export default function EnergyTab() {
               <CartesianGrid strokeDasharray="3 3" stroke={CHART_STYLE.grid} vertical={false} />
               <XAxis
                 dataKey="phase"
-                tick={{ fill: CHART_STYLE.text, fontSize: 10, fontFamily: 'monospace' }}
+                tick={{ fill: CHART_STYLE.text, fontSize: 11, fontFamily: 'JetBrains Mono, monospace' }}
                 axisLine={{ stroke: CHART_STYLE.border }}
                 tickLine={false}
               />
               <YAxis
-                tick={{ fill: CHART_STYLE.text, fontSize: 10, fontFamily: 'monospace' }}
+                tick={{ fill: CHART_STYLE.text, fontSize: 11, fontFamily: 'JetBrains Mono, monospace' }}
                 axisLine={false}
                 tickLine={false}
                 tickFormatter={v => `$${v}`}
               />
-              <Tooltip content={<CustomTooltip />} />
-              <Bar dataKey="spotATT" fill={CHART_STYLE.gold} name="Spot ATT ($/bbl)" fillOpacity={0.85} radius={[1,1,0,0]}>
+              <Tooltip content={<ChartTooltip />} cursor={{ stroke: CHART.grid }} />
+              <Bar dataKey="spotATT" fill={CHART_STYLE.gold} name="Spot ATT ($/bbl)" fillOpacity={0.85} radius={[1,1,0,0]} isAnimationActive={false}>
                 <LabelList
                   dataKey="spotATT"
                   position="top"
@@ -218,7 +201,7 @@ export default function EnergyTab() {
                   style={{ fill: CHART_STYLE.gold, fontSize: 9, fontFamily: 'monospace' }}
                 />
               </Bar>
-              <Bar dataKey="futuresATT" fill={CHART_STYLE.blue} name="Futures ATT ($/bbl)" fillOpacity={0.85} radius={[1,1,0,0]}>
+              <Bar dataKey="futuresATT" fill={CHART_STYLE.blue} name="Futures ATT ($/bbl)" fillOpacity={0.85} radius={[1,1,0,0]} isAnimationActive={false}>
                 <LabelList
                   dataKey="futuresATT"
                   position="top"
@@ -230,7 +213,7 @@ export default function EnergyTab() {
           </ResponsiveContainer>
         </div>
 
-        <p className="text-hw-muted text-xs font-inter mt-2 leading-relaxed">
+        <p className="text-ink-3 text-xs font-sans mt-2 leading-relaxed">
           Spot ATT uses FRED Brent ~ Dubai synthetic (Dubai forward-filled from Feb 2026 — inflates post-period values).
           Futures ATT is the cleaner estimate: change in Brent-WTI futures spread post-treatment, demeaned by pre-period mean.
         </p>

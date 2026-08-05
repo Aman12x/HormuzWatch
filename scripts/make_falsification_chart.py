@@ -30,12 +30,20 @@ HORMUZ = ["FRO", "STNG"]
 CONTROL = ["HAFNI", "INSW", "NAT", "TK"]
 ALL_T = HORMUZ + CONTROL
 
-BG, SURFACE, BORDER = "#11111b", "#1e1e2e", "#313244"
-TEXT, SUBTEXT, MUTED, FAINT = "#cdd6f4", "#a6adc8", "#585b70", "#45475a"
-ACCENT = "#f38ba8"
+# Palette shared with the dashboard (hormuzwatch-ui/tailwind.config.js).
+# Validated against the dark surface with the data-viz validator.
+BG = "#0d0f11"
+SURFACE = "#15181c"
+BORDER = "#262b31"
+TEXT = "#e9ecef"
+SUBTEXT = "#a4acb4"
+MUTED = "#6b747d"
+FAINT = "#333a42"
+CONTEXT = "#4b535b"
+ACCENT = "#3987e5"   # the single emphasis hue — reserved for the observed value
 
 plt.rcParams.update({
-    "font.family": "monospace", "text.color": TEXT,
+    "font.family": "monospace", "font.monospace": ["JetBrains Mono", "Menlo", "DejaVu Sans Mono"], "text.color": TEXT,
     "axes.labelcolor": SUBTEXT, "xtick.color": SUBTEXT, "ytick.color": SUBTEXT,
     "figure.facecolor": BG, "axes.facecolor": SURFACE, "axes.edgecolor": BORDER,
 })

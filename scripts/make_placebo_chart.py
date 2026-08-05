@@ -26,18 +26,20 @@ HIST = ROOT / "data" / "raw" / "ovx_vix_history.csv"
 EVENT_DATE = pd.Timestamp("2026-02-28")
 REOPEN_DATE = pd.Timestamp("2026-06-18")
 
-# Catppuccin Mocha — the repo's established surface set
-BG = "#11111b"
-SURFACE = "#1e1e2e"
-BORDER = "#313244"
-TEXT = "#cdd6f4"
-SUBTEXT = "#a6adc8"
-MUTED = "#585b70"
-FAINT = "#45475a"
-ACCENT = "#f38ba8"  # the single emphasis hue — the observed window
+# Palette shared with the dashboard (hormuzwatch-ui/tailwind.config.js).
+# Validated against the dark surface with the data-viz validator.
+BG = "#0d0f11"
+SURFACE = "#15181c"
+BORDER = "#262b31"
+TEXT = "#e9ecef"
+SUBTEXT = "#a4acb4"
+MUTED = "#6b747d"
+FAINT = "#333a42"
+CONTEXT = "#4b535b"
+ACCENT = "#3987e5"   # the single emphasis hue — reserved for the observed value
 
 plt.rcParams.update({
-    "font.family": "monospace",
+    "font.family": "monospace", "font.monospace": ["JetBrains Mono", "Menlo", "DejaVu Sans Mono"],
     "text.color": TEXT,
     "axes.labelcolor": SUBTEXT,
     "xtick.color": SUBTEXT,

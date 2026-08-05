@@ -1,61 +1,36 @@
 import { timelineEvents } from '../data/metrics.js'
 
-const TYPE_COLORS = {
-  critical   : '#ef4444',
-  escalation : '#e8b84b',
-  final      : '#10b981',
-  default    : '#475569',
-}
-
+/**
+ * Chronology. Rendered inside a Panel, so it carries no chrome of its own.
+ * The marker for the closing event is filled to mark where the record stops;
+ * everything else is a hollow node on a single recessive rule.
+ */
 export default function EventTimeline() {
   return (
-    <div className="bg-hw-card border border-hw-border p-4">
-      <div className="font-mono text-[10px] tracking-[0.2em] text-hw-muted mb-4">
-        EVENT TIMELINE — CONFLICT CHRONOLOGY
-      </div>
-      <div className="relative">
-        {/* Vertical line */}
-        <div
-          className="absolute left-3 top-0 bottom-0 w-px"
-          style={{ background: 'linear-gradient(180deg, #ef444455, #e8b84b44, #10b98133)' }}
-        />
+    <ol className="relative space-y-6">
+      <span className="absolute bottom-2 left-[3.5px] top-2 w-px bg-line" aria-hidden="true" />
 
-        <div className="space-y-5 pl-10">
-          {timelineEvents.map((ev, i) => {
-            const color = TYPE_COLORS[ev.type] || TYPE_COLORS.default
-            return (
-              <div key={i} className="relative">
-                {/* Dot */}
-                <div
-                  className="absolute -left-[1.65rem] top-0.5 w-3 h-3 rounded-full border-2 bg-hw-bg"
-                  style={{ borderColor: color }}
-                />
-                <div>
-                  <div className="flex items-center gap-3 mb-0.5">
-                    <span className="font-mono text-[10px] tracking-wider" style={{ color }}>
-                      {ev.date}
-                    </span>
-                    {ev.type === 'critical' && (
-                      <span
-                        className="font-mono text-[9px] tracking-wider px-1 py-0.5"
-                        style={{ color: '#ef4444', borderColor: '#ef444433', border: '1px solid', background: '#ef444411' }}
-                      >
-                        CRITICAL
-                      </span>
-                    )}
-                  </div>
-                  <div className="font-inter font-semibold text-hw-text text-sm">
-                    {ev.label}
-                  </div>
-                  <div className="font-inter text-hw-sub text-xs mt-0.5 leading-relaxed">
-                    {ev.description}
-                  </div>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-    </div>
+      {timelineEvents.map(ev => {
+        const isFinal = ev.type === 'final'
+        return (
+          <li key={ev.date} className="relative pl-6">
+            <span
+              className={`absolute left-0 top-1.5 h-2 w-2 rounded-full ring-4 ring-surface ${
+                isFinal ? 'bg-reported' : 'bg-line-strong'
+              }`}
+              aria-hidden="true"
+            />
+            <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+              <time className="tnum font-mono text-micro uppercase text-ink-3">{ev.date}</time>
+              {isFinal && (
+                <span className="font-mono text-micro uppercase text-reported">Window ends</span>
+              )}
+            </div>
+            <h3 className="mt-1 text-h3 font-medium text-ink">{ev.label}</h3>
+            <p className="mt-1 text-label leading-6 text-ink-2">{ev.description}</p>
+          </li>
+        )
+      })}
+    </ol>
   )
 }

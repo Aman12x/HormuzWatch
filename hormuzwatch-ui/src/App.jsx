@@ -9,12 +9,12 @@ const NewsTab = lazy(() => import('./components/tabs/NewsTab.jsx'))
 const GeoImpactTab = lazy(() => import('./components/GeoImpactTab.jsx'))
 
 const TABS = [
-  { id: 'overview', label: 'OVERVIEW', component: OverviewTab },
-  { id: 'energy', label: 'ENERGY', component: EnergyTab },
-  { id: 'equities', label: 'EQUITIES', component: EquityTab },
-  { id: 'methodology', label: 'METHOD', component: MethodologyTab },
-  { id: 'news', label: 'INTEL ARCHIVE', component: NewsTab },
-  { id: 'geo', label: 'GLOBAL IMPACT', component: GeoImpactTab },
+  { id: 'overview', label: 'Overview', component: OverviewTab },
+  { id: 'methodology', label: 'Method', component: MethodologyTab },
+  { id: 'energy', label: 'Energy', component: EnergyTab },
+  { id: 'equities', label: 'Equities', component: EquityTab },
+  { id: 'geo', label: 'Geography', component: GeoImpactTab },
+  { id: 'news', label: 'Timeline', component: NewsTab },
 ]
 
 function initialTab() {
@@ -24,8 +24,8 @@ function initialTab() {
 
 function LoadingPanel() {
   return (
-    <div className="grid min-h-72 place-items-center border border-hw-border bg-hw-card/60">
-      <div className="font-mono text-[10px] tracking-[0.24em] text-hw-muted">LOADING ANALYSIS</div>
+    <div className="grid min-h-72 place-items-center rounded border border-line bg-surface">
+      <div className="font-mono text-micro uppercase text-ink-3">Loading</div>
     </div>
   )
 }
@@ -60,11 +60,11 @@ export default function App() {
 
   return (
     <>
-      <div className="min-h-screen bg-hw-bg flex flex-col">
+      <div className="flex min-h-screen flex-col bg-bg">
         <Header />
 
-        <nav className="sticky top-0 z-20 border-b border-hw-border bg-hw-bg/95 backdrop-blur" aria-label="Analysis sections">
-          <div className="mx-auto flex max-w-screen-2xl overflow-x-auto px-3 md:px-6" role="tablist">
+        <nav className="sticky top-0 z-20 border-b border-line bg-bg/90 backdrop-blur-md" aria-label="Analysis sections">
+          <div className="mx-auto flex max-w-screen-2xl gap-1 overflow-x-auto px-4 md:px-7" role="tablist">
             {TABS.map((tab, index) => (
               <button
                 key={tab.id}
@@ -76,7 +76,7 @@ export default function App() {
                 tabIndex={activeTab === tab.id ? 0 : -1}
                 onClick={() => selectTab(tab.id)}
                 onKeyDown={event => onTabKeyDown(event, index)}
-                className={`whitespace-nowrap border-b-2 px-4 py-3.5 font-mono text-[10px] tracking-[0.16em] transition md:px-5 ${activeTab === tab.id ? 'border-hw-gold text-hw-gold' : 'border-transparent text-hw-muted hover:text-hw-text'}`}
+                className={`-mb-px whitespace-nowrap border-b-2 px-3.5 py-3 text-body transition ${activeTab === tab.id ? 'border-reported font-medium text-ink' : 'border-transparent text-ink-3 hover:border-line-strong hover:text-ink-2'}`}
               >
                 {tab.label}
               </button>
@@ -88,15 +88,22 @@ export default function App() {
           id={`panel-${activeTab}`}
           role="tabpanel"
           aria-labelledby={`tab-${activeTab}`}
-          className="mx-auto w-full max-w-screen-2xl flex-1 p-3 sm:p-5 md:p-6"
+          className="mx-auto w-full max-w-screen-2xl flex-1 px-4 py-6 md:px-7 md:py-8"
         >
           <Suspense fallback={<LoadingPanel />}><ActiveComponent /></Suspense>
         </main>
 
-        <footer className="border-t border-hw-border bg-hw-card/40 px-4 py-4">
-          <div className="mx-auto flex max-w-screen-2xl flex-col gap-2 font-mono text-[10px] tracking-wide text-hw-muted sm:flex-row sm:items-center sm:justify-between">
-            <span>HORMUZWATCH · ARCHIVED · DATA THROUGH JUN 18, 2026</span>
-            <a className="transition hover:text-hw-gold" href="https://github.com/Aman12x/hormuzwatch" target="_blank" rel="noreferrer">SOURCE & METHODOLOGY ↗</a>
+        <footer className="mt-4 border-t border-line px-4 py-6 md:px-7">
+          <div className="mx-auto flex max-w-screen-2xl flex-col gap-2 text-label text-ink-3 sm:flex-row sm:items-center sm:justify-between">
+            <span>Archived study &middot; all estimates capped at 18 June 2026</span>
+            <a
+              className="text-ink-2 underline decoration-line-strong underline-offset-4 transition hover:text-ink hover:decoration-ink-3"
+              href="https://github.com/Aman12x/HormuzWatch"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Source, notebooks and refit scripts
+            </a>
           </div>
         </footer>
       </div>

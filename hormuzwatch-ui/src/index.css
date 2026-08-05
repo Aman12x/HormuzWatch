@@ -3,78 +3,119 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-hw-bg text-hw-text font-inter antialiased;
-    min-width: 320px;
+  html {
+    -webkit-text-size-adjust: 100%;
   }
+
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    min-width: 320px;
+    font-feature-settings: 'cv05' 1, 'ss01' 1;
+  }
+
   * {
-    @apply border-hw-border;
+    @apply border-line;
+  }
+
+  /* Numbers are data — always tabular so columns align and values don't
+     jitter when a digit changes. */
+  .tnum,
+  table td,
+  table th {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  /* Small-caps metadata label. Used for card labels, section eyebrows and
+     table headers — the only place wide tracking is allowed. */
+  .eyebrow {
+    @apply font-mono text-micro uppercase text-ink-3;
+  }
+
+  .card {
+    @apply bg-surface border border-line rounded;
+  }
+
+  /* Recharts injects focus rings on every surface; suppress and re-add
+     only where we manage focus ourselves. */
+  .recharts-wrapper:focus,
+  .recharts-surface:focus {
+    outline: none;
   }
 }
 
 ::selection {
-  background: rgba(232, 184, 75, 0.28);
-  color: #fff;
+  background: rgba(57, 135, 229, 0.3);
 }
 
 :focus-visible {
-  outline: 2px solid #e8b84b;
-  outline-offset: 3px;
+  outline: 2px solid #3987e5;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Scrollbars: present but recessive */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0f11;
+}
+::-webkit-scrollbar-thumb {
+  background: #262b31;
+  border: 2px solid #0d0f11;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #333a42;
+}
+
+/* Range slider — geo weight control */
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  height: 18px;
+}
+input[type='range']::-webkit-slider-runnable-track,
+input[type='range']::-moz-range-track {
+  height: 3px;
+  border-radius: 2px;
+  background: #262b31;
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -5.5px;
+  border-radius: 50%;
+  background: #e9ecef;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+input[type='range']::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+input[type='range']::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #e9ecef;
+  border: none;
+  cursor: pointer;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     scroll-behavior: auto !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-}
-
-/* Range slider thumb styling */
-input[type='range']::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #e8b84b;
-  border: 2px solid #181c2a;
-  cursor: pointer;
-  box-shadow: 0 0 6px rgba(240, 192, 96, 0.5);
-}
-input[type='range']::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #f0c060;
-  border: 2px solid #181c2a;
-  cursor: pointer;
-  box-shadow: 0 0 6px rgba(232, 184, 75, 0.5);
-}
-input[type='range']::-webkit-slider-runnable-track {
-  height: 4px;
-  border-radius: 2px;
-  background: linear-gradient(to right, #89b4fa, #e8b84b 50%, #ef4444);
-}
-input[type='range']::-moz-range-track {
-  height: 4px;
-  border-radius: 2px;
-  background: linear-gradient(to right, #89b4fa, #e8b84b 50%, #ef4444);
-}
-
-@layer utilities {
-  .font-num {
-    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
-    font-variant-numeric: tabular-nums;
-  }
-  .scan-line {
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(255,255,255,0.015) 2px,
-      rgba(255,255,255,0.015) 4px
-    );
   }
 }

@@ -3,36 +3,34 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip,
   ReferenceLine, ResponsiveContainer, Legend,
 } from 'recharts'
-import MetricCard from '../MetricCard.jsx'
+import { Stat, Panel, CHART, ChartTooltip } from '../ui.jsx'
 import { equitiesCAR as staticEquitiesCAR } from '../../data/equities.js'
 import {
   equityStats as staticEquityStats,
   tickerCAR as staticTickerCAR,
   shippingPlacebo as staticShippingPlacebo,
 } from '../../data/metrics.js'
-import ExploratoryNotice from '../ExploratoryNotice.jsx'
+import { ExploratoryBanner } from '../ui.jsx'
 
+// Fixed-order assignment from the validated categorical set. The control
+// basket is additionally dashed, so identity never rests on colour alone.
 const COLORS = {
-  defense         : '#3b82f6',
-  energy          : '#e8b84b',
-  shipping_hormuz : '#ef4444',
-  shipping_ctrl   : '#94a3b8',
+  defense: CHART.series[0],
+  energy: CHART.series[1],
+  shipping_hormuz: CHART.series[2],
+  shipping_ctrl: CHART.context,
 }
-const GRID = '#3a4060'
-const TEXT = '#94a3b8'
+const GRID = CHART.grid
+const TEXT = CHART.axis
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null
   return (
     <div style={{
-      background: '#232840', border: '1px solid #3a4060',
+      background: '#15181c', border: '1px solid #262b31',
       padding: '8px 12px', fontSize: 11, fontFamily: 'monospace',
     }}>
-      <ExploratoryNotice>
-        The cumulative abnormal returns here come from market models with almost no explanatory power (R² 0.000–0.022), and no test statistic was computed on any of them. The route placebo cannot reach significance with six tankers.
-      </ExploratoryNotice>
-
-      <p style={{ color: '#94a3b8', marginBottom: 4 }}>
+      <p style={{ color: '#6b747d', marginBottom: 4 }}>
         {label > 0 ? `+${label}d` : label === 0 ? 'T0 (Strike)' : `${label}d`}
       </p>
       {payload.map(p => (
@@ -56,40 +54,42 @@ export default function EquityTab() {
   const lastPoint = equitiesCAR[equitiesCAR.length - 1] || {}
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
 
-      {/* Sector metric cards */}
+      <ExploratoryBanner>
+        Nothing on this tab is a reported finding. These cumulative abnormal returns come from
+        market models with almost no explanatory power (R² 0.000–0.022), and no test statistic is
+        computed on any of them.
+      </ExploratoryBanner>
+
+      {/* Sector statistics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <MetricCard
-          label="DEFENSE SECTOR CAR"
+        <Stat
+          label="Defense sector CAR"
           value={`${equityStats.defense.car.toFixed(1)}%`}
-          accent="red"
-          description={`LMT ${(tickerCAR.LMT ?? 0).toFixed(1)}% · RTX ${(tickerCAR.RTX ?? 0).toFixed(1)}% · NOC ${(tickerCAR.NOC ?? 0).toFixed(1)}%. Sell-the-news dynamics after prior pricing-in of conflict. Low market betas (R²<0.09) confirm decorrelation from SPY.`}
+          note={`LMT ${(tickerCAR.LMT ?? 0).toFixed(1)}% · RTX ${(tickerCAR.RTX ?? 0).toFixed(1)}% · NOC ${(tickerCAR.NOC ?? 0).toFixed(1)}%. Descriptive: the market model explains ≈0% of variance against SPY, so this is close to a raw return.`}
         />
-        <MetricCard
-          label="ENERGY SECTOR CAR"
+        <Stat
+          label="Energy sector CAR"
           value={`${equityStats.energy.car >= 0 ? '+' : ''}${equityStats.energy.car.toFixed(1)}%`}
-          accent="gold"
-          description={`BP ${(tickerCAR.BP ?? 0) >= 0 ? '+' : ''}${(tickerCAR.BP ?? 0).toFixed(1)}% · CVX ${(tickerCAR.CVX ?? 0).toFixed(1)}% · XOM ${(tickerCAR.XOM ?? 0).toFixed(1)}%. Driven by BP's upstream exposure. XOM/CVX underperformed despite Brent rally, consistent with demand-destruction hedging.`}
+          note={`BP ${(tickerCAR.BP ?? 0) >= 0 ? '+' : ''}${(tickerCAR.BP ?? 0).toFixed(1)}% · CVX ${(tickerCAR.CVX ?? 0).toFixed(1)}% · XOM ${(tickerCAR.XOM ?? 0).toFixed(1)}%. Spread is driven by BP's upstream exposure. No test statistic is computed on any CAR here.`}
         />
-        <MetricCard
-          label="HORMUZ SHIPPING CAR"
+        <Stat
+          label="Hormuz tanker CAR"
           value={`${equityStats.shipping_hormuz.car.toFixed(1)}%`}
-          accent="red"
-          description={`FRO ${(tickerCAR.FRO ?? 0).toFixed(1)}% · STNG ${(tickerCAR.STNG ?? 0).toFixed(1)}%. Hormuz-exposed tankers sold off sharply — insurance premium spikes and seizure risk outweighed freight-rate upside.`}
+          note={`FRO ${(tickerCAR.FRO ?? 0).toFixed(1)}% · STNG ${(tickerCAR.STNG ?? 0).toFixed(1)}%. Two tickers, market-model R² 0.001–0.004.`}
         />
-        <MetricCard
-          label="SHIPPING PLACEBO GAP"
+        <Stat
+          label="Route gap — not significant"
           value={`${shippingPlacebo.gap.toFixed(1)}pp`}
-          accent="muted"
-          description={`Hormuz basket (${shippingPlacebo.hormuzCAR.toFixed(1)}%) vs non-Hormuz control (${shippingPlacebo.nonHormuzCAR.toFixed(1)}%). Route-exposure placebo confirms ${shippingPlacebo.gap.toFixed(1)}pp underperformance is Hormuz-specific, not sector-wide.`}
+          note={`Hormuz ${shippingPlacebo.hormuzCAR.toFixed(1)}% vs control ${shippingPlacebo.nonHormuzCAR.toFixed(1)}%. Exact permutation over all 15 route splits ranks this second, p = ${shippingPlacebo.pPermutation}; the smallest attainable p is ${shippingPlacebo.minAttainableP}.`}
         />
       </div>
 
       {/* CAR chart */}
-      <div className="bg-hw-card border border-hw-border p-4">
+      <div className="bg-surface border border-line p-4">
         <div className="flex items-center justify-between mb-3">
-          <span className="font-mono text-[10px] tracking-[0.2em] text-hw-muted">
+          <span className="font-mono text-micro text-ink-3">
             CUMULATIVE ABNORMAL RETURN BY SECTOR — MARKET MODEL OLS (t = −5 to +{lastPoint.t ?? 23})
           </span>
           <div className="flex items-center gap-4 flex-wrap">
@@ -105,7 +105,7 @@ export default function EquityTab() {
                   ...(dashed ? { backgroundImage: `repeating-linear-gradient(to right, ${color} 0, ${color} 4px, transparent 4px, transparent 7px)`, background: 'none' } : {}),
                   borderTop: dashed ? `2px dashed ${color}` : undefined,
                 }} />
-                <span className="font-mono text-[10px] text-hw-muted">{label}</span>
+                <span className="font-mono text-micro text-ink-3">{label}</span>
               </div>
             ))}
           </div>
@@ -143,25 +143,27 @@ export default function EquityTab() {
               {/* Event line */}
               <ReferenceLine
                 x={0}
-                stroke="#e8b84b"
+                stroke={CHART.context}
                 strokeDasharray="4 4"
                 strokeOpacity={0.8}
                 label={{
-                  value: 'STRIKE', position: 'top',
-                  fill: '#e8b84b', fontSize: 9, fontFamily: 'monospace',
+                  value: 'Strikes', position: 'top',
+                  fill: CHART.axis, fontSize: 10, fontFamily: 'monospace',
                 }}
               />
-              <Line type="monotone" dataKey="defense"         stroke={COLORS.defense}         strokeWidth={2} dot={false} name="Defense" />
-              <Line type="monotone" dataKey="energy"           stroke={COLORS.energy}           strokeWidth={2} dot={false} name="Energy" />
-              <Line type="monotone" dataKey="shipping_hormuz"  stroke={COLORS.shipping_hormuz}  strokeWidth={2} dot={false} name="Shipping (Hormuz)" />
-              <Line type="monotone" dataKey="shipping_ctrl"    stroke={COLORS.shipping_ctrl}    strokeWidth={2} dot={false} name="Shipping (Ctrl)" strokeDasharray="4 3" />
+              <Line type="monotone" dataKey="defense"         stroke={COLORS.defense}         strokeWidth={2} dot={false} name="Defense"  isAnimationActive={false} />
+              <Line type="monotone" dataKey="energy"           stroke={COLORS.energy}           strokeWidth={2} dot={false} name="Energy"  isAnimationActive={false} />
+              <Line type="monotone" dataKey="shipping_hormuz"  stroke={COLORS.shipping_hormuz}  strokeWidth={2} dot={false} name="Shipping (Hormuz)"  isAnimationActive={false} />
+              <Line type="monotone" dataKey="shipping_ctrl"    stroke={COLORS.shipping_ctrl}    strokeWidth={2} dot={false} name="Shipping (Ctrl)" strokeDasharray="4 3"  isAnimationActive={false} />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
-        <p className="text-hw-muted text-xs font-inter mt-2">
-          CAR normalized to 0 at t=−1. Estimation window: Nov 2025 – Feb 27, 2026. SPY used as market factor.
-          Pre-period R² values 0.001–0.082 indicate decorrelation — abnormal returns capture genuine idiosyncratic responses.
+        <p className="mt-3 max-w-prose text-label leading-6 text-ink-3">
+          CAR normalized to 0 at t=−1. Estimation window Nov 2025 – 27 Feb 2026, SPY as market
+          factor. Pre-period R² of 0.001–0.082 means the market model explains almost none of these
+          stocks&rsquo; variance, so these &ldquo;abnormal&rdquo; returns are close to raw returns.
+          No standard error or test statistic is computed on any CAR here.
         </p>
       </div>
 
@@ -169,15 +171,15 @@ export default function EquityTab() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
         {/* Ticker CARs */}
-        <div className="bg-hw-card border border-hw-border p-4">
-          <div className="font-mono text-[10px] tracking-[0.2em] text-hw-muted mb-3">
+        <div className="bg-surface border border-line p-4">
+          <div className="font-mono text-micro text-ink-3 mb-3">
             INDIVIDUAL TICKER CAR (FULL POST-PERIOD)
           </div>
           <table className="w-full">
             <thead>
-              <tr className="border-b border-hw-border">
+              <tr className="border-b border-line">
                 {['TICKER', 'SECTOR', 'CAR'].map(h => (
-                  <th key={h} className="text-left py-1.5 font-mono text-[10px] text-hw-muted tracking-wider">
+                  <th key={h} className="text-left py-1.5 font-mono text-micro text-ink-3">
                     {h}
                   </th>
                 ))}
@@ -198,11 +200,11 @@ export default function EquityTab() {
                 { t: 'NAT',   s: 'Ship (Ctrl)',      c: tickerCAR.NAT   },
                 { t: 'TK',    s: 'Ship (Ctrl)',      c: tickerCAR.TK    },
               ].map(row => (
-                <tr key={row.t} className="border-b border-hw-border last:border-0">
-                  <td className="py-2 font-mono font-semibold text-hw-text text-sm">{row.t}</td>
-                  <td className="py-2 font-mono text-xs text-hw-muted">{row.s}</td>
+                <tr key={row.t} className="border-b border-line last:border-0">
+                  <td className="py-2 font-mono font-semibold text-ink text-sm">{row.t}</td>
+                  <td className="py-2 font-mono text-xs text-ink-3">{row.s}</td>
                   <td className="py-2 font-mono font-semibold text-sm" style={{
-                    color: row.c >= 0 ? '#10b981' : '#ef4444'
+                    color: row.c >= 0 ? '#199e70' : '#e66767'
                   }}>
                     {row.c >= 0 ? '+' : ''}{row.c.toFixed(2)}%
                   </td>
@@ -213,51 +215,58 @@ export default function EquityTab() {
         </div>
 
         {/* Route-exposure placebo test */}
-        <div className="bg-hw-card border border-hw-border p-4">
-          <div className="font-mono text-[10px] tracking-[0.2em] text-hw-muted mb-3">
+        <div className="bg-surface border border-line p-4">
+          <div className="font-mono text-micro text-ink-3 mb-3">
             ROUTE-EXPOSURE PLACEBO TEST
           </div>
-          <div className="space-y-3 text-hw-sub text-sm font-inter leading-relaxed">
+          <div className="space-y-3 text-ink-2 text-sm font-sans leading-relaxed">
 
             {/* Gap summary */}
             <div className="grid grid-cols-3 gap-2 text-center">
-              <div className="bg-hw-bg border border-hw-border p-2">
-                <div className="font-mono text-[10px] text-hw-muted mb-1">HORMUZ BASKET</div>
-                <div className="font-mono font-bold text-base" style={{ color: '#ef4444' }}>
+              <div className="bg-bg border border-line p-2">
+                <div className="font-mono text-micro text-ink-3 mb-1">HORMUZ BASKET</div>
+                <div className="font-mono font-bold text-base" style={{ color: '#e66767' }}>
                   {shippingPlacebo.hormuzCAR.toFixed(1)}%
                 </div>
-                <div className="font-mono text-[9px] text-hw-muted mt-0.5">FRO · STNG</div>
+                <div className="font-mono text-micro text-ink-3 mt-0.5">FRO · STNG</div>
               </div>
-              <div className="bg-hw-bg border border-hw-border p-2">
-                <div className="font-mono text-[10px] text-hw-muted mb-1">CTRL BASKET</div>
-                <div className="font-mono font-bold text-base" style={{ color: '#94a3b8' }}>
+              <div className="bg-bg border border-line p-2">
+                <div className="font-mono text-micro text-ink-3 mb-1">CTRL BASKET</div>
+                <div className="font-mono font-bold text-base" style={{ color: '#6b747d' }}>
                   {shippingPlacebo.nonHormuzCAR.toFixed(1)}%
                 </div>
-                <div className="font-mono text-[9px] text-hw-muted mt-0.5">HAFNI · INSW · NAT · TK</div>
+                <div className="font-mono text-micro text-ink-3 mt-0.5">HAFNI · INSW · NAT · TK</div>
               </div>
-              <div className="bg-hw-bg border border-hw-border p-2">
-                <div className="font-mono text-[10px] text-hw-muted mb-1">GAP</div>
-                <div className="font-mono font-bold text-base" style={{ color: '#ef4444' }}>
+              <div className="bg-bg border border-line p-2">
+                <div className="font-mono text-micro text-ink-3 mb-1">GAP</div>
+                <div className="font-mono font-bold text-base" style={{ color: '#e66767' }}>
                   {shippingPlacebo.gap.toFixed(1)}pp
                 </div>
-                <div className="font-mono text-[9px] text-hw-muted mt-0.5">Hormuz − Ctrl</div>
+                <div className="font-mono text-micro text-ink-3 mt-0.5">Hormuz − Ctrl</div>
               </div>
             </div>
 
             <p>
-              <span className="text-hw-gold font-semibold">Design:</span> Non-Hormuz tankers (Atlantic/Pacific routes) serve as a within-sector control.
-              If shipping underperformance were sector-wide (e.g., demand recession, oil price spike suppressing consumption),
-              both baskets should fall equally.
+              <span className="text-ink font-semibold">Design:</span> Non-Hormuz tankers on
+              Atlantic and Pacific routes serve as a within-sector control. Same war, same
+              industry, same freight cycle — differing only in route exposure. This is the
+              cleanest identification idea in the project.
             </p>
             <p>
-              <span className="text-hw-text font-semibold">Result:</span> The <span className="font-semibold" style={{ color: '#ef4444' }}>{shippingPlacebo.gap.toFixed(1)}pp gap</span> is
-              route-specific. Hormuz-exposed operators face insurance premium spikes (Hull War Risk),
-              Iranian asset-seizure risk, and cargo diversion costs that non-Hormuz routes do not.
+              <span className="text-refuted font-semibold">Why it fails:</span> an exact
+              permutation test over all C(6,2)&nbsp;=&nbsp;15 ways of splitting six tankers into a
+              2/4 treated-control split ranks the observed{' '}
+              <span className="font-semibold text-ink">{shippingPlacebo.gap.toFixed(1)}pp</span> gap{' '}
+              <span className="font-semibold text-ink">second</span>, one-sided p ={' '}
+              {shippingPlacebo.pPermutation}. With six tankers the smallest attainable p-value is{' '}
+              {shippingPlacebo.minAttainableP}, so no effect size could have produced a significant
+              result here.
             </p>
-            <p className="text-hw-muted text-xs border-t border-hw-border pt-2 mt-1">
-              Rules out: sector-wide recession hedging, oil-price beta, and SPY correlation as confounders.
-              A sustained closure (90+ days) may reverse this if freight-rate premiums exceed insurance costs —
-              1984 Tanker War precedent suggests this threshold is ~3 months.
+            <p className="mt-1 border-t border-line pt-2 text-label text-ink-3">
+              A route-specific mechanism remains plausible — insurance premium spikes, seizure risk,
+              cargo diversion — but this design cannot demonstrate it, and the market models it
+              rests on explain almost none of these stocks' variance. The previously published gap
+              of −7.94pp appeared in no notebook output and has been removed.
             </p>
           </div>
         </div>

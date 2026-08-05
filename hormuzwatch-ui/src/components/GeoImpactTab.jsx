@@ -10,29 +10,23 @@ import {
   BarChart, Bar, XAxis, YAxis, Cell, Tooltip, ResponsiveContainer,
 } from 'recharts'
 import { countryData, dataByNumeric } from '../data/geoImpact.js'
-import MetricCard from './MetricCard.jsx'
-import ExploratoryNotice from './ExploratoryNotice.jsx'
+import { Stat } from './ui.jsx'
+import { ExploratoryBanner } from './ui.jsx'
 // Vendored from world-atlas@2 so the archive makes no runtime network calls.
 // react-simple-maps accepts a topojson object directly, not just a URL.
 import worldAtlas from '../data/countries-110m.json'
 
 
-// ── Color scale ──────────────────────────────────────────────────────────────
+// ── Sequential ramp ──────────────────────────────────────────────────────────
+// Score is a magnitude, so the encoding is a single hue running dark → light,
+// not a rainbow. The previous dark→gold→red ramp implied three categories where
+// the data has one ordered dimension, and put a hue at the midpoint.
+const RAMP = ['#16222e', '#1d3b57', '#215681', '#2472ad', '#3987e5', '#6ba6ee']
+
 function scoreToColor(score) {
-  if (score == null || score === 0) return '#12121f'
+  if (score == null || score === 0) return '#15181c'
   const t = Math.min(10, Math.max(0, score)) / 10
-  if (t < 0.5) {
-    const s = t / 0.5
-    const r = Math.round(26  + (232 - 26)  * s)
-    const g = Math.round(26  + (184 - 26)  * s)
-    const b = Math.round(46  + (75  - 46)  * s)
-    return `rgb(${r},${g},${b})`
-  }
-  const s = (t - 0.5) / 0.5
-  const r = Math.round(232 + (239 - 232) * s)
-  const g = Math.round(184 * (1 - s))
-  const b = Math.round(75  * (1 - s))
-  return `rgb(${r},${g},${b})`
+  return RAMP[Math.min(RAMP.length - 1, Math.floor(t * RAMP.length))]
 }
 
 // ── Composite score computation ───────────────────────────────────────────────
@@ -42,11 +36,12 @@ function compositeScore(d, warAlpha) {
 }
 
 // ── War proximity badge ───────────────────────────────────────────────────────
+// Proximity is ordered, not categorical — one hue, stepped by intensity.
 const PROXIMITY_COLORS = {
-  direct:     '#ef4444',
-  proximate:  '#f97316',
-  regional:   '#e8b84b',
-  remote:     '#585b70',
+  direct:     '#e66767',
+  proximate:  '#c25a5a',
+  regional:   '#8f4a4a',
+  remote:     '#4b535b',
 }
 const PROXIMITY_LABELS = {
   direct:    'DIRECT',
@@ -68,8 +63,8 @@ const MapTooltip = ({ data, x, y, warAlpha }) => {
         top: y - 10,
         pointerEvents: 'none',
         zIndex: 9999,
-        background: '#2a2f4a',
-        border: '1px solid #3a4060',
+        background: '#1b1f24',
+        border: '1px solid #262b31',
         borderLeft: `3px solid ${scoreColor}`,
         padding: '8px 12px',
         fontFamily: 'monospace',
@@ -78,7 +73,7 @@ const MapTooltip = ({ data, x, y, warAlpha }) => {
         boxShadow: '0 4px 20px rgba(0,0,0,0.6)',
       }}
     >
-      <div style={{ color: '#cdd6f4', fontWeight: 'bold', marginBottom: 4, fontSize: 12 }}>
+      <div style={{ color: '#e9ecef', fontWeight: 'bold', marginBottom: 4, fontSize: 12 }}>
         {data.country}
         {data.war_proximity && (
           <span style={{
@@ -94,19 +89,19 @@ const MapTooltip = ({ data, x, y, warAlpha }) => {
       <div style={{ color: scoreColor, fontSize: 16, fontWeight: 'bold', marginBottom: 6 }}>
         {score.toFixed(1)} / 10
       </div>
-      <div style={{ color: '#a6adc8', lineHeight: 1.8, fontSize: 10 }}>
+      <div style={{ color: '#a4acb4', lineHeight: 1.8, fontSize: 10 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
           <span>Economy score</span>
-          <span style={{ color: '#89b4fa' }}>{data.economy_score.toFixed(2)}</span>
+          <span style={{ color: '#3987e5' }}>{data.economy_score.toFixed(2)}</span>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
           <span>War score</span>
-          <span style={{ color: '#ef4444' }}>{data.war_score.toFixed(2)}</span>
+          <span style={{ color: '#e66767' }}>{data.war_score.toFixed(2)}</span>
         </div>
-        <div style={{ borderTop: '1px solid #3a4060', marginTop: 4, paddingTop: 4 }}>
-          <div>Hormuz oil dep: <span style={{ color: '#cdd6f4' }}>{data.hormuz_oil_dependency_pct}%</span></div>
-          <div>Fertilizer exp: <span style={{ color: '#cdd6f4' }}>{data.fertilizer_import_exposure.toUpperCase()}</span></div>
-          <div>Iran trade: <span style={{ color: '#cdd6f4' }}>${data.trade_with_iran_usd_bn}B/yr</span></div>
+        <div style={{ borderTop: '1px solid #262b31', marginTop: 4, paddingTop: 4 }}>
+          <div>Hormuz oil dep: <span style={{ color: '#e9ecef' }}>{data.hormuz_oil_dependency_pct}%</span></div>
+          <div>Fertilizer exp: <span style={{ color: '#e9ecef' }}>{data.fertilizer_import_exposure.toUpperCase()}</span></div>
+          <div>Iran trade: <span style={{ color: '#e9ecef' }}>${data.trade_with_iran_usd_bn}B/yr</span></div>
         </div>
       </div>
     </div>
@@ -120,17 +115,17 @@ const BarTooltip = ({ active, payload, warAlpha }) => {
   const score = compositeScore(d, warAlpha)
   return (
     <div style={{
-      background: '#2a2f4a', border: '1px solid #3a4060',
+      background: '#1b1f24', border: '1px solid #262b31',
       padding: '8px 12px', fontFamily: 'monospace', fontSize: 11,
     }}>
-      <div style={{ color: '#cdd6f4', fontWeight: 'bold', marginBottom: 2 }}>{d.country}</div>
+      <div style={{ color: '#e9ecef', fontWeight: 'bold', marginBottom: 2 }}>{d.country}</div>
       <div style={{ color: scoreToColor(score), fontSize: 13, fontWeight: 'bold' }}>
         Score: {score.toFixed(1)}
       </div>
-      <div style={{ color: '#a6adc8', marginTop: 4, fontSize: 10, lineHeight: 1.7 }}>
-        <div>Economy: <span style={{ color: '#89b4fa' }}>{d.economy_score.toFixed(2)}</span></div>
-        <div>War:     <span style={{ color: '#ef4444' }}>{d.war_score.toFixed(2)}</span></div>
-        <div style={{ color: '#585b70', marginTop: 2 }}>
+      <div style={{ color: '#a4acb4', marginTop: 4, fontSize: 10, lineHeight: 1.7 }}>
+        <div>Economy: <span style={{ color: '#3987e5' }}>{d.economy_score.toFixed(2)}</span></div>
+        <div>War:     <span style={{ color: '#e66767' }}>{d.war_score.toFixed(2)}</span></div>
+        <div style={{ color: '#4b535b', marginTop: 2 }}>
           {PROXIMITY_LABELS[d.war_proximity] ?? '—'} proximity
         </div>
       </div>
@@ -176,22 +171,22 @@ export default function GeoImpactTab() {
   return (
     <div className="space-y-4">
 
-      <ExploratoryNotice>
+      <ExploratoryBanner>
         These impact scores are a hand-assigned index, not an estimate. There is no identification
         strategy, no uncertainty, and no way to falsify them.
-      </ExploratoryNotice>
+      </ExploratoryBanner>
 
       {/* ── Slider ─────────────────────────────────────────────────────────── */}
-      <div className="bg-hw-card border border-hw-border p-4">
-        <div className="font-mono text-[10px] tracking-[0.2em] text-hw-muted mb-3">
+      <div className="bg-surface border border-line p-4">
+        <div className="font-mono text-micro text-ink-3 mb-3">
           IMPACT WEIGHT — DRAG TO ADJUST SCORING EMPHASIS
         </div>
         <div className="flex items-center gap-4">
           <div className="text-left w-36 flex-shrink-0">
-            <div className="font-mono text-xs font-bold" style={{ color: '#89b4fa' }}>
+            <div className="font-mono text-xs font-bold" style={{ color: '#3987e5' }}>
               ECONOMY {econPct}%
             </div>
-            <div className="font-mono text-[10px] text-hw-muted leading-tight mt-0.5">
+            <div className="font-mono text-micro text-ink-3 leading-tight mt-0.5">
               Oil dep · Fertilizer<br />Trade exposure
             </div>
           </div>
@@ -203,7 +198,7 @@ export default function GeoImpactTab() {
               style={{
                 height: 4,
                 left: 0, right: 0,
-                background: `linear-gradient(to right, #89b4fa, #e8b84b ${50}%, #ef4444)`,
+                background: 'linear-gradient(to right, #3987e5, #4b535b 50%, #e66767)',
                 opacity: 0.5,
               }}
             />
@@ -226,22 +221,22 @@ export default function GeoImpactTab() {
           </div>
 
           <div className="text-right w-36 flex-shrink-0">
-            <div className="font-mono text-xs font-bold" style={{ color: '#ef4444' }}>
+            <div className="font-mono text-xs font-bold" style={{ color: '#e66767' }}>
               WAR IMPACT {warPct}%
             </div>
-            <div className="font-mono text-[10px] text-hw-muted leading-tight mt-0.5">
+            <div className="font-mono text-micro text-ink-3 leading-tight mt-0.5">
               War proximity<br />Refugee · Conflict zone
             </div>
           </div>
         </div>
 
         {/* Proximity legend */}
-        <div className="flex items-center gap-5 mt-3 pt-3 border-t border-hw-border">
-          <span className="font-mono text-[10px] text-hw-muted">WAR PROXIMITY:</span>
+        <div className="flex items-center gap-5 mt-3 pt-3 border-t border-line">
+          <span className="font-mono text-micro text-ink-3">WAR PROXIMITY:</span>
           {Object.entries(PROXIMITY_LABELS).map(([k, v]) => (
             <div key={k} className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full" style={{ background: PROXIMITY_COLORS[k] }} />
-              <span className="font-mono text-[10px]" style={{ color: PROXIMITY_COLORS[k] }}>{v}</span>
+              <span className="font-mono text-micro" style={{ color: PROXIMITY_COLORS[k] }}>{v}</span>
             </div>
           ))}
         </div>
@@ -249,54 +244,51 @@ export default function GeoImpactTab() {
 
       {/* ── Metric cards ────────────────────────────────────────────────────── */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <MetricCard
-          label="SEVERELY EXPOSED COUNTRIES"
+        <Stat
+          label="Scored ≥ 7.0"
           value={severelyExposed.length}
           unit="countries"
-          accent="red"
-          description={`Score ≥ 7.0 at current weighting. ${severelyExposed.slice(0, 6).map(d => d.country).join(', ')}${severelyExposed.length > 6 ? '…' : ''}`}
+          note={`At the current weighting. ${severelyExposed.slice(0, 6).map(d => d.country).join(', ')}${severelyExposed.length > 6 ? '…' : ''}`}
         />
-        <MetricCard
-          label="HIGHEST EXPOSED COUNTRY"
+        <Stat
+          label="Highest scored"
           value={topCountry.country}
           unit={`${topCountry._score.toFixed(1)} / 10`}
-          accent="gold"
-          description={`Econ score ${topCountry.economy_score.toFixed(2)} · War score ${topCountry.war_score.toFixed(2)} · ${PROXIMITY_LABELS[topCountry.war_proximity] ?? ''} proximity`}
+          note={`Economy ${topCountry.economy_score.toFixed(2)} · War ${topCountry.war_score.toFixed(2)} · ${PROXIMITY_LABELS[topCountry.war_proximity] ?? ''} proximity`}
         />
-        <MetricCard
-          label="WAR ZONE EXPOSURE"
+        <Stat
+          label="Direct-zone countries"
           value={countryData.filter(d => d.war_proximity === 'direct').length}
-          unit="direct-zone countries"
-          accent="blue"
-          description="Countries with military bases, IRBM range, or active proxy operations in the Iran conflict zone."
+          unit="countries"
+          note="Hand-assigned: military bases, IRBM range, or active proxy operations in the conflict zone."
         />
       </div>
 
       {/* ── World map ───────────────────────────────────────────────────────── */}
-      <div className="bg-hw-card border border-hw-border p-4">
-        <div className="font-mono text-[10px] tracking-[0.2em] text-hw-muted mb-3">
+      <div className="bg-surface border border-line p-4">
+        <div className="font-mono text-micro text-ink-3 mb-3">
           GLOBAL IMPACT MAP — {econPct}% ECONOMY · {warPct}% WAR WEIGHT · SCORE (1–10)
         </div>
 
-        <div className="flex items-center gap-4 mb-3">
-          {[
-            { label: 'LOW (< 3)',    color: '#1a1a3a' },
-            { label: 'MEDIUM (3–6)', color: '#e8b84b' },
-            { label: 'HIGH (7–10)',  color: '#ef4444' },
-            { label: 'HORMUZ',       color: '#ef4444', shape: 'star' },
-          ].map(l => (
-            <div key={l.label} className="flex items-center gap-1.5">
-              {l.shape === 'star' ? (
-                <span style={{ color: l.color, fontSize: 12 }}>★</span>
-              ) : (
-                <div className="w-4 h-3 rounded-sm" style={{ background: l.color }} />
-              )}
-              <span className="font-mono text-[10px] text-hw-muted">{l.label}</span>
+        {/* Sequential legend: one ordered ramp, ends labelled */}
+        <div className="mb-3 flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-micro text-ink-3">0</span>
+            <div className="flex" role="img" aria-label="Impact score ramp, 0 to 10">
+              {RAMP.map(c => (
+                <span key={c} className="h-3 w-6 first:rounded-l-sm last:rounded-r-sm" style={{ background: c }} />
+              ))}
             </div>
-          ))}
+            <span className="font-mono text-micro text-ink-3">10</span>
+            <span className="text-label text-ink-3">impact score</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span style={{ color: '#e9ecef', fontSize: 12 }}>★</span>
+            <span className="text-label text-ink-3">Strait of Hormuz</span>
+          </div>
         </div>
 
-        <div style={{ background: '#0a0a12', borderRadius: 2 }} className="relative">
+        <div className="relative rounded bg-bg">
           <ComposableMap
             projectionConfig={{ scale: 145, center: [15, 15] }}
             style={{ width: '100%', height: 'auto' }}
@@ -307,17 +299,17 @@ export default function GeoImpactTab() {
                 {({ geographies }) =>
                   geographies.map(geo => {
                     const found = scoredByNumeric[String(parseInt(geo.id))]
-                    const fill  = found ? scoreToColor(found._score) : '#1a1a2e'
+                    const fill  = found ? scoreToColor(found._score) : '#191d22'
                     return (
                       <Geography
                         key={geo.rsmKey}
                         geography={geo}
                         fill={fill}
-                        stroke="#0d0d1e"
+                        stroke="#0d0f11"
                         strokeWidth={0.4}
                         style={{
                           default: { outline: 'none' },
-                          hover:   { outline: 'none', fill: found ? fill : '#252540', cursor: found ? 'crosshair' : 'default' },
+                          hover:   { outline: 'none', fill: found ? fill : '#1b1f24', cursor: found ? 'crosshair' : 'default' },
                           pressed: { outline: 'none' },
                         }}
                         onMouseEnter={found ? (evt) => handleMouseEnter(found, evt) : undefined}
@@ -331,11 +323,11 @@ export default function GeoImpactTab() {
 
               {/* Strait of Hormuz marker */}
               <Marker coordinates={[56.5, 26.5]}>
-                <circle r={5} fill="#ef4444" opacity={0.9} />
-                <circle r={9} fill="none" stroke="#ef4444" strokeWidth={1} opacity={0.4} />
+                <circle r={5} fill="#e66767" opacity={0.9} />
+                <circle r={9} fill="none" stroke="#e66767" strokeWidth={1} opacity={0.4} />
                 <text
                   textAnchor="start" x={10} y={4}
-                  style={{ fontFamily: 'monospace', fontSize: '7px', fill: '#ef4444', fontWeight: 'bold' }}
+                  style={{ fontFamily: 'monospace', fontSize: '7px', fill: '#e66767', fontWeight: 'bold' }}
                 >
                   HORMUZ
                 </text>
@@ -353,7 +345,7 @@ export default function GeoImpactTab() {
           )}
         </div>
 
-        <p className="text-hw-muted text-[10px] font-mono mt-2">
+        <p className="text-ink-3 text-micro font-mono mt-2">
           ECONOMY SCORE = 50% Hormuz oil dep · 35% fertilizer · 15% Iran trade ·
           WAR SCORE = 60% war proximity · 25% refugee impact · 15% Iran trade ·
           Source: IEA/IMF/UNHCR
@@ -361,8 +353,8 @@ export default function GeoImpactTab() {
       </div>
 
       {/* ── Bar chart: top 15 ───────────────────────────────────────────────── */}
-      <div className="bg-hw-card border border-hw-border p-4">
-        <div className="font-mono text-[10px] tracking-[0.2em] text-hw-muted mb-3">
+      <div className="bg-surface border border-line p-4">
+        <div className="font-mono text-micro text-ink-3 mb-3">
           TOP 15 MOST EXPOSED — {econPct}% ECONOMY · {warPct}% WAR
         </div>
         <div className="h-80">
@@ -376,24 +368,24 @@ export default function GeoImpactTab() {
               <XAxis
                 type="number"
                 domain={[0, 10]}
-                tick={{ fill: '#a6adc8', fontSize: 9, fontFamily: 'monospace' }}
-                axisLine={{ stroke: '#3a4060' }}
+                tick={{ fill: '#a4acb4', fontSize: 9, fontFamily: 'monospace' }}
+                axisLine={{ stroke: '#262b31' }}
                 tickLine={false}
                 tickFormatter={v => v.toFixed(0)}
               />
               <YAxis
                 type="category"
                 dataKey="country"
-                tick={{ fill: '#cdd6f4', fontSize: 9, fontFamily: 'monospace' }}
+                tick={{ fill: '#e9ecef', fontSize: 9, fontFamily: 'monospace' }}
                 axisLine={false}
                 tickLine={false}
                 width={85}
               />
               <Tooltip
                 content={<BarTooltipWrapper warAlpha={warAlpha} />}
-                cursor={{ fill: '#2a2f4a' }}
+                cursor={{ fill: '#1b1f24' }}
               />
-              <Bar dataKey="_score" radius={[0, 2, 2, 0]}>
+              <Bar dataKey="_score" radius={[0, 2, 2, 0]} isAnimationActive={false}>
                 {top15.map(entry => (
                   <Cell key={entry.iso3} fill={scoreToColor(entry._score)} />
                 ))}
@@ -401,7 +393,7 @@ export default function GeoImpactTab() {
             </BarChart>
           </ResponsiveContainer>
         </div>
-        <div className="mt-2 grid grid-cols-3 gap-2 text-[10px] font-mono text-hw-muted">
+        <div className="mt-2 grid grid-cols-3 gap-2 text-micro font-mono text-ink-3">
           <span>THRESHOLD: ≥ 7.0 = SEVERE</span>
           <span>USE SLIDER ABOVE TO ADJUST WEIGHTING</span>
           <span className="text-right">DATA: IEA · IMF · UNHCR ESTIMATES</span>
@@ -409,16 +401,16 @@ export default function GeoImpactTab() {
       </div>
 
       {/* ── Severely exposed detail table ───────────────────────────────────── */}
-      <div className="bg-hw-card border border-hw-border p-4">
-        <div className="font-mono text-[10px] tracking-[0.2em] text-hw-muted mb-3">
+      <div className="bg-surface border border-line p-4">
+        <div className="font-mono text-micro text-ink-3 mb-3">
           SEVERELY EXPOSED — DETAIL (SCORE ≥ 7.0 · CURRENT WEIGHTING)
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-xs font-mono">
             <thead>
-              <tr className="border-b border-hw-border">
+              <tr className="border-b border-line">
                 {['COUNTRY', 'SCORE', 'ECON', 'WAR', 'PROXIMITY', 'HORMUZ DEP', 'FERTILIZER', 'REFUGEE'].map(h => (
-                  <th key={h} className="text-left py-2 px-2 text-hw-muted text-[10px] tracking-wider">
+                  <th key={h} className="text-left py-2 px-2 text-ink-3 text-micro">
                     {h}
                   </th>
                 ))}
@@ -426,32 +418,32 @@ export default function GeoImpactTab() {
             </thead>
             <tbody>
               {severelyExposed.map(d => (
-                <tr key={d.iso3} className="border-b border-hw-border last:border-0 hover:bg-hw-bg/30">
-                  <td className="py-2 px-2 text-hw-text font-semibold">{d.country}</td>
+                <tr key={d.iso3} className="border-b border-line last:border-0 hover:bg-bg/30">
+                  <td className="py-2 px-2 text-ink font-semibold">{d.country}</td>
                   <td className="py-2 px-2 font-bold text-sm" style={{ color: scoreToColor(d._score) }}>
                     {d._score.toFixed(1)}
                   </td>
-                  <td className="py-2 px-2" style={{ color: '#89b4fa' }}>
+                  <td className="py-2 px-2" style={{ color: '#3987e5' }}>
                     {d.economy_score.toFixed(2)}
                   </td>
-                  <td className="py-2 px-2" style={{ color: '#ef4444' }}>
+                  <td className="py-2 px-2" style={{ color: '#e66767' }}>
                     {d.war_score.toFixed(2)}
                   </td>
                   <td className="py-2 px-2">
                     <span style={{
-                      color: PROXIMITY_COLORS[d.war_proximity] ?? '#585b70',
+                      color: PROXIMITY_COLORS[d.war_proximity] ?? '#4b535b',
                       fontSize: 9,
-                      border: `1px solid ${PROXIMITY_COLORS[d.war_proximity] ?? '#585b70'}`,
+                      border: `1px solid ${PROXIMITY_COLORS[d.war_proximity] ?? '#4b535b'}`,
                       padding: '1px 4px',
                     }}>
                       {PROXIMITY_LABELS[d.war_proximity] ?? '—'}
                     </span>
                   </td>
-                  <td className="py-2 px-2 text-hw-sub">{d.hormuz_oil_dependency_pct}%</td>
+                  <td className="py-2 px-2 text-ink-2">{d.hormuz_oil_dependency_pct}%</td>
                   <td className="py-2 px-2">
                     <span className={
                       d.fertilizer_import_exposure === 'high'   ? 'text-red-400'    :
-                      d.fertilizer_import_exposure === 'medium' ? 'text-yellow-400' : 'text-hw-muted'
+                      d.fertilizer_import_exposure === 'medium' ? 'text-yellow-400' : 'text-ink-3'
                     }>
                       {d.fertilizer_import_exposure.toUpperCase()}
                     </span>
@@ -459,7 +451,7 @@ export default function GeoImpactTab() {
                   <td className="py-2 px-2">
                     <span className={
                       d.refugee_impact === 'high'   ? 'text-red-400'    :
-                      d.refugee_impact === 'medium' ? 'text-yellow-400' : 'text-hw-muted'
+                      d.refugee_impact === 'medium' ? 'text-yellow-400' : 'text-ink-3'
                     }>
                       {d.refugee_impact.toUpperCase()}
                     </span>

@@ -2,17 +2,20 @@ import { useMemo, useState } from 'react'
 import { Archive, ExternalLink, ShieldCheck } from 'lucide-react'
 import { NEWS_ITEMS, NEWS_BRIEF } from '../../data/newsArchive.js'
 
+// Severity is an ordered scale — one hue stepped by intensity, not three hues.
 const SEVERITY = {
-  HIGH:   { color: '#f97316', label: 'HIGH' },
-  MEDIUM: { color: '#e8b84b', label: 'MEDIUM' },
-  LOW:    { color: '#60a5fa', label: 'LOW' },
+  HIGH:   { color: '#e9ecef', label: 'High' },
+  MEDIUM: { color: '#a4acb4', label: 'Medium' },
+  LOW:    { color: '#6b747d', label: 'Low' },
 }
 
+// Category is genuinely categorical: fixed-order assignment from the validated
+// set, and MARKETS previously duplicated DIPLOMATIC's hue.
 const CATEGORY = {
-  MILITARY:   { background: '#ef444416', color: '#f87171' },
-  ENERGY:     { background: '#e8b84b16', color: '#e8b84b' },
-  DIPLOMATIC: { background: '#3b82f616', color: '#60a5fa' },
-  MARKETS:    { background: '#a78bfa16', color: '#a78bfa' },
+  DIPLOMATIC: { background: '#3987e518', color: '#3987e5' },
+  ENERGY:     { background: '#d9592618', color: '#d95926' },
+  MARKETS:    { background: '#199e7018', color: '#199e70' },
+  MILITARY:   { background: '#c9850018', color: '#c98500' },
 }
 
 function formatDate(iso) {
@@ -38,27 +41,27 @@ function NewsCard({ item }) {
   const content = (
     <>
       <div className="flex items-center justify-between gap-3">
-        <span className="flex items-center gap-2 font-mono text-[10px] font-bold tracking-[0.16em]" style={{ color: severity.color }}>
+        <span className="flex items-center gap-2 font-mono text-micro font-bold" style={{ color: severity.color }}>
           <span className="h-1.5 w-1.5 rounded-full" style={{ background: severity.color }} />
           {severity.label}
         </span>
-        <span className="rounded-sm px-2 py-1 font-mono text-[9px] tracking-[0.14em]" style={category}>
+        <span className="rounded-sm px-2 py-1 font-mono text-micro" style={category}>
           {item.category}
         </span>
       </div>
-      <h3 className="mt-4 text-[15px] font-semibold leading-snug text-hw-text group-hover:text-white">
+      <h3 className="mt-4 text-lead font-semibold leading-snug text-ink group-hover:text-white">
         {item.title}
         {url && <ExternalLink size={12} className="ml-2 inline opacity-50" aria-hidden="true" />}
       </h3>
-      <p className="mt-2 text-xs leading-5 text-hw-sub">{item.summary}</p>
-      <div className="mt-5 flex items-center justify-between gap-3 border-t border-hw-border/70 pt-3 font-mono text-[10px] tracking-wide text-hw-muted">
+      <p className="mt-2 text-xs leading-5 text-ink-2">{item.summary}</p>
+      <div className="mt-5 flex items-center justify-between gap-3 border-t border-line pt-3 font-mono text-micro text-ink-3">
         <span>{item.source}</span>
         <time dateTime={item.timestamp}>{formatDate(item.timestamp)}</time>
       </div>
     </>
   )
 
-  const classes = 'group block min-h-56 border border-hw-border bg-hw-card/80 p-5 transition hover:-translate-y-0.5 hover:border-hw-gold/40 hover:bg-hw-card'
+  const classes = 'group block min-h-56 border border-line bg-surface p-5 transition hover:-translate-y-0.5 hover:border-reported/40 hover:bg-surface'
   return url ? (
     <a className={classes} href={url} target="_blank" rel="noreferrer">{content}</a>
   ) : (
@@ -77,22 +80,22 @@ export default function NewsTab() {
 
   return (
     <div className="space-y-5">
-      <section className="overflow-hidden border border-hw-border bg-hw-card">
+      <section className="overflow-hidden border border-line bg-surface">
         <div className="grid gap-6 p-5 md:grid-cols-[1fr_auto] md:p-7">
           <div>
-            <div className="flex items-center gap-2 font-mono text-[10px] tracking-[0.22em] text-hw-gold">
+            <div className="flex items-center gap-2 font-mono text-micro text-reported">
               <Archive size={14} aria-hidden="true" /> FINAL · SOURCE-LINKED ARCHIVE
             </div>
             <h1 className="mt-3 text-2xl font-semibold tracking-tight text-white">The reopening, in context</h1>
-            <p className="mt-3 max-w-4xl text-sm leading-6 text-hw-sub">
+            <p className="mt-3 max-w-4xl text-sm leading-6 text-ink-2">
               {NEWS_BRIEF}
             </p>
           </div>
           <div className="flex h-fit items-center gap-3 border border-emerald-500/25 bg-emerald-500/5 px-4 py-3">
             <ShieldCheck size={18} className="text-emerald-400" aria-hidden="true" />
             <div>
-              <div className="font-mono text-[10px] tracking-[0.16em] text-emerald-400">ARCHIVE VERIFIED</div>
-              <div className="mt-1 font-mono text-[10px] text-hw-muted">DATA THROUGH JUN 18, 2026</div>
+              <div className="font-mono text-micro text-emerald-400">ARCHIVE VERIFIED</div>
+              <div className="mt-1 font-mono text-micro text-ink-3">DATA THROUGH JUN 18, 2026</div>
             </div>
           </div>
         </div>
@@ -106,13 +109,13 @@ export default function NewsTab() {
               type="button"
               onClick={() => setFilter(category)}
               aria-pressed={filter === category}
-              className={`border px-3 py-1.5 font-mono text-[10px] tracking-[0.14em] transition ${filter === category ? 'border-hw-gold/60 bg-hw-gold/10 text-hw-gold' : 'border-hw-border text-hw-muted hover:border-hw-muted hover:text-hw-text'}`}
+              className={`border px-3 py-1.5 font-mono text-micro transition ${filter === category ? 'border-reported/40 bg-reported/10 text-reported' : 'border-line text-ink-3 hover:border-line-strong hover:text-ink'}`}
             >
               {category}
             </button>
           ))}
         </div>
-        <span className="font-mono text-[10px] tracking-widest text-hw-muted">{visible.length} SOURCES</span>
+        <span className="font-mono text-micro text-ink-3">{visible.length} SOURCES</span>
       </div>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {visible.map(item => <NewsCard key={`${item.source}-${item.title}`} item={item} />)}
